@@ -1,7 +1,7 @@
 # Equipment size — synthetic bookings
 
 **Pack:** `domains/equipment-size/`  
-**File:** `data/bookings.csv` (~600 rows)  
+**File:** `data/bookings.csv` (~250 rows; regenerate with `--n 600` for full)  
 **No real shipper PII.**
 
 ## Columns

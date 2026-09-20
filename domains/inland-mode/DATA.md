@@ -1,7 +1,7 @@
 # Inland mode — synthetic moves
 
 **Pack:** `domains/inland-mode/`  
-**File:** `data/moves.csv` (~600 rows)  
+**File:** `data/moves.csv` (~250 rows; regenerate with `--n 600` for full)  
 **No real shipper PII.**
 
 ## Columns
