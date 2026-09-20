@@ -39,6 +39,7 @@ class DomainConfig(BaseModel):
     disclaimer: str = "Synthetic demo only."
     data_path: str | None = None
     feature_exclude: list[str] = Field(default_factory=list)
+    secondary_label_col: str | None = None
 
     @property
     def group_time_col(self) -> str | None:
