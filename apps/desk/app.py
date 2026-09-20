@@ -39,7 +39,7 @@ except ImportError:
 
 PACKS = build_packs(ROOT)
 
-app = FastAPI(title="Freight Demurrage Desk", version="0.3.0")
+app = FastAPI(title="Freight Ops Board", version="0.4.0")
 templates = Jinja2Templates(directory=str(DESK_DIR / "templates"))
 static_dir = DESK_DIR / "static"
 static_dir.mkdir(exist_ok=True)
@@ -54,6 +54,7 @@ _STATE: dict[str, Any] = {
     "group_col": None, "group_time_col": None, "fast_ab": None, "elapsed_s": None,
     "blank_metrics": None, "blank_backend": None, "blank_warning": None,
     "blank_label": "blank_sailing", "what_if": None, "sample_row_ids": [],
+    "risk_cards": [], "money_label": "Projected demurrage",
 }
 
 
@@ -97,6 +98,7 @@ def _reset_triage_state() -> None:
         "elapsed_s", "blank_metrics", "blank_backend", "blank_warning", "what_if",
     ):
         _STATE[k] = None
+    _STATE["risk_cards"] = []
 
 
 def _metric_slice(metrics: dict[str, float] | None) -> dict[str, float]:
@@ -114,6 +116,17 @@ def _money_total(df) -> float:
     if col and col in df.columns:
         return float(df[col].fillna(0).sum())
     return 0.0
+
+
+try:
+    from apps.desk.risk_board import build_risk_cards as _build_risk_cards_impl
+except ImportError:
+    from risk_board import build_risk_cards as _build_risk_cards_impl  # type: ignore
+
+
+def _build_risk_cards(sess: PipelineSession, tid: str, actions: list[dict[str, Any]], limit: int = 12) -> list[dict[str, Any]]:
+    return _build_risk_cards_impl(sess, tid, actions, _pack_meta(), limit=limit)
+
 
 
 def _load_default_csv(session: PipelineSession | None = None) -> None:
@@ -134,6 +147,8 @@ def _load_default_csv(session: PipelineSession | None = None) -> None:
     _STATE["group_time_col"] = sess.domain.time_col
     _STATE["sample_row_ids"] = sample_ids(df, id_col=sess.domain.id_col or "container_id")
     _STATE["blank_label"] = getattr(sess.domain, "secondary_label_col", None) or "blank_sailing"
+    _STATE["money_label"] = meta.get("money_label") or "Exposure"
+    _STATE["risk_cards"] = []
     _reset_triage_state()
     app.state.session = sess
 
@@ -207,113 +222,22 @@ async def switch_pack(pack: str = Form(...)) -> RedirectResponse:
     _load_default_csv(sess)
     return RedirectResponse(url="/", status_code=303)
 
+try:
+    from apps.desk.desk_triage import register_triage_routes
+except ImportError:
+    from desk_triage import register_triage_routes  # type: ignore
 
-@app.post("/run-triage")
-async def run_triage(mode: str = Form("mock"), fast_ab: str | None = Form(None)) -> RedirectResponse:
-    """Run triage with judge-priority modes; always attach HistGBM baseline delta."""
-    sess: PipelineSession = app.state.session
-    tid = _STATE.get("table_id")
-    if not tid or tid not in sess.tables:
-        _load_default_csv(sess)
-        tid = _STATE["table_id"]
-    backend_mode, resolve_warn = _resolve_mode(mode)
-    n = len(sess.tables[tid])
-    test_size = 0.3 if n >= 10 else 0.25
-    if n < 4:
-        import pandas as pd
-        combined = pd.concat([pd.read_csv(_pack_meta()["csv"]), sess.tables[tid]], ignore_index=True)
-        sess.tables[tid] = combined
-        _STATE["n_rows"] = len(combined)
-        _STATE["demurrage_total"] = _money_total(combined)
-        _STATE["sample_row_ids"] = sample_ids(combined, id_col=sess.domain.id_col or "container_id")
-        test_size = 0.2
-    t0 = time.perf_counter()
-    cmp_ = sess.compare_baseline(tid, mode=backend_mode, baseline="sklearn_hist_gbm", test_size=test_size)
-    elapsed = time.perf_counter() - t0
-    actions = sess.suggest_actions(tid, max_rows=50)
-    warnings: list[str] = []
-    if resolve_warn:
-        warnings.append(resolve_warn)
-    if sess.last_warning:
-        warnings.append(str(sess.last_warning))
-    _STATE["metrics"] = _metric_slice(cmp_.tabpfn_metrics)
-    _STATE["baseline_metrics"] = _metric_slice(cmp_.baseline_metrics)
-    _STATE["delta"] = _metric_slice(cmp_.delta)
-    _STATE["baseline_narrative"] = cmp_.narrative
-    _STATE["backend"] = sess.last_backend
-    effective = sess.last_mode
-    _STATE["mode"] = effective.value if hasattr(effective, "value") else str(effective)
-    _STATE["requested_mode"] = backend_mode.value if hasattr(backend_mode, "value") else str(backend_mode)
-    _STATE["warning"] = " · ".join(warnings) if warnings else None
-    _STATE["elapsed_s"] = round(elapsed, 3)
-    _STATE["group_col"] = sess.domain.group_col
-    _STATE["group_time_col"] = sess.domain.time_col
-    _STATE["actions"] = [
-        {"row_id": a.row_id, "proba": round(float(a.proba), 4), "action": a.action, "reason": a.reason}
-        for a in actions.items
-    ]
-    _STATE["action_counts"] = dict(actions.counts)
-    _STATE["what_if"] = None
-    if _pack_meta().get("spine"):
-        run_blank_head(sess, tid, backend_mode, test_size, _STATE)
-    else:
-        _STATE["blank_metrics"] = None
-        _STATE["blank_backend"] = None
-        _STATE["blank_warning"] = None
-    if fast_ab in {"1", "on", "true", "yes"}:
-        snap_pred = None if sess.last_predictions is None else sess.last_predictions.copy()
-        snap = (sess.last_metrics, sess.last_backend, sess.last_mode, sess.last_warning, sess.last_baseline)
-        t1 = time.perf_counter()
-        fast_mode, fast_warn = _resolve_mode("fast")
-        fast_fit = sess.fit_predict(tid, mode=fast_mode, test_size=test_size)
-        _STATE["fast_ab"] = {
-            "mode": "fast", "backend": fast_fit.backend, "metrics": _metric_slice(fast_fit.metrics),
-            "elapsed_s": round(time.perf_counter() - t1, 3), "warning": fast_warn or fast_fit.warning,
-            "note": "Fast A/B stub — queue latency vs Thinking/Plus score (optional).",
-        }
-        if snap_pred is not None:
-            sess.last_predictions = snap_pred
-            sess.last_metrics, sess.last_backend, sess.last_mode, sess.last_warning, sess.last_baseline = snap
-    else:
-        _STATE["fast_ab"] = None
-    return RedirectResponse(url="/", status_code=303)
-
-
-@app.post("/what-if")
-async def what_if(
-    row_id: str = Form(...),
-    free_days_left: str | None = Form(None),
-    projected_demurrage_usd: str | None = Form(None),
-    divert: str | None = Form(None),
-    mode: str | None = Form(None),
-) -> RedirectResponse:
-    """Synthetic what-if simulation on a selected container row."""
-    sess: PipelineSession = app.state.session
-    tid = _STATE.get("table_id")
-    if not tid or tid not in sess.tables:
-        _load_default_csv(sess)
-        tid = _STATE["table_id"]
-    overrides: dict[str, Any] = {}
-    if free_days_left is not None and str(free_days_left).strip() != "":
-        overrides["free_days_left"] = float(free_days_left)
-    if projected_demurrage_usd is not None and str(projected_demurrage_usd).strip() != "":
-        overrides["projected_demurrage_usd"] = float(projected_demurrage_usd)
-    if divert in {"1", "on", "true", "yes"}:
-        overrides["divert"] = 1
-    backend_mode, resolve_warn = _resolve_mode(mode or _STATE.get("requested_mode") or "mock")
-    try:
-        result = run_what_if(sess, tid, row_id, overrides, backend_mode)
-        if resolve_warn:
-            result["warning"] = " · ".join(x for x in [resolve_warn, result.get("warning")] if x)
-        _STATE["what_if"] = result
-    except Exception as exc:  # noqa: BLE001
-        _STATE["what_if"] = {
-            "simulation": True,
-            "label": "what-if simulation (synthetic)",
-            "error": str(exc),
-            "row_id": row_id,
-        }
-    return RedirectResponse(url="/#what-if", status_code=303)
+register_triage_routes(
+    app,
+    state=_STATE,
+    pack_meta=_pack_meta,
+    resolve_mode=_resolve_mode,
+    metric_slice=_metric_slice,
+    money_total=_money_total,
+    build_risk_cards=_build_risk_cards,
+    load_default_csv=_load_default_csv,
+    sample_ids=sample_ids,
+)
 
 
 def create_app() -> FastAPI:
