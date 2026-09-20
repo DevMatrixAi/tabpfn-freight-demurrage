@@ -1,0 +1,45 @@
+name: inland-mode
+label_col: prefer_rail
+group_col: lane_id
+time_col: event_ts
+text_cols: [shipper_note, ops_note]
+high_card_cols: [move_id, container_id, terminal, destination]
+id_col: move_id
+data_path: domains/inland-mode/data/moves.csv
+feature_exclude: []
+action_thresholds:
+  high: 0.75
+  mid_high: 0.60
+  mid: 0.48
+  mid_low: 0.35
+actions:
+  high: book_rail
+  mid_high: hold_for_ramp
+  mid: book_truck
+  mid_low: expedite_inland
+  low: monitor
+playbook:
+  - action: expedite_inland
+    min_proba: 0.30
+    when_col: expedite_inland
+    when_equals: "1"
+    reason: "Expedite inland — free days / BCO urgency favors truck sprint (synthetic)"
+  - action: book_rail
+    min_proba: 0.62
+    when_col: book_rail
+    when_equals: "1"
+    reason: "Book rail — distance + cost gap + free days support ramp (synthetic)"
+  - action: hold_for_ramp
+    min_proba: 0.50
+    when_col: hold_for_ramp
+    when_equals: "1"
+    reason: "Hold for ramp — rail preferred but chassis/cut-off not ready"
+  - action: book_truck
+    min_proba: 0.40
+    when_col: book_truck
+    when_equals: "1"
+    reason: "Book truck — short haul, tight appointment, or expedite path"
+  - action: monitor
+    min_proba: 0.0
+    reason: "Monitor — log mode score; leave planner default"
+disclaimer: "Synthetic inland truck-vs-rail coda pack only. Not a TMS, not live rate shopping, not production routing."

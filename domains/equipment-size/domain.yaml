@@ -1,0 +1,45 @@
+name: equipment-size
+label_col: special_equip_fit
+group_col: trade_lane
+time_col: event_ts
+text_cols: [booking_note, ops_note]
+high_card_cols: [booking_id, shipper_id, pol, pod]
+id_col: booking_id
+data_path: domains/equipment-size/data/bookings.csv
+feature_exclude: []
+action_thresholds:
+  high: 0.78
+  mid_high: 0.62
+  mid: 0.48
+  mid_low: 0.35
+actions:
+  high: reefer_hold
+  mid_high: upsell_40hc
+  mid: confirm_special
+  mid_low: confirm_dry
+  low: monitor
+playbook:
+  - action: reefer_hold
+    min_proba: 0.72
+    when_col: hold_reefer_slot
+    when_equals: "1"
+    reason: "Reefer hold — cold-chain / temp cargo needs RF slot (synthetic)"
+  - action: upsell_40hc
+    min_proba: 0.55
+    when_col: hc_upsell
+    when_equals: "1"
+    reason: "Upsell 40HC — cubing out on dry GP (synthetic)"
+  - action: confirm_special
+    min_proba: 0.55
+    when_col: reefer_candidate
+    when_equals: "1"
+    reason: "Confirm special equip — reefer candidate, verify plug / genset"
+  - action: confirm_dry
+    min_proba: 0.0
+    when_col: confirm_dry_ok
+    when_equals: "1"
+    reason: "Confirm dry — no cold/cube/hazmat signal; keep GP"
+  - action: monitor
+    min_proba: 0.0
+    reason: "Monitor — log score; leave booking path unchanged"
+disclaimer: "Synthetic equipment-size coda pack only. Not a carrier booking system, not equipment inventory truth."
