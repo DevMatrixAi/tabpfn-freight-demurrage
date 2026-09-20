@@ -1,0 +1,201 @@
+container_id,event_ts,vessel_id,bol_id,pol,pod,terminal_note,weather_alert,free_days_left,dwell_days_so_far,teu,cargo_value_usd,daily_demurrage_usd,blank_sailing,inland_can_beat_freedays,fee_inevitable,cargo_vs_fee_collapse,projected_demurrage_usd,demurrage_risk
+CONT-000001,2026-07-01T03:05:00Z,VSL-A2,BOL-783385,JPYOK,AEJEA,Crane outage berth 3 — expect 18h delay.,,4.8,9.8,1,41754.0,150.0,0,0,0,1,20877.0,1
+CONT-000002,2026-07-01T06:10:00Z,VSL-A3,BOL-871599,KRPUS,DEHAM,,Typhoon track updated — possible blank sailing.,1.4,0.8,1,27669.0,200.0,0,1,0,0,0.0,0
+CONT-000003,2026-07-01T09:15:00Z,VSL-A4,BOL-169445,JPYOK,NLRTM,Empty return pile full; dwell rising.,Heat advisory; reefer power constrained.,4.7,1.4,2,28503.0,75.0,0,0,0,0,0.0,0
+CONT-000004,2026-07-01T12:20:00Z,VSL-B1,BOL-820802,NLRTM,CNSHA,,All clear.,1.9,3.3,1,31371.0,75.0,0,1,0,0,105.0,0
+CONT-000005,2026-07-01T15:25:00Z,VSL-B2,BOL-103186,CNSHA,KRPUS,,Fog thinning; ops normal.,8.5,6.7,1,7256.0,75.0,0,0,0,0,0.0,0
+CONT-000006,2026-07-01T18:30:00Z,VSL-B3,BOL-923301,DEHAM,AEJEA,Labor slowdown reported by agent.,Gale warning outer anchorage.,2.2,8.1,1,39997.0,200.0,0,1,0,0,1180.0,1
+CONT-000007,2026-07-01T21:35:00Z,VSL-B4,BOL-565145,JPYOK,USLAX,Box ready; trucker no-show.,,-1.9,9.1,1,11212.0,150.0,0,0,1,0,1365.0,1
+CONT-000008,2026-07-02T00:40:00Z,VSL-C1,BOL-631570,KRPUS,DEHAM,On schedule; gate flowing.,Typhoon track updated — possible blank sailing.,6.8,8.3,1,79211.0,250.0,0,0,0,0,375.0,0
+CONT-000009,2026-07-02T03:45:00Z,VSL-C2,BOL-275796,NLRTM,USLAX,Early discharge; chassis available.,Heat advisory; reefer power constrained.,8.5,5.8,2,65001.0,75.0,0,0,0,0,0.0,0
+CONT-000010,2026-07-02T06:50:00Z,VSL-C3,BOL-948895,JPYOK,JPYOK,Gate congestion; dual transactions stacked.,All clear.,1.8,10.9,2,65135.0,100.0,0,1,0,0,910.0,0
+CONT-000011,2026-07-02T09:55:00Z,VSL-C4,BOL-711709,NLRTM,NLRTM,,Fog thinning; ops normal.,5.9,,1,20917.0,75.0,0,0,0,0,0.0,0
+CONT-000012,2026-07-02T12:00:00Z,VSL-D1,BOL-653781,JPYOK,CNSHA,Customs hold pending docs.,Gale warning outer anchorage.,8.3,7.3,1,78891.0,75.0,0,0,0,0,0.0,0
+CONT-000013,2026-07-02T15:05:00Z,VSL-D2,BOL-683514,SGSIN,NLRTM,Empty return pile full; dwell rising.,,3.0,9.8,1,39930.0,100.0,0,1,0,0,680.0,0
+CONT-000014,2026-07-02T18:10:00Z,VSL-D3,BOL-106779,AEJEA,DEHAM,,Typhoon track updated — possible blank sailing.,2.4,8.9,2,82348.0,150.0,0,1,0,0,975.0,0
+CONT-000015,2026-07-02T21:15:00Z,VSL-D4,BOL-186039,SGSIN,USLAX,Pilotage delayed fog bank.,Heat advisory; reefer power constrained.,1.9,8.6,1,30148.0,75.0,1,1,0,0,502.0,0
+CONT-000016,2026-07-03T00:20:00Z,VSL-E1,BOL-346299,CNSHA,CNSHA,Labor slowdown reported by agent.,All clear.,-0.8,1.6,1,47215.0,200.0,0,0,0,0,320.0,0
+CONT-000017,2026-07-03T03:25:00Z,VSL-E2,BOL-619870,AEJEA,KRPUS,Box ready; trucker no-show.,Fog thinning; ops normal.,-1.1,4.3,2,21708.0,150.0,0,0,1,0,645.0,1
+CONT-000018,2026-07-03T06:30:00Z,VSL-E3,BOL-961125,SGSIN,KRPUS,,Gale warning outer anchorage.,1.4,2.7,1,25733.0,75.0,0,1,0,0,98.0,0
+CONT-000019,2026-07-03T09:35:00Z,VSL-E4,BOL-181357,AEJEA,SGSIN,Early discharge; chassis available.,,0.9,10.2,1,44826.0,100.0,0,1,0,0,930.0,0
+CONT-000020,2026-07-03T12:40:00Z,VSL-A1,BOL-556121,SGSIN,KRPUS,Gate congestion; dual transactions stacked.,Typhoon track updated — possible blank sailing.,8.5,10.3,1,25392.0,150.0,0,0,0,0,270.0,0
+CONT-000021,2026-07-03T15:45:00Z,VSL-A2,BOL-502380,JPYOK,AEJEA,,Heat advisory; reefer power constrained.,3.3,1.2,1,15135.0,200.0,0,0,0,0,0.0,0
+CONT-000022,2026-07-03T18:50:00Z,VSL-A3,BOL-696798,NLRTM,KRPUS,Customs hold pending docs.,All clear.,8.0,2.8,1,80573.0,100.0,0,0,0,0,0.0,0
+CONT-000023,2026-07-03T21:55:00Z,VSL-A4,BOL-321227,DEHAM,USLAX,Empty return pile full; dwell rising.,Fog thinning; ops normal.,8.8,4.6,2,10016.0,250.0,0,0,0,0,0.0,0
+CONT-000024,2026-07-04T00:00:00Z,VSL-B1,BOL-607003,DEHAM,CNSHA,,Gale warning outer anchorage.,9.8,7.2,1,36391.0,100.0,0,0,0,0,0.0,0
+CONT-000025,2026-07-04T03:05:00Z,VSL-B2,BOL-555213,JPYOK,JPYOK,Pilotage delayed fog bank.,,8.5,2.3,2,5271.0,200.0,0,0,0,0,0.0,0
+CONT-000026,2026-07-04T06:10:00Z,VSL-B3,BOL-884420,JPYOK,DEHAM,Labor slowdown reported by agent.,Typhoon track updated — possible blank sailing.,-0.6,,1,22108.0,150.0,0,0,1,0,600.0,1
+CONT-000027,2026-07-04T09:15:00Z,VSL-B4,BOL-165464,KRPUS,JPYOK,,Heat advisory; reefer power constrained.,-1.7,2.2,1,76731.0,250.0,0,0,1,0,550.0,0
+CONT-000028,2026-07-04T12:20:00Z,VSL-C1,BOL-724693,CNSHA,AEJEA,On schedule; gate flowing.,All clear.,8.8,6.1,2,68519.0,150.0,0,0,0,0,0.0,0
+CONT-000029,2026-07-04T15:25:00Z,VSL-C2,BOL-449917,USLAX,KRPUS,,Fog thinning; ops normal.,8.1,,1,84031.0,200.0,0,0,0,0,0.0,0
+CONT-000030,2026-07-04T18:30:00Z,VSL-C3,BOL-798934,CNSHA,DEHAM,Gate congestion; dual transactions stacked.,Gale warning outer anchorage.,6.6,2.1,1,31133.0,150.0,0,0,0,0,0.0,0
+CONT-000031,2026-07-04T21:35:00Z,VSL-C4,BOL-257327,AEJEA,USLAX,Crane outage berth 3 — expect 18h delay.,,5.1,,1,62757.0,250.0,0,0,0,0,0.0,0
+CONT-000032,2026-07-05T00:40:00Z,VSL-D1,BOL-896626,NLRTM,CNSHA,Customs hold pending docs.,Typhoon track updated — possible blank sailing.,0.9,10.4,2,15692.0,250.0,0,1,0,0,2375.0,1
+CONT-000033,2026-07-05T03:45:00Z,VSL-D2,BOL-463650,USLAX,DEHAM,Empty return pile full; dwell rising.,Heat advisory; reefer power constrained.,5.6,4.0,1,82120.0,150.0,0,0,0,0,0.0,0
+CONT-000034,2026-07-05T06:50:00Z,VSL-D3,BOL-676319,KRPUS,NLRTM,,All clear.,6.6,1.3,2,63678.0,75.0,0,0,0,0,0.0,0
+CONT-000035,2026-07-05T09:55:00Z,VSL-D4,BOL-132643,JPYOK,CNSHA,Pilotage delayed fog bank.,Fog thinning; ops normal.,3.6,0.2,1,51194.0,250.0,0,0,0,0,0.0,0
+CONT-000036,2026-07-05T12:00:00Z,VSL-E1,BOL-475962,SGSIN,USLAX,Labor slowdown reported by agent.,Gale warning outer anchorage.,8.5,10.9,1,43350.0,100.0,0,0,0,0,240.0,1
+CONT-000037,2026-07-05T15:05:00Z,VSL-E2,BOL-336755,KRPUS,AEJEA,Box ready; trucker no-show.,,4.8,3.9,1,82594.0,100.0,0,0,0,0,0.0,0
+CONT-000038,2026-07-05T18:10:00Z,VSL-E3,BOL-468009,USLAX,DEHAM,,Typhoon track updated — possible blank sailing.,-1.1,3.1,1,45230.0,150.0,0,0,1,0,465.0,0
+CONT-000039,2026-07-05T21:15:00Z,VSL-E4,BOL-849664,CNSHA,NLRTM,Early discharge; chassis available.,Heat advisory; reefer power constrained.,7.3,,1,56016.0,75.0,0,0,0,0,0.0,0
+CONT-000040,2026-07-06T00:20:00Z,VSL-A1,BOL-498484,USLAX,NLRTM,Gate congestion; dual transactions stacked.,All clear.,3.1,3.1,1,33408.0,150.0,0,0,0,0,0.0,0
+CONT-000041,2026-07-06T03:25:00Z,VSL-A2,BOL-898936,AEJEA,KRPUS,Crane outage berth 3 — expect 18h delay.,Fog thinning; ops normal.,6.4,3.1,1,72796.0,250.0,0,0,0,1,36398.0,1
+CONT-000042,2026-07-06T06:30:00Z,VSL-A3,BOL-652699,KRPUS,KRPUS,Customs hold pending docs.,Gale warning outer anchorage.,7.4,1.0,1,83100.0,200.0,0,0,0,0,0.0,0
+CONT-000043,2026-07-06T09:35:00Z,VSL-A4,BOL-748801,DEHAM,NLRTM,Empty return pile full; dwell rising.,,6.4,11.1,1,74448.0,100.0,0,0,0,0,470.0,0
+CONT-000044,2026-07-06T12:40:00Z,VSL-B1,BOL-640221,SGSIN,SGSIN,,Typhoon track updated — possible blank sailing.,1.7,2.5,2,64514.0,100.0,0,1,0,0,80.0,0
+CONT-000045,2026-07-06T15:45:00Z,VSL-B2,BOL-632810,DEHAM,DEHAM,Pilotage delayed fog bank.,Heat advisory; reefer power constrained.,6.2,,2,46942.0,100.0,0,0,0,0,0.0,0
+CONT-000046,2026-07-06T18:50:00Z,VSL-B3,BOL-948343,JPYOK,KRPUS,Labor slowdown reported by agent.,All clear.,7.8,11.7,2,70096.0,75.0,0,0,0,0,292.0,0
+CONT-000047,2026-07-06T21:55:00Z,VSL-B4,BOL-241921,JPYOK,NLRTM,Box ready; trucker no-show.,Fog thinning; ops normal.,0.2,11.0,1,2513.0,150.0,0,0,0,1,1620.0,1
+CONT-000048,2026-07-07T00:00:00Z,VSL-C1,BOL-448282,DEHAM,USLAX,On schedule; gate flowing.,Gale warning outer anchorage.,0.5,5.3,1,2989.0,150.0,0,1,0,0,720.0,0
+CONT-000049,2026-07-07T03:05:00Z,VSL-C2,BOL-911266,AEJEA,CNSHA,Early discharge; chassis available.,,10.0,8.6,1,37701.0,200.0,0,0,0,0,0.0,0
+CONT-000050,2026-07-07T06:10:00Z,VSL-C3,BOL-922424,NLRTM,USLAX,Gate congestion; dual transactions stacked.,Typhoon track updated — possible blank sailing.,6.5,11.3,1,75265.0,150.0,0,0,0,0,720.0,0
+CONT-000051,2026-07-07T09:15:00Z,VSL-C4,BOL-815394,CNSHA,CNSHA,Crane outage berth 3 — expect 18h delay.,Heat advisory; reefer power constrained.,-0.7,1.2,1,16376.0,150.0,0,0,1,0,180.0,1
+CONT-000052,2026-07-07T12:20:00Z,VSL-D1,BOL-719843,USLAX,NLRTM,Customs hold pending docs.,All clear.,5.4,10.4,1,59370.0,250.0,0,0,0,0,1250.0,0
+CONT-000053,2026-07-07T15:25:00Z,VSL-D2,BOL-687968,AEJEA,KRPUS,Empty return pile full; dwell rising.,Fog thinning; ops normal.,7.3,9.3,2,48893.0,200.0,0,0,0,0,400.0,0
+CONT-000054,2026-07-07T18:30:00Z,VSL-D3,BOL-836978,KRPUS,SGSIN,,Gale warning outer anchorage.,6.8,1.6,2,76873.0,100.0,0,0,0,0,0.0,0
+CONT-000055,2026-07-07T21:35:00Z,VSL-D4,BOL-455710,NLRTM,DEHAM,,,-0.0,4.0,1,31832.0,200.0,0,0,1,0,800.0,0
+CONT-000056,2026-07-08T00:40:00Z,VSL-E1,BOL-491030,NLRTM,JPYOK,Labor slowdown reported by agent.,Typhoon track updated — possible blank sailing.,8.1,11.0,1,66964.0,150.0,0,0,0,0,435.0,0
+CONT-000057,2026-07-08T03:45:00Z,VSL-E2,BOL-902697,USLAX,CNSHA,Box ready; trucker no-show.,Heat advisory; reefer power constrained.,0.3,4.5,1,9681.0,200.0,0,0,0,0,840.0,0
+CONT-000058,2026-07-08T06:50:00Z,VSL-E3,BOL-648286,CNSHA,USLAX,On schedule; gate flowing.,All clear.,5.1,11.9,2,15632.0,100.0,0,0,0,0,680.0,0
+CONT-000059,2026-07-08T09:55:00Z,VSL-E4,BOL-469739,DEHAM,KRPUS,Early discharge; chassis available.,Fog thinning; ops normal.,7.0,5.8,1,5596.0,100.0,0,0,0,0,0.0,0
+CONT-000060,2026-07-08T12:00:00Z,VSL-A1,BOL-302366,USLAX,SGSIN,Gate congestion; dual transactions stacked.,Gale warning outer anchorage.,2.0,9.4,1,6050.0,200.0,1,1,0,0,1480.0,1
+CONT-000061,2026-07-08T15:05:00Z,VSL-A2,BOL-347374,SGSIN,DEHAM,Crane outage berth 3 — expect 18h delay.,,6.6,3.1,1,8672.0,200.0,0,0,0,0,0.0,0
+CONT-000062,2026-07-08T18:10:00Z,VSL-A3,BOL-688276,SGSIN,SGSIN,Customs hold pending docs.,Typhoon track updated — possible blank sailing.,3.6,3.3,2,77044.0,100.0,0,0,0,0,0.0,0
+CONT-000063,2026-07-08T21:15:00Z,VSL-A4,BOL-711192,KRPUS,KRPUS,Empty return pile full; dwell rising.,Heat advisory; reefer power constrained.,7.9,7.5,2,60405.0,100.0,0,0,0,0,0.0,0
+CONT-000064,2026-07-09T00:20:00Z,VSL-B1,BOL-767964,NLRTM,NLRTM,,All clear.,8.9,2.0,1,16479.0,250.0,0,0,0,0,0.0,0
+CONT-000065,2026-07-09T03:25:00Z,VSL-B2,BOL-455821,AEJEA,NLRTM,Pilotage delayed fog bank.,Fog thinning; ops normal.,2.6,,1,37269.0,100.0,0,1,0,0,140.0,0
+CONT-000066,2026-07-09T06:30:00Z,VSL-B3,BOL-994603,NLRTM,CNSHA,Labor slowdown reported by agent.,Gale warning outer anchorage.,1.5,1.9,1,25734.0,250.0,0,1,0,0,100.0,0
+CONT-000067,2026-07-09T09:35:00Z,VSL-B4,BOL-909529,SGSIN,CNSHA,Box ready; trucker no-show.,,6.1,9.2,1,16152.0,250.0,0,0,0,0,775.0,0
+CONT-000068,2026-07-09T12:40:00Z,VSL-C1,BOL-242004,KRPUS,SGSIN,,Typhoon track updated — possible blank sailing.,-0.2,5.9,2,64320.0,150.0,0,0,1,0,885.0,0
+CONT-000069,2026-07-09T15:45:00Z,VSL-C2,BOL-257352,DEHAM,SGSIN,Early discharge; chassis available.,Heat advisory; reefer power constrained.,0.1,6.9,1,24060.0,75.0,0,0,0,0,510.0,1
+CONT-000070,2026-07-09T18:50:00Z,VSL-C3,BOL-280593,SGSIN,JPYOK,,All clear.,-0.6,10.8,2,74114.0,200.0,0,0,1,0,2160.0,1
+CONT-000071,2026-07-09T21:55:00Z,VSL-C4,BOL-372519,USLAX,NLRTM,Crane outage berth 3 — expect 18h delay.,Fog thinning; ops normal.,8.4,2.5,2,74732.0,100.0,0,0,0,0,0.0,0
+CONT-000072,2026-07-10T00:00:00Z,VSL-D1,BOL-760801,KRPUS,JPYOK,Customs hold pending docs.,Gale warning outer anchorage.,7.9,10.8,2,67864.0,200.0,0,0,0,0,580.0,0
+CONT-000073,2026-07-10T03:05:00Z,VSL-D2,BOL-774475,KRPUS,DEHAM,Empty return pile full; dwell rising.,,7.7,7.1,1,34368.0,200.0,0,0,0,0,0.0,0
+CONT-000074,2026-07-10T06:10:00Z,VSL-D3,BOL-783175,AEJEA,NLRTM,,Typhoon track updated — possible blank sailing.,3.2,5.9,1,20206.0,75.0,0,1,0,0,202.0,0
+CONT-000075,2026-07-10T09:15:00Z,VSL-D4,BOL-780346,AEJEA,USLAX,Pilotage delayed fog bank.,Heat advisory; reefer power constrained.,4.0,5.4,1,71316.0,150.0,1,0,0,0,210.0,0
+CONT-000076,2026-07-10T12:20:00Z,VSL-E1,BOL-169245,NLRTM,KRPUS,Labor slowdown reported by agent.,All clear.,-0.1,3.6,1,40471.0,200.0,0,0,1,0,720.0,0
+CONT-000077,2026-07-10T15:25:00Z,VSL-E2,BOL-491173,JPYOK,USLAX,,Fog thinning; ops normal.,7.5,11.5,2,49900.0,150.0,0,0,0,0,600.0,0
+CONT-000078,2026-07-10T18:30:00Z,VSL-E3,BOL-567563,USLAX,SGSIN,On schedule; gate flowing.,Gale warning outer anchorage.,1.4,,2,2169.0,100.0,0,0,0,0,260.0,0
+CONT-000079,2026-07-10T21:35:00Z,VSL-E4,BOL-301267,DEHAM,SGSIN,Early discharge; chassis available.,,3.9,4.1,2,71460.0,200.0,0,0,0,0,40.0,0
+CONT-000080,2026-07-11T00:40:00Z,VSL-A1,BOL-255577,SGSIN,NLRTM,Gate congestion; dual transactions stacked.,Typhoon track updated — possible blank sailing.,3.5,10.8,1,29414.0,250.0,0,1,0,0,1825.0,1
+CONT-000081,2026-07-11T03:45:00Z,VSL-A2,BOL-593103,JPYOK,SGSIN,Crane outage berth 3 — expect 18h delay.,Heat advisory; reefer power constrained.,8.3,5.7,1,29783.0,200.0,0,0,0,1,14891.5,1
+CONT-000082,2026-07-11T06:50:00Z,VSL-A3,BOL-629280,AEJEA,JPYOK,Customs hold pending docs.,All clear.,7.8,11.1,2,7256.0,75.0,0,0,0,0,248.0,0
+CONT-000083,2026-07-11T09:55:00Z,VSL-A4,BOL-161780,NLRTM,SGSIN,Empty return pile full; dwell rising.,Fog thinning; ops normal.,-1.4,7.4,1,44050.0,75.0,0,0,1,0,555.0,0
+CONT-000084,2026-07-11T12:00:00Z,VSL-B1,BOL-348352,JPYOK,USLAX,,Gale warning outer anchorage.,1.2,9.0,2,79665.0,200.0,0,0,0,0,1560.0,1
+CONT-000085,2026-07-11T15:05:00Z,VSL-B2,BOL-434665,KRPUS,NLRTM,,,-0.3,9.5,1,58727.0,150.0,0,0,1,0,1425.0,1
+CONT-000086,2026-07-11T18:10:00Z,VSL-B3,BOL-459123,JPYOK,JPYOK,Labor slowdown reported by agent.,Typhoon track updated — possible blank sailing.,0.6,1.8,2,23601.0,150.0,0,1,0,0,180.0,0
+CONT-000087,2026-07-11T21:15:00Z,VSL-B4,BOL-963572,CNSHA,USLAX,Box ready; trucker no-show.,Heat advisory; reefer power constrained.,2.7,1.3,2,27423.0,100.0,0,1,0,0,0.0,0
+CONT-000088,2026-07-12T00:20:00Z,VSL-C1,BOL-787356,SGSIN,USLAX,,All clear.,1.1,0.8,1,76751.0,75.0,0,1,0,0,0.0,0
+CONT-000089,2026-07-12T03:25:00Z,VSL-C2,BOL-813428,AEJEA,USLAX,Early discharge; chassis available.,Fog thinning; ops normal.,9.3,1.9,2,66913.0,75.0,0,0,0,0,0.0,0
+CONT-000090,2026-07-12T06:30:00Z,VSL-C3,BOL-160204,DEHAM,DEHAM,Gate congestion; dual transactions stacked.,Gale warning outer anchorage.,8.3,4.4,1,70411.0,150.0,1,0,0,0,0.0,0
+CONT-000091,2026-07-12T09:35:00Z,VSL-C4,BOL-320465,SGSIN,JPYOK,Crane outage berth 3 — expect 18h delay.,,-1.1,11.4,1,45037.0,200.0,0,0,1,0,2280.0,1
+CONT-000092,2026-07-12T12:40:00Z,VSL-D1,BOL-787347,AEJEA,NLRTM,Customs hold pending docs.,Typhoon track updated — possible blank sailing.,2.5,7.9,1,73196.0,150.0,0,0,0,0,810.0,0
+CONT-000093,2026-07-12T15:45:00Z,VSL-D2,BOL-788884,SGSIN,JPYOK,Empty return pile full; dwell rising.,Heat advisory; reefer power constrained.,3.9,0.4,1,4085.0,100.0,0,0,0,0,0.0,0
+CONT-000094,2026-07-12T18:50:00Z,VSL-D3,BOL-686745,USLAX,KRPUS,,All clear.,0.9,11.4,1,81048.0,75.0,0,1,0,0,788.0,0
+CONT-000095,2026-07-12T21:55:00Z,VSL-D4,BOL-673316,JPYOK,DEHAM,Pilotage delayed fog bank.,Fog thinning; ops normal.,-1.5,0.2,1,63754.0,75.0,0,0,0,0,15.0,0
+CONT-000096,2026-07-13T00:00:00Z,VSL-E1,BOL-116220,SGSIN,CNSHA,Labor slowdown reported by agent.,Gale warning outer anchorage.,3.4,6.2,1,9642.0,250.0,0,1,0,0,700.0,1
+CONT-000097,2026-07-13T03:05:00Z,VSL-E2,BOL-643916,USLAX,NLRTM,Box ready; trucker no-show.,,1.9,9.2,1,39491.0,75.0,0,0,0,0,547.0,0
+CONT-000098,2026-07-13T06:10:00Z,VSL-E3,BOL-224870,DEHAM,NLRTM,On schedule; gate flowing.,Typhoon track updated — possible blank sailing.,0.4,1.3,1,66540.0,250.0,0,1,0,0,225.0,0
+CONT-000099,2026-07-13T09:15:00Z,VSL-E4,BOL-901429,KRPUS,KRPUS,Early discharge; chassis available.,Heat advisory; reefer power constrained.,-1.2,2.9,1,44778.0,100.0,0,0,0,0,290.0,0
+CONT-000100,2026-07-13T12:20:00Z,VSL-A1,BOL-520625,AEJEA,SGSIN,Gate congestion; dual transactions stacked.,All clear.,1.8,11.6,1,68035.0,200.0,0,0,0,0,1960.0,0
+CONT-000101,2026-07-13T15:25:00Z,VSL-A2,BOL-159624,JPYOK,AEJEA,Crane outage berth 3 — expect 18h delay.,Fog thinning; ops normal.,4.1,0.4,1,37951.0,100.0,0,0,0,0,0.0,0
+CONT-000102,2026-07-13T18:30:00Z,VSL-A3,BOL-801724,SGSIN,NLRTM,Customs hold pending docs.,Gale warning outer anchorage.,5.0,1.6,2,76261.0,200.0,0,0,0,0,0.0,0
+CONT-000103,2026-07-13T21:35:00Z,VSL-A4,BOL-566219,DEHAM,AEJEA,,,3.6,9.9,1,35303.0,75.0,0,0,0,0,473.0,0
+CONT-000104,2026-07-14T00:40:00Z,VSL-B1,BOL-548313,JPYOK,CNSHA,,Typhoon track updated — possible blank sailing.,7.9,5.6,2,44221.0,250.0,0,0,0,0,0.0,0
+CONT-000105,2026-07-14T03:45:00Z,VSL-B2,BOL-965144,SGSIN,CNSHA,Pilotage delayed fog bank.,Heat advisory; reefer power constrained.,9.7,3.8,1,54324.0,200.0,1,0,0,0,0.0,0
+CONT-000106,2026-07-14T06:50:00Z,VSL-B3,BOL-164257,AEJEA,DEHAM,Labor slowdown reported by agent.,All clear.,5.8,6.9,1,25883.0,200.0,0,0,0,0,220.0,0
+CONT-000107,2026-07-14T09:55:00Z,VSL-B4,BOL-361977,AEJEA,SGSIN,Box ready; trucker no-show.,Fog thinning; ops normal.,2.1,5.4,1,31082.0,250.0,0,0,0,0,825.0,0
+CONT-000108,2026-07-14T12:00:00Z,VSL-C1,BOL-399419,JPYOK,DEHAM,On schedule; gate flowing.,Gale warning outer anchorage.,3.9,10.4,1,37046.0,250.0,0,0,0,0,1625.0,0
+CONT-000109,2026-07-14T15:05:00Z,VSL-C2,BOL-497371,JPYOK,CNSHA,Early discharge; chassis available.,,2.7,,1,15484.0,150.0,0,1,0,0,195.0,0
+CONT-000110,2026-07-14T18:10:00Z,VSL-C3,BOL-498614,AEJEA,CNSHA,Gate congestion; dual transactions stacked.,Typhoon track updated — possible blank sailing.,7.0,0.2,2,37994.0,150.0,0,0,0,0,0.0,0
+CONT-000111,2026-07-14T21:15:00Z,VSL-C4,BOL-929698,AEJEA,AEJEA,Crane outage berth 3 — expect 18h delay.,Heat advisory; reefer power constrained.,4.2,10.5,1,15486.0,200.0,0,0,0,0,1260.0,1
+CONT-000112,2026-07-15T00:20:00Z,VSL-D1,BOL-507143,AEJEA,AEJEA,Customs hold pending docs.,All clear.,3.9,6.7,1,36894.0,150.0,0,0,0,0,420.0,0
+CONT-000113,2026-07-15T03:25:00Z,VSL-D2,BOL-229193,SGSIN,AEJEA,Empty return pile full; dwell rising.,Fog thinning; ops normal.,1.6,4.7,1,81730.0,100.0,0,1,0,0,310.0,0
+CONT-000114,2026-07-15T06:30:00Z,VSL-D3,BOL-106016,SGSIN,CNSHA,,Gale warning outer anchorage.,8.4,4.0,1,71205.0,75.0,0,0,0,0,0.0,0
+CONT-000115,2026-07-15T09:35:00Z,VSL-D4,BOL-651254,NLRTM,SGSIN,Pilotage delayed fog bank.,,1.9,2.0,1,10934.0,250.0,0,1,0,0,25.0,0
+CONT-000116,2026-07-15T12:40:00Z,VSL-E1,BOL-206612,JPYOK,NLRTM,Labor slowdown reported by agent.,Typhoon track updated — possible blank sailing.,-0.2,0.3,1,54689.0,200.0,0,0,0,0,60.0,1
+CONT-000117,2026-07-15T15:45:00Z,VSL-E2,BOL-439784,AEJEA,KRPUS,Box ready; trucker no-show.,Heat advisory; reefer power constrained.,2.5,,1,5251.0,200.0,0,1,0,0,300.0,0
+CONT-000118,2026-07-15T18:50:00Z,VSL-E3,BOL-923776,JPYOK,USLAX,On schedule; gate flowing.,All clear.,8.1,7.8,1,31738.0,200.0,0,0,0,0,0.0,0
+CONT-000119,2026-07-15T21:55:00Z,VSL-E4,BOL-618322,DEHAM,AEJEA,Early discharge; chassis available.,Fog thinning; ops normal.,-0.6,9.1,1,48663.0,150.0,0,0,1,0,1365.0,1
+CONT-000120,2026-07-16T00:00:00Z,VSL-A1,BOL-515748,KRPUS,CNSHA,Gate congestion; dual transactions stacked.,Gale warning outer anchorage.,8.3,6.7,1,82272.0,100.0,1,0,0,0,0.0,1
+CONT-000121,2026-07-16T03:05:00Z,VSL-A2,BOL-198954,USLAX,USLAX,Crane outage berth 3 — expect 18h delay.,,7.9,8.0,1,22616.0,250.0,0,0,0,1,11308.0,1
+CONT-000122,2026-07-16T06:10:00Z,VSL-A3,BOL-442142,DEHAM,AEJEA,Customs hold pending docs.,Typhoon track updated — possible blank sailing.,-0.6,10.6,2,42481.0,100.0,0,0,1,0,1060.0,1
+CONT-000123,2026-07-16T09:15:00Z,VSL-A4,BOL-663785,DEHAM,CNSHA,Empty return pile full; dwell rising.,Heat advisory; reefer power constrained.,2.2,1.5,1,4258.0,200.0,0,0,0,0,0.0,0
+CONT-000124,2026-07-16T12:20:00Z,VSL-B1,BOL-914994,JPYOK,NLRTM,,All clear.,4.3,,2,33579.0,250.0,0,0,0,0,0.0,0
+CONT-000125,2026-07-16T15:25:00Z,VSL-B2,BOL-196823,CNSHA,JPYOK,Pilotage delayed fog bank.,Fog thinning; ops normal.,5.3,3.9,1,20038.0,250.0,0,0,0,0,0.0,0
+CONT-000126,2026-07-16T18:30:00Z,VSL-B3,BOL-439658,NLRTM,AEJEA,,Gale warning outer anchorage.,6.9,10.5,1,7712.0,200.0,0,0,0,0,720.0,0
+CONT-000127,2026-07-16T21:35:00Z,VSL-B4,BOL-762505,USLAX,USLAX,Box ready; trucker no-show.,,6.7,3.0,1,55738.0,250.0,0,0,0,0,0.0,0
+CONT-000128,2026-07-17T00:40:00Z,VSL-C1,BOL-284384,AEJEA,NLRTM,On schedule; gate flowing.,Typhoon track updated — possible blank sailing.,9.9,11.5,1,14125.0,75.0,0,0,0,0,120.0,0
+CONT-000129,2026-07-17T03:45:00Z,VSL-C2,BOL-184232,JPYOK,USLAX,Early discharge; chassis available.,Heat advisory; reefer power constrained.,-0.9,10.7,1,75952.0,200.0,0,0,1,0,2140.0,1
+CONT-000130,2026-07-17T06:50:00Z,VSL-C3,BOL-409254,USLAX,JPYOK,Gate congestion; dual transactions stacked.,All clear.,7.4,4.3,1,45039.0,250.0,0,0,0,0,0.0,0
+CONT-000131,2026-07-17T09:55:00Z,VSL-C4,BOL-912990,USLAX,CNSHA,Crane outage berth 3 — expect 18h delay.,Fog thinning; ops normal.,3.7,11.9,1,35818.0,100.0,0,0,0,0,820.0,0
+CONT-000132,2026-07-17T12:00:00Z,VSL-D1,BOL-782995,CNSHA,NLRTM,Customs hold pending docs.,Gale warning outer anchorage.,2.2,5.2,1,54532.0,250.0,0,0,0,0,750.0,0
+CONT-000133,2026-07-17T15:05:00Z,VSL-D2,BOL-740373,CNSHA,USLAX,Empty return pile full; dwell rising.,,3.5,1.7,1,84443.0,250.0,0,1,0,0,0.0,0
+CONT-000134,2026-07-17T18:10:00Z,VSL-D3,BOL-469611,USLAX,JPYOK,,Typhoon track updated — possible blank sailing.,5.0,3.0,1,2579.0,150.0,0,0,0,0,0.0,0
+CONT-000135,2026-07-17T21:15:00Z,VSL-D4,BOL-350056,CNSHA,JPYOK,Pilotage delayed fog bank.,Heat advisory; reefer power constrained.,6.5,8.9,2,69668.0,100.0,1,0,0,0,240.0,1
+CONT-000136,2026-07-18T00:20:00Z,VSL-E1,BOL-319761,SGSIN,NLRTM,Labor slowdown reported by agent.,All clear.,-0.6,3.2,1,54302.0,100.0,0,0,0,0,320.0,0
+CONT-000137,2026-07-18T03:25:00Z,VSL-E2,BOL-629079,NLRTM,CNSHA,Box ready; trucker no-show.,Fog thinning; ops normal.,3.5,9.7,1,13310.0,250.0,0,1,0,0,1550.0,0
+CONT-000138,2026-07-18T06:30:00Z,VSL-E3,BOL-379838,JPYOK,SGSIN,On schedule; gate flowing.,Gale warning outer anchorage.,2.7,11.5,1,56610.0,100.0,0,1,0,0,880.0,0
+CONT-000139,2026-07-18T09:35:00Z,VSL-E4,BOL-775300,NLRTM,AEJEA,Early discharge; chassis available.,,5.5,3.5,1,50852.0,200.0,0,0,0,0,0.0,0
+CONT-000140,2026-07-18T12:40:00Z,VSL-A1,BOL-991394,DEHAM,SGSIN,Gate congestion; dual transactions stacked.,Typhoon track updated — possible blank sailing.,7.0,,1,61388.0,75.0,0,0,0,0,0.0,0
+CONT-000141,2026-07-18T15:45:00Z,VSL-A2,BOL-454375,USLAX,KRPUS,Crane outage berth 3 — expect 18h delay.,Heat advisory; reefer power constrained.,7.4,6.6,1,38095.0,250.0,0,0,0,0,0.0,0
+CONT-000142,2026-07-18T18:50:00Z,VSL-A3,BOL-246069,JPYOK,JPYOK,Customs hold pending docs.,All clear.,8.2,4.5,2,29282.0,200.0,0,0,0,0,0.0,0
+CONT-000143,2026-07-18T21:55:00Z,VSL-A4,BOL-849060,SGSIN,NLRTM,Empty return pile full; dwell rising.,Fog thinning; ops normal.,0.2,6.1,2,40206.0,200.0,0,1,0,0,1180.0,0
+CONT-000144,2026-07-19T00:00:00Z,VSL-B1,BOL-627635,NLRTM,KRPUS,,Gale warning outer anchorage.,5.6,2.5,1,83419.0,150.0,0,0,0,0,0.0,0
+CONT-000145,2026-07-19T03:05:00Z,VSL-B2,BOL-589850,SGSIN,KRPUS,Pilotage delayed fog bank.,,4.6,2.3,1,62206.0,250.0,0,0,0,0,0.0,0
+CONT-000146,2026-07-19T06:10:00Z,VSL-B3,BOL-955638,SGSIN,NLRTM,Labor slowdown reported by agent.,Typhoon track updated — possible blank sailing.,-0.8,4.6,1,8040.0,250.0,0,0,1,0,1150.0,1
+CONT-000147,2026-07-19T09:15:00Z,VSL-B4,BOL-698005,AEJEA,SGSIN,Box ready; trucker no-show.,Heat advisory; reefer power constrained.,3.3,10.0,1,81603.0,75.0,0,1,0,0,502.0,0
+CONT-000148,2026-07-19T12:20:00Z,VSL-C1,BOL-203801,SGSIN,CNSHA,On schedule; gate flowing.,All clear.,9.4,,1,30371.0,100.0,0,0,0,0,0.0,0
+CONT-000149,2026-07-19T15:25:00Z,VSL-C2,BOL-344878,JPYOK,DEHAM,Early discharge; chassis available.,Fog thinning; ops normal.,2.0,11.0,2,77169.0,250.0,0,1,0,0,2250.0,0
+CONT-000150,2026-07-19T18:30:00Z,VSL-C3,BOL-266474,USLAX,USLAX,Gate congestion; dual transactions stacked.,Gale warning outer anchorage.,7.9,,1,14427.0,150.0,1,0,0,0,0.0,1
+CONT-000151,2026-07-19T21:35:00Z,VSL-C4,BOL-708554,AEJEA,NLRTM,Crane outage berth 3 — expect 18h delay.,,8.0,6.2,1,9089.0,75.0,0,0,0,0,0.0,0
+CONT-000152,2026-07-20T00:40:00Z,VSL-D1,BOL-565082,NLRTM,CNSHA,Customs hold pending docs.,Typhoon track updated — possible blank sailing.,7.9,7.3,2,52619.0,75.0,0,0,0,0,0.0,0
+CONT-000153,2026-07-20T03:45:00Z,VSL-D2,BOL-899462,SGSIN,JPYOK,,Heat advisory; reefer power constrained.,0.8,10.1,1,48236.0,250.0,0,1,0,0,2325.0,0
+CONT-000154,2026-07-20T06:50:00Z,VSL-D3,BOL-734665,KRPUS,KRPUS,,All clear.,4.4,2.1,1,76294.0,75.0,0,0,0,0,0.0,0
+CONT-000155,2026-07-20T09:55:00Z,VSL-D4,BOL-753257,AEJEA,KRPUS,,Fog thinning; ops normal.,2.0,6.9,1,52913.0,75.0,0,1,0,0,368.0,0
+CONT-000156,2026-07-20T12:00:00Z,VSL-E1,BOL-388759,JPYOK,AEJEA,Labor slowdown reported by agent.,Gale warning outer anchorage.,-1.0,9.4,1,26569.0,75.0,0,0,1,0,705.0,1
+CONT-000157,2026-07-20T15:05:00Z,VSL-E2,BOL-567243,DEHAM,USLAX,Box ready; trucker no-show.,,3.0,9.1,1,3152.0,100.0,0,1,0,0,610.0,0
+CONT-000158,2026-07-20T18:10:00Z,VSL-E3,BOL-651209,AEJEA,USLAX,On schedule; gate flowing.,Typhoon track updated — possible blank sailing.,9.7,11.9,1,47657.0,250.0,0,0,0,0,550.0,0
+CONT-000159,2026-07-20T21:15:00Z,VSL-E4,BOL-531422,JPYOK,SGSIN,Early discharge; chassis available.,Heat advisory; reefer power constrained.,3.9,7.7,1,25947.0,150.0,0,0,0,0,570.0,0
+CONT-000160,2026-07-21T00:20:00Z,VSL-A1,BOL-755410,DEHAM,NLRTM,Gate congestion; dual transactions stacked.,All clear.,1.8,0.4,1,68630.0,200.0,0,1,0,0,0.0,0
+CONT-000161,2026-07-21T03:25:00Z,VSL-A2,BOL-581726,JPYOK,CNSHA,Crane outage berth 3 — expect 18h delay.,Fog thinning; ops normal.,9.4,6.0,1,30583.0,150.0,0,0,0,1,15291.5,1
+CONT-000162,2026-07-21T06:30:00Z,VSL-A3,BOL-305558,USLAX,DEHAM,Customs hold pending docs.,Gale warning outer anchorage.,7.8,7.7,2,7260.0,250.0,0,0,0,0,0.0,0
+CONT-000163,2026-07-21T09:35:00Z,VSL-A4,BOL-958522,JPYOK,JPYOK,Empty return pile full; dwell rising.,,1.5,,1,19390.0,150.0,0,1,0,0,375.0,0
+CONT-000164,2026-07-21T12:40:00Z,VSL-B1,BOL-127220,AEJEA,DEHAM,,Typhoon track updated — possible blank sailing.,1.8,10.2,1,37218.0,150.0,0,1,0,0,1260.0,0
+CONT-000165,2026-07-21T15:45:00Z,VSL-B2,BOL-134647,USLAX,KRPUS,Pilotage delayed fog bank.,Heat advisory; reefer power constrained.,6.1,11.6,1,75270.0,200.0,1,0,0,0,1100.0,0
+CONT-000166,2026-07-21T18:50:00Z,VSL-B3,BOL-382451,JPYOK,DEHAM,,All clear.,0.8,8.8,2,18935.0,200.0,0,1,0,0,1600.0,0
+CONT-000167,2026-07-21T21:55:00Z,VSL-B4,BOL-634324,CNSHA,DEHAM,Box ready; trucker no-show.,Fog thinning; ops normal.,-0.4,9.9,2,69886.0,100.0,0,0,1,0,990.0,0
+CONT-000168,2026-07-22T00:00:00Z,VSL-C1,BOL-370900,AEJEA,DEHAM,On schedule; gate flowing.,Gale warning outer anchorage.,1.5,10.3,1,3508.0,150.0,0,1,0,0,1320.0,0
+CONT-000169,2026-07-22T03:05:00Z,VSL-C2,BOL-557782,AEJEA,CNSHA,Early discharge; chassis available.,,-1.8,8.1,1,70287.0,100.0,0,0,1,0,810.0,1
+CONT-000170,2026-07-22T06:10:00Z,VSL-C3,BOL-316937,DEHAM,AEJEA,Gate congestion; dual transactions stacked.,Typhoon track updated — possible blank sailing.,6.3,7.1,1,20566.0,150.0,0,0,0,0,120.0,1
+CONT-000171,2026-07-22T09:15:00Z,VSL-C4,BOL-453367,AEJEA,AEJEA,Crane outage berth 3 — expect 18h delay.,Heat advisory; reefer power constrained.,1.2,9.7,1,74616.0,150.0,0,1,0,0,1275.0,0
+CONT-000172,2026-07-22T12:20:00Z,VSL-D1,BOL-575382,AEJEA,JPYOK,Customs hold pending docs.,All clear.,3.0,4.8,1,38584.0,150.0,0,1,0,0,270.0,0
+CONT-000173,2026-07-22T15:25:00Z,VSL-D2,BOL-218066,AEJEA,CNSHA,Empty return pile full; dwell rising.,Fog thinning; ops normal.,0.8,4.2,1,40424.0,75.0,0,1,0,0,255.0,0
+CONT-000174,2026-07-22T18:30:00Z,VSL-D3,BOL-472486,DEHAM,DEHAM,,Gale warning outer anchorage.,7.1,11.2,1,22026.0,150.0,0,0,0,0,615.0,0
+CONT-000175,2026-07-22T21:35:00Z,VSL-D4,BOL-377015,USLAX,AEJEA,Pilotage delayed fog bank.,,1.0,1.1,1,15302.0,100.0,0,0,0,0,10.0,0
+CONT-000176,2026-07-23T00:40:00Z,VSL-E1,BOL-408208,DEHAM,AEJEA,Labor slowdown reported by agent.,Typhoon track updated — possible blank sailing.,3.4,7.1,1,16830.0,100.0,0,1,0,0,370.0,0
+CONT-000177,2026-07-23T03:45:00Z,VSL-E2,BOL-694587,DEHAM,NLRTM,Box ready; trucker no-show.,Heat advisory; reefer power constrained.,5.1,,1,38039.0,75.0,0,0,0,0,0.0,0
+CONT-000178,2026-07-23T06:50:00Z,VSL-E3,BOL-494424,DEHAM,AEJEA,On schedule; gate flowing.,All clear.,-1.6,6.8,1,31447.0,200.0,0,0,1,0,1360.0,0
+CONT-000179,2026-07-23T09:55:00Z,VSL-E4,BOL-337620,KRPUS,AEJEA,Early discharge; chassis available.,Fog thinning; ops normal.,3.6,,2,20047.0,250.0,0,0,0,0,100.0,0
+CONT-000180,2026-07-23T12:00:00Z,VSL-A1,BOL-383853,KRPUS,AEJEA,Gate congestion; dual transactions stacked.,Gale warning outer anchorage.,5.3,12.0,1,28882.0,250.0,1,0,0,0,1675.0,1
+CONT-000181,2026-07-23T15:05:00Z,VSL-A2,BOL-717006,DEHAM,AEJEA,,,8.3,9.4,2,54140.0,200.0,0,0,0,0,220.0,0
+CONT-000182,2026-07-23T18:10:00Z,VSL-A3,BOL-206373,USLAX,JPYOK,Customs hold pending docs.,Typhoon track updated — possible blank sailing.,8.5,9.2,1,84429.0,100.0,0,0,0,0,70.0,0
+CONT-000183,2026-07-23T21:15:00Z,VSL-A4,BOL-583651,SGSIN,USLAX,Empty return pile full; dwell rising.,Heat advisory; reefer power constrained.,7.8,10.3,1,20315.0,100.0,0,0,0,0,250.0,0
+CONT-000184,2026-07-24T00:20:00Z,VSL-B1,BOL-375391,AEJEA,KRPUS,,All clear.,1.6,2.4,1,76138.0,75.0,0,1,0,0,60.0,0
+CONT-000185,2026-07-24T03:25:00Z,VSL-B2,BOL-657711,NLRTM,DEHAM,Pilotage delayed fog bank.,Fog thinning; ops normal.,1.9,0.3,2,23976.0,250.0,0,1,0,0,0.0,0
+CONT-000186,2026-07-24T06:30:00Z,VSL-B3,BOL-292224,JPYOK,DEHAM,Labor slowdown reported by agent.,Gale warning outer anchorage.,3.5,7.5,1,73600.0,150.0,0,1,0,0,600.0,1
+CONT-000187,2026-07-24T09:35:00Z,VSL-B4,BOL-418352,KRPUS,SGSIN,Box ready; trucker no-show.,,6.1,6.9,1,78114.0,75.0,0,0,0,0,60.0,0
+CONT-000188,2026-07-24T12:40:00Z,VSL-C1,BOL-851039,USLAX,AEJEA,,Typhoon track updated — possible blank sailing.,8.0,9.8,1,53571.0,75.0,0,0,0,0,135.0,0
+CONT-000189,2026-07-24T15:45:00Z,VSL-C2,BOL-884591,AEJEA,CNSHA,Early discharge; chassis available.,Heat advisory; reefer power constrained.,-1.6,,1,82494.0,75.0,0,0,0,0,300.0,0
+CONT-000190,2026-07-24T18:50:00Z,VSL-C3,BOL-991796,AEJEA,NLRTM,Gate congestion; dual transactions stacked.,All clear.,1.9,1.2,1,74894.0,250.0,0,1,0,0,0.0,0
+CONT-000191,2026-07-24T21:55:00Z,VSL-C4,BOL-893590,CNSHA,USLAX,Crane outage berth 3 — expect 18h delay.,Fog thinning; ops normal.,9.7,11.7,1,44089.0,250.0,0,0,0,0,500.0,0
+CONT-000192,2026-07-25T00:00:00Z,VSL-D1,BOL-238188,NLRTM,KRPUS,Customs hold pending docs.,Gale warning outer anchorage.,7.6,9.8,1,75374.0,100.0,0,0,0,0,220.0,0
+CONT-000193,2026-07-25T03:05:00Z,VSL-D2,BOL-786705,USLAX,KRPUS,Empty return pile full; dwell rising.,,7.4,6.9,2,79734.0,100.0,0,0,0,0,0.0,0
+CONT-000194,2026-07-25T06:10:00Z,VSL-D3,BOL-595006,JPYOK,AEJEA,,Typhoon track updated — possible blank sailing.,1.2,9.2,1,10984.0,200.0,0,1,0,0,1600.0,1
+CONT-000195,2026-07-25T09:15:00Z,VSL-D4,BOL-201772,SGSIN,AEJEA,Pilotage delayed fog bank.,Heat advisory; reefer power constrained.,-0.3,1.0,2,82778.0,75.0,1,0,0,0,75.0,1
+CONT-000196,2026-07-25T12:20:00Z,VSL-E1,BOL-506626,NLRTM,NLRTM,Labor slowdown reported by agent.,All clear.,1.4,11.8,1,47681.0,150.0,0,1,0,0,1560.0,0
+CONT-000197,2026-07-25T15:25:00Z,VSL-E2,BOL-289689,SGSIN,SGSIN,Box ready; trucker no-show.,Fog thinning; ops normal.,8.9,0.8,1,57899.0,250.0,0,0,0,0,0.0,0
+CONT-000198,2026-07-25T18:30:00Z,VSL-E3,BOL-334523,USLAX,AEJEA,On schedule; gate flowing.,Gale warning outer anchorage.,-1.0,10.8,2,28548.0,200.0,0,0,1,0,2160.0,1
+CONT-000199,2026-07-25T21:35:00Z,VSL-E4,BOL-189628,NLRTM,CNSHA,Early discharge; chassis available.,,5.4,8.3,1,35572.0,75.0,0,0,0,0,218.0,0
+CONT-000200,2026-07-26T00:40:00Z,VSL-A1,BOL-422943,SGSIN,CNSHA,,Typhoon track updated — possible blank sailing.,-0.9,,2,57686.0,75.0,0,0,0,0,300.0,0
