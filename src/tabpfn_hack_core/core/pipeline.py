@@ -1,1 +1,1 @@
-{{INCLUDE_FILE:/tmp/exact_push/pipeline_FROZEN.py}}
+file:///tmp/exact_push/pipeline_FROZEN.py
