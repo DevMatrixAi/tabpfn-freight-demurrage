@@ -33,6 +33,8 @@ expedite_aog → hold_for_connection → rebook_belly → monitor
 
 ## Regenerate
 
+First `tabpfn-hack demo --domain domains/air-freight/domain.yaml --mode mock` auto-generates `data/shipments.csv` (250 rows) if missing — same as equipment-size / inland-mode.
+
 ```bash
 python scripts/gen_coda_packs.py --pack air-freight --n 600
 ```
