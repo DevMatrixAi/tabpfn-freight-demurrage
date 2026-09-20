@@ -16,6 +16,19 @@ Synthetic / public-derived demo only. Fixture adapters only — not live carrier
 ---
 <!-- FREIGHT_FACE_END -->
 
+
+## Robot / TMS consumer API
+
+**Humans or robots call the same action API.** Desk serves JSON under `/api/v1/*` that wraps TabPFN `suggest_actions` / triage (honest: **decisions API**, not crane control). Mock works without a token; Plus/Thinking when `TABPFN_TOKEN` is set. See [`docs/ROBOT_API.md`](docs/ROBOT_API.md) and OpenAPI at `/docs`.
+
+```bash
+tabpfn-hack desk --host 127.0.0.1 --port 8765
+curl -s http://127.0.0.1:8765/api/v1/health
+curl -s -X POST http://127.0.0.1:8765/api/v1/triage \
+  -H 'content-type: application/json' \
+  -d '{"pack":"freight-demurrage","mode":"mock"}'
+```
+
 ## Multi-desk note
 
 **Spine:** `domains/freight-demurrage/` — demurrage triage is the default desk story.  
