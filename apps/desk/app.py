@@ -29,10 +29,15 @@ except ImportError:  # uvicorn app-dir=.
 
 DESK_DIR = Path(__file__).resolve().parent
 ROOT = find_project_root(_ROOT)
-DOMAIN_PATH = ROOT / "domains" / "freight-demurrage" / "domain.yaml"
-DEFAULT_CSV = ROOT / "domains" / "freight-demurrage" / "data" / "containers.csv"
 PRIMARY_MODES = ("plus", "thinking", "mock")
 METRIC_KEYS = ("accuracy", "f1", "roc_auc", "avg_precision")
+
+try:
+    from apps.desk.packs import DEFAULT_PACK, build_packs
+except ImportError:
+    from packs import DEFAULT_PACK, build_packs  # type: ignore
+
+PACKS = build_packs(ROOT)
 
 app = FastAPI(title="Freight Demurrage Desk", version="0.3.0")
 templates = Jinja2Templates(directory=str(DESK_DIR / "templates"))
@@ -41,6 +46,7 @@ static_dir.mkdir(exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 _STATE: dict[str, Any] = {
+    "pack": DEFAULT_PACK, "pack_label": PACKS[DEFAULT_PACK]["label"],
     "source": "domain_csv", "adapter": None, "table_id": None, "n_rows": 0,
     "metrics": None, "baseline_metrics": None, "delta": None, "baseline_narrative": None,
     "backend": None, "mode": None, "requested_mode": None, "warning": None,
@@ -70,8 +76,18 @@ def _resolve_mode(requested: str) -> tuple[BackendMode, str | None]:
     return mode, warn
 
 
-def _session() -> PipelineSession:
-    return PipelineSession(domain=load_domain(DOMAIN_PATH), root=ROOT)
+def _pack_id() -> str:
+    pid = _STATE.get("pack") or DEFAULT_PACK
+    return pid if pid in PACKS else DEFAULT_PACK
+
+
+def _pack_meta() -> dict[str, Any]:
+    return PACKS[_pack_id()]
+
+
+def _session(pack: str | None = None) -> PipelineSession:
+    pid = pack if pack in PACKS else _pack_id()
+    return PipelineSession(domain=load_domain(PACKS[pid]["domain"]), root=ROOT)
 
 
 def _reset_triage_state() -> None:
@@ -93,41 +109,61 @@ def _metric_slice(metrics: dict[str, float] | None) -> dict[str, float]:
     }
 
 
-def _load_default_csv(session: PipelineSession) -> None:
-    result = session.load_table(path=str(DEFAULT_CSV), table_id="desk")
+def _money_total(df) -> float:
+    col = _pack_meta().get("money_col")
+    if col and col in df.columns:
+        return float(df[col].fillna(0).sum())
+    return 0.0
+
+
+def _load_default_csv(session: PipelineSession | None = None) -> None:
+    meta = _pack_meta()
+    sess = session or _session()
+    csv_path = meta["csv"]
+    result = sess.load_table(path=str(csv_path), table_id="desk")
+    _STATE["pack"] = _pack_id()
+    _STATE["pack_label"] = meta["label"]
     _STATE["source"] = "domain_csv"
     _STATE["adapter"] = None
     _STATE["table_id"] = result.table_id
     _STATE["n_rows"] = result.n_rows
-    df = session.tables[result.table_id]
-    _STATE["demurrage_total"] = float(df["projected_demurrage_usd"].fillna(0).sum())
+    df = sess.tables[result.table_id]
+    _STATE["demurrage_total"] = _money_total(df)
     _STATE["preview_rows"] = df.head(8).fillna("").to_dict(orient="records")
-    _STATE["group_col"] = session.domain.group_col
-    _STATE["group_time_col"] = session.domain.time_col
-    _STATE["sample_row_ids"] = sample_ids(df)
-    _STATE["blank_label"] = getattr(session.domain, "secondary_label_col", None) or "blank_sailing"
+    _STATE["group_col"] = sess.domain.group_col
+    _STATE["group_time_col"] = sess.domain.time_col
+    _STATE["sample_row_ids"] = sample_ids(df, id_col=sess.domain.id_col or "container_id")
+    _STATE["blank_label"] = getattr(sess.domain, "secondary_label_col", None) or "blank_sailing"
     _reset_triage_state()
+    app.state.session = sess
 
 
 @app.on_event("startup")
 def _startup() -> None:
     from dotenv import load_dotenv
     load_dotenv(ROOT / ".env")
-    sess = _session()
+    sess = _session(DEFAULT_PACK)
+    _STATE["pack"] = DEFAULT_PACK
+    _STATE["pack_label"] = PACKS[DEFAULT_PACK]["label"]
     _STATE["group_col"] = sess.domain.group_col
     _STATE["group_time_col"] = sess.domain.time_col
     _STATE["blank_label"] = getattr(sess.domain, "secondary_label_col", None) or "blank_sailing"
-    if DEFAULT_CSV.is_file():
+    if PACKS[DEFAULT_PACK]["csv"].is_file():
         _load_default_csv(sess)
-    app.state.session = sess
+    else:
+        app.state.session = sess
 
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request) -> HTMLResponse:
+    meta = _pack_meta()
+    disclaimer = load_domain(meta["domain"]).disclaimer
     return templates.TemplateResponse(request, "index.html", {
         "adapters": list_adapters(), "state": _STATE,
-        "disclaimer": "Synthetic / public-derived ocean freight demo only. Not a carrier system of record.",
+        "packs": [{"id": k, "label": v["label"], "spine": v["spine"]} for k, v in PACKS.items()],
+        "disclaimer": disclaimer,
         "has_token": _has_token(), "primary_modes": PRIMARY_MODES, "metric_keys": METRIC_KEYS,
+        "is_spine": bool(meta.get("spine")),
     })
 
 
@@ -146,11 +182,11 @@ async def load_adapter(adapter_name: str = Form(...)) -> RedirectResponse:
     _STATE["table_id"] = result.table_id
     _STATE["n_rows"] = result.n_rows
     loaded = sess.tables[result.table_id]
-    _STATE["demurrage_total"] = float(loaded["projected_demurrage_usd"].fillna(0).sum())
+    _STATE["demurrage_total"] = _money_total(loaded)
     _STATE["preview_rows"] = loaded.head(8).fillna("").to_dict(orient="records")
     _STATE["group_col"] = sess.domain.group_col
     _STATE["group_time_col"] = sess.domain.time_col
-    _STATE["sample_row_ids"] = sample_ids(loaded)
+    _STATE["sample_row_ids"] = sample_ids(loaded, id_col=sess.domain.id_col or "container_id")
     _reset_triage_state()
     return RedirectResponse(url="/", status_code=303)
 
@@ -158,6 +194,17 @@ async def load_adapter(adapter_name: str = Form(...)) -> RedirectResponse:
 @app.post("/load-domain-csv")
 async def load_domain_csv() -> RedirectResponse:
     _load_default_csv(app.state.session)
+    return RedirectResponse(url="/", status_code=303)
+
+
+@app.post("/switch-pack")
+async def switch_pack(pack: str = Form(...)) -> RedirectResponse:
+    """Swap spine / coda domain packs (fixtures only)."""
+    pid = pack if pack in PACKS else DEFAULT_PACK
+    _STATE["pack"] = pid
+    _STATE["pack_label"] = PACKS[pid]["label"]
+    sess = _session(pid)
+    _load_default_csv(sess)
     return RedirectResponse(url="/", status_code=303)
 
 
@@ -174,11 +221,11 @@ async def run_triage(mode: str = Form("mock"), fast_ab: str | None = Form(None))
     test_size = 0.3 if n >= 10 else 0.25
     if n < 4:
         import pandas as pd
-        combined = pd.concat([pd.read_csv(DEFAULT_CSV), sess.tables[tid]], ignore_index=True)
+        combined = pd.concat([pd.read_csv(_pack_meta()["csv"]), sess.tables[tid]], ignore_index=True)
         sess.tables[tid] = combined
         _STATE["n_rows"] = len(combined)
-        _STATE["demurrage_total"] = float(combined["projected_demurrage_usd"].fillna(0).sum())
-        _STATE["sample_row_ids"] = sample_ids(combined)
+        _STATE["demurrage_total"] = _money_total(combined)
+        _STATE["sample_row_ids"] = sample_ids(combined, id_col=sess.domain.id_col or "container_id")
         test_size = 0.2
     t0 = time.perf_counter()
     cmp_ = sess.compare_baseline(tid, mode=backend_mode, baseline="sklearn_hist_gbm", test_size=test_size)
@@ -207,7 +254,12 @@ async def run_triage(mode: str = Form("mock"), fast_ab: str | None = Form(None))
     ]
     _STATE["action_counts"] = dict(actions.counts)
     _STATE["what_if"] = None
-    run_blank_head(sess, tid, backend_mode, test_size, _STATE)
+    if _pack_meta().get("spine"):
+        run_blank_head(sess, tid, backend_mode, test_size, _STATE)
+    else:
+        _STATE["blank_metrics"] = None
+        _STATE["blank_backend"] = None
+        _STATE["blank_warning"] = None
     if fast_ab in {"1", "on", "true", "yes"}:
         snap_pred = None if sess.last_predictions is None else sess.last_predictions.copy()
         snap = (sess.last_metrics, sess.last_backend, sess.last_mode, sess.last_warning, sess.last_baseline)
