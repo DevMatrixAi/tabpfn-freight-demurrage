@@ -30,9 +30,21 @@ PACKS = [
 ]
 
 
+def _ensure_csv(name: str, csv_path: Path) -> None:
+    if csv_path.is_file():
+        return
+    from tabpfn_hack_core.demo.gen_coda_packs import gen_equipment_size, gen_inland_mode
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    if name == "equipment-size":
+        gen_equipment_size(n=250, seed=42).to_csv(csv_path, index=False)
+    else:
+        gen_inland_mode(n=250, seed=43).to_csv(csv_path, index=False)
+
+
 @pytest.mark.parametrize("name,domain_path,csv_path,label,actions", PACKS, ids=[p[0] for p in PACKS])
 def test_coda_pack_load_and_fit_mock(name, domain_path, csv_path, label, actions):
     assert domain_path.is_file(), domain_path
+    _ensure_csv(name, csv_path)
     assert csv_path.is_file(), csv_path
     domain = load_domain(domain_path)
     assert domain.name == name
