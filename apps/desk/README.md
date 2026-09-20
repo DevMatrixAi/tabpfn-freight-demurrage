@@ -1,6 +1,8 @@
-# Freight demurrage web desk
+# Freight ops board (web desk)
 
-Lean FastAPI + Jinja shell that wraps `PipelineSession` for judges and SaaS demos.
+Lean FastAPI + Jinja **ops board** wrapping `PipelineSession` for judges and SaaS demos.
+Opens on a **projected-$ ticker**, paints container/shipment **risk cards** (green / amber / red by score),
+and keeps the Plus | Thinking | Mock + HistGBM Δ panel as the judge card.
 Fixture adapters under `fixtures/adapters/` normalize vendor-shaped JSON into the
 `domains/freight-demurrage` CSV schema — **no live API keys**.
 
@@ -52,7 +54,7 @@ Brain remains `tabpfn_hack_core` / MCP. This desk is presentation + ingest only.
 
 ## Coda packs
 
-Desk home includes a **pack selector** (spine demurrage + equipment-size + inland-mode).
+Desk home includes a **pack selector** (spine demurrage + equipment-size + inland-mode + air-freight).
 Coda packs are fixtures only; blank-sailing second head and what-if stay demurrage-spine features.
 
 CLI:
@@ -60,4 +62,5 @@ CLI:
 ```bash
 tabpfn-hack demo --domain domains/equipment-size/domain.yaml
 tabpfn-hack demo --domain domains/inland-mode/domain.yaml
+tabpfn-hack demo --domain domains/air-freight/domain.yaml --mode mock
 ```

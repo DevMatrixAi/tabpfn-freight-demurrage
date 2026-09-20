@@ -1,13 +1,23 @@
-"""Coda pack generators (equipment-size + inland-mode)."""
+"""Coda pack generators (equipment-size + inland-mode + air-freight)."""
 from __future__ import annotations
-from tabpfn_hack_core.demo._gen_equipment import gen_equipment_size
-from tabpfn_hack_core.demo._gen_inland import gen_inland_mode
-from tabpfn_hack_core.demo._gen_equipment import ROOT
+
 import argparse
+
+from tabpfn_hack_core.demo._gen_air import gen_air_freight
+from tabpfn_hack_core.demo._gen_equipment import ROOT, gen_equipment_size
+from tabpfn_hack_core.demo._gen_inland import gen_inland_mode
+
+# Re-exports for tests / scripts
+__all__ = ["gen_equipment_size", "gen_inland_mode", "gen_air_freight", "main"]
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pack", choices=["equipment-size", "inland-mode", "all"], default="all")
+    parser.add_argument(
+        "--pack",
+        choices=["equipment-size", "inland-mode", "air-freight", "all"],
+        default="all",
+    )
     parser.add_argument("--n", type=int, default=600)
     args = parser.parse_args()
     if args.pack in ("equipment-size", "all"):
@@ -22,6 +32,13 @@ def main() -> None:
         df = gen_inland_mode(n=args.n, seed=43)
         df.to_csv(out, index=False)
         print(f"Wrote {out} ({len(df)} rows, pos={df['prefer_rail'].mean():.2f})")
+    if args.pack in ("air-freight", "all"):
+        out = ROOT / "domains" / "air-freight" / "data" / "shipments.csv"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        df = gen_air_freight(n=args.n, seed=44)
+        df.to_csv(out, index=False)
+        print(f"Wrote {out} ({len(df)} rows, pos={df['miss_connection_risk'].mean():.2f})")
+
 
 if __name__ == "__main__":
     main()
