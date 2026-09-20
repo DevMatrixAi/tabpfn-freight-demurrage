@@ -20,12 +20,14 @@ def metric_slice(metrics: dict[str, float] | None) -> dict[str, float]:
     }
 
 
-def sample_ids(df, id_col: str = "container_id", limit: int = 18) -> list[str]:
-    if id_col not in df.columns:
+def sample_ids(df, id_col: str | None = "container_id", limit: int = 18) -> list[str]:
+    candidates = [c for c in (id_col, "container_id", "booking_id", "move_id", "row_id") if c]
+    col = next((c for c in candidates if c in df.columns), None)
+    if not col:
         return []
-    ids = [str(x) for x in df[id_col].head(12).tolist()]
+    ids = [str(x) for x in df[col].head(12).tolist()]
     if "blank_sailing" in df.columns:
-        for p in df.loc[df["blank_sailing"].astype(int) == 1, id_col].astype(str).head(6):
+        for p in df.loc[df["blank_sailing"].astype(int) == 1, col].astype(str).head(6):
             if p not in ids:
                 ids.append(p)
     return ids[:limit]

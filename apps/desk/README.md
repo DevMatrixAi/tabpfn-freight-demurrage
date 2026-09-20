@@ -48,3 +48,16 @@ Missing or failing `TABPFN_TOKEN` falls back to mock with a visible warning bann
 | `edi_315` | `fixtures/adapters/edi_315.json` | `adapters/edi_315_fixture.py` |
 
 Brain remains `tabpfn_hack_core` / MCP. This desk is presentation + ingest only.
+
+
+## Coda packs
+
+Desk home includes a **pack selector** (spine demurrage + equipment-size + inland-mode).
+Coda packs are fixtures only; blank-sailing second head and what-if stay demurrage-spine features.
+
+CLI:
+
+```bash
+tabpfn-hack demo --domain domains/equipment-size/domain.yaml
+tabpfn-hack demo --domain domains/inland-mode/domain.yaml
+```
