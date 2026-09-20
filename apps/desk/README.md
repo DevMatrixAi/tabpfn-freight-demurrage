@@ -29,7 +29,13 @@ Open http://127.0.0.1:8765
 2. **Baseline Δ** — every triage calls `compare_baseline` vs sklearn HistGBM and
    shows accuracy / f1 / roc_auc / AP plus Δ on the metrics panel.
 3. **Fast A/B (optional stub)** — checkbox; latency vs score side-by-side, not required.
-4. **Not blocking** — second head / stream re-score / what-if are disabled TODO chips.
+4. **Second head (blank sailing)** — after triage, desk also fits `label_col=blank_sailing`
+   via the same `PipelineSession.fit_predict` (no stack fork). Metrics shown under the
+   primary demurrage + HistGBM Δ card.
+5. **What-if panel** — tweak `free_days_left` / `projected_demurrage_usd` / divert on a
+   sample container; hold-out re-score shows before/after proba + suggested action
+   (labeled synthetic simulation).
+6. **Backlog** — stream re-score remains a TODO chip.
 
 Missing or failing `TABPFN_TOKEN` falls back to mock with a visible warning banner.
 
