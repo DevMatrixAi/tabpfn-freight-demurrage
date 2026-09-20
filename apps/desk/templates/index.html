@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Freight Demurrage Desk</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --text: #e7ecf3;
+      --muted: #8b9bb4;
+      --accent: #3d9cf0;
+      --warn: #f0a030;
+      --good: #3ecf8e;
+      --bad: #f07178;
+      --border: #2a3548;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: "IBM Plex Sans", system-ui, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.45;
+    }
+    header {
+      padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
+      background: linear-gradient(90deg, #152033, #1a2838);
+    }
+    header h1 { margin: 0 0 0.25rem; font-size: 1.35rem; font-weight: 600; }
+    header p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+    main { padding: 1.25rem 1.5rem; max-width: 1100px; margin: 0 auto; }
+    .grid { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.1rem;
+    }
+    .card h2 { margin: 0 0 0.75rem; font-size: 1rem; color: var(--accent); }
+    .metric {
+      font-size: 1.75rem; font-weight: 700; color: var(--warn);
+      font-variant-numeric: tabular-nums;
+    }
+    .muted { color: var(--muted); font-size: 0.85rem; }
+    form.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+    select, button {
+      background: #243044; color: var(--text); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.45rem 0.75rem; font-size: 0.9rem;
+    }
+    button {
+      background: var(--accent); color: #041018; font-weight: 600; cursor: pointer;
+      border: none;
+    }
+    button.secondary { background: #2c3a50; color: var(--text); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 500; }
+    .badge {
+      display: inline-block; padding: 0.15rem 0.45rem; border-radius: 4px;
+      background: #243044; font-size: 0.75rem;
+    }
+    .badge.risk { background: #3a2030; color: var(--bad); }
+    .badge.ok { background: #1e3328; color: var(--good); }
+    footer { padding: 1rem 1.5rem; color: var(--muted); font-size: 0.8rem; }
+    .full { grid-column: 1 / -1; }
+    .counts span { margin-right: 0.75rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Freight Demurrage Desk</h1>
+    <p>TabPFN-3.5 triage shell · fixture adapters only · mock by default</p>
+  </header>
+  <main>
+    <div class="grid">
+      <section class="card">
+        <h2>Projected demurrage on table</h2>
+        <div class="metric">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
+        <p class="muted">
+          Source: <span class="badge">{{ state.source }}</span>
+          · rows: {{ state.n_rows }}
+          {% if state.backend %} · backend: {{ state.backend }} ({{ state.mode }}){% endif %}
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Load feed</h2>
+        <form class="row" method="post" action="/load-adapter">
+          <label class="muted" for="adapter_name">Fixture adapter</label>
+          <select name="adapter_name" id="adapter_name">
+            {% for a in adapters %}
+            <option value="{{ a }}" {% if state.adapter == a %}selected{% endif %}>{{ a }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit">Load adapter</button>
+        </form>
+        <form class="row" method="post" action="/load-domain-csv" style="margin-top:0.75rem">
+          <button class="secondary" type="submit">Reload domain CSV (1200)</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Run triage</h2>
+        <form class="row" method="post" action="/run-triage">
+          <label class="muted" for="mode">Mode</label>
+          <select name="mode" id="mode">
+            <option value="mock">mock (default)</option>
+            <option value="plus">plus {% if not has_token %}(needs TABPFN_TOKEN){% endif %}</option>
+            <option value="thinking">thinking</option>
+            <option value="fast">fast</option>
+          </select>
+          <button type="submit">Run triage</button>
+        </form>
+        {% if state.warning %}
+        <p class="muted" style="margin-top:0.75rem;color:var(--warn)">{{ state.warning }}</p>
+        {% endif %}
+        {% if state.metrics %}
+        <p class="muted" style="margin-top:0.75rem">
+          {% for k, v in state.metrics.items() %}
+            <span class="badge">{{ k }}={{ "%.3f"|format(v|float) if v is number else v }}</span>
+          {% endfor %}
+        </p>
+        {% endif %}
+        {% if state.action_counts %}
+        <p class="counts muted" style="margin-top:0.5rem">
+          {% for k, v in state.action_counts.items() %}
+          <span><strong>{{ k }}</strong>: {{ v }}</span>
+          {% endfor %}
+        </p>
+        {% endif %}
+      </section>
+
+      <section class="card full">
+        <h2>Preview</h2>
+        {% if state.preview_rows %}
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>container</th><th>vessel</th><th>pod</th>
+                <th>free days</th><th>projected $</th><th>risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in state.preview_rows %}
+              <tr>
+                <td>{{ r.container_id }}</td>
+                <td>{{ r.vessel_id }}</td>
+                <td>{{ r.pod }}</td>
+                <td>{{ r.free_days_left }}</td>
+                <td>{{ r.projected_demurrage_usd }}</td>
+                <td>
+                  {% if r.demurrage_risk == 1 or r.demurrage_risk == "1" %}
+                  <span class="badge risk">high</span>
+                  {% else %}
+                  <span class="badge ok">low</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="muted">No rows loaded.</p>
+        {% endif %}
+      </section>
+
+      {% if state.actions %}
+      <section class="card full">
+        <h2>Suggested actions</h2>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr><th>row</th><th>proba</th><th>action</th><th>reason</th></tr>
+            </thead>
+            <tbody>
+              {% for a in state.actions %}
+              <tr>
+                <td>{{ a.row_id }}</td>
+                <td>{{ a.proba }}</td>
+                <td><span class="badge">{{ a.action }}</span></td>
+                <td>{{ a.reason }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {% endif %}
+    </div>
+  </main>
+  <footer>{{ disclaimer }}</footer>
+</body>
+</html>
