@@ -64,3 +64,14 @@ tabpfn-hack demo --domain domains/equipment-size/domain.yaml
 tabpfn-hack demo --domain domains/inland-mode/domain.yaml
 tabpfn-hack demo --domain domains/air-freight/domain.yaml --mode mock
 ```
+
+## Robot / TMS consumer API
+
+Same FastAPI process exposes **decisions** endpoints for robots/TMS:
+
+- `GET /api/v1/health`
+- `POST /api/v1/triage` — pack / fixture / rows → metrics + actions
+- `POST /api/v1/actions` — score rows → playbook actions
+
+OpenAPI tag: **robot/TMS consumer API** (`/docs`). Docs: [`docs/ROBOT_API.md`](../../docs/ROBOT_API.md).
+Does not replace the ops board UI — both share `PipelineSession` + domain playbooks.
