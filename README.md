@@ -3,7 +3,7 @@
 
 **Demo open:** **$1.27M** projected demurrage — then divert / rebook / expedite / authorize_fee / cancel_booking before free days burn.
 
-Messy vessel/BOL tables → TabPFN-3.5 Plus / Thinking / Fast → baseline vs HistGBM → MCP money moves. **Web desk:** load Terminal49 / project44 / EDI-315 fixtures and triage in the browser.
+Messy vessel/BOL tables → TabPFN-3.5 Plus / Thinking / Fast → baseline vs HistGBM → MCP money moves. **Web ops board:** projected-$ ticker + risk cards; load Terminal49 / project44 / EDI-315 fixtures and triage in the browser.
 
 ```bash
 pip install -e ".[dev,desk]"
@@ -25,8 +25,9 @@ Synthetic / public-derived demo only. Fixture adapters only — not live carrier
 | --- | --- | --- |
 | Equipment size (box / TEU / reefer vs dry) | [`domains/equipment-size/`](domains/equipment-size/) | `tabpfn-hack demo --domain domains/equipment-size/domain.yaml` |
 | Inland truck vs rail | [`domains/inland-mode/`](domains/inland-mode/) | `tabpfn-hack demo --domain domains/inland-mode/domain.yaml` |
+| Air freight (AOG / connection / belly) | [`domains/air-freight/`](domains/air-freight/) | `tabpfn-hack demo --domain domains/air-freight/domain.yaml --mode mock` |
 
-Desk home has a light **pack selector**; coda packs also run CLI-only. Chargeback remains an extra story under `domains/chargeback-desk/`.
+**Ops board desk:** dollar ticker + green/amber/red risk cards; Plus | Thinking | Mock + HistGBM Δ stays the judge card. Pack selector includes demurrage (spine) + the three coda packs. Chargeback remains an extra story under `domains/chargeback-desk/`.
 
 # Engine: tabpfn-hack-core
 
@@ -172,7 +173,7 @@ Fixture-only ingest + FastAPI desk for demurrage triage demos:
 
 - Adapters: `src/tabpfn_hack_core/adapters/` (Terminal49 / project44 / EDI 315 fixtures)
 - Fixtures: `fixtures/adapters/*.json`
-- Desk: `apps/desk/` — home, load adapter, run triage (mock default; honors `TABPFN_TOKEN` for plus)
+- Desk: `apps/desk/` — **visual ops board** (projected-$ ticker, risk cards), load adapter, run triage (mock default; honors `TABPFN_TOKEN` for plus)
 
 ```bash
 pip install -e ".[dev,desk]"
@@ -193,8 +194,9 @@ tabpfn-hack-core/
   domains/freight-demurrage/   # spine
   domains/equipment-size/      # coda
   domains/inland-mode/         # coda
+  domains/air-freight/         # coda
   fixtures/adapters/*.json
-  apps/desk/                 # FastAPI demurrage desk (+ pack selector)
+  apps/desk/                 # FastAPI ops board (+ pack selector, risk cards)
   scripts/gen_synthetic_table.py
   src/tabpfn_hack_core/
     cli.py  tools_api.py  domain.py
