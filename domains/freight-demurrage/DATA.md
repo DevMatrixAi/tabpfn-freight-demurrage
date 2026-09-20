@@ -30,3 +30,12 @@
 ## Playbook
 
 divert → rebook (blank_sailing) → expedite (inland) → authorize_fee → cancel_booking → monitor
+
+## Regenerating the full table
+
+If the repo ships a truncated sample (e.g. 200 rows), regenerate the full ~1200-row `data/containers.csv` with:
+
+```bash
+python scripts/gen_synthetic_table.py --domain freight-demurrage --n-rows 1200 \
+  --out domains/freight-demurrage/data/containers.csv
+```
