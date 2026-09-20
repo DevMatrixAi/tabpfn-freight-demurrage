@@ -1,5 +1,6 @@
 name: freight-demurrage
 label_col: demurrage_risk
+secondary_label_col: blank_sailing
 group_col: vessel_id
 time_col: event_ts
 text_cols: [terminal_note, weather_alert]
