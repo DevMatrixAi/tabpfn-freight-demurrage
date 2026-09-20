@@ -204,34 +204,25 @@ def _try_tabpfn_client(
         warnings.warn("tabpfn_client not installed; falling back to mock", stacklevel=2)
         return None
 
-    kwargs: dict[str, Any] = {}
     try:
-        if mode == BackendMode.fast:
-            clf = TabPFNClassifier.create_default_for_version("v3.5-fast")
-        elif mode == BackendMode.thinking:
-            clf = TabPFNClassifier.create_default_for_version("v3.5")
-            kwargs["thinking_mode"] = True
+        # Constructor accepts thinking_mode / group_col / time_col / group_time_col.
+        # Setting attributes after fit is a no-op for inference — must pass at init.
+        overrides: dict[str, Any] = {}
+        if mode == BackendMode.thinking:
+            overrides["thinking_mode"] = True
             if group_col:
-                kwargs["group_col"] = group_col
+                overrides["group_col"] = group_col
             if group_time_col:
-                kwargs["group_time_col"] = group_time_col
+                # Client: group_time_col requires group_col; cannot combine with time_col.
+                overrides["group_time_col"] = group_time_col
+
+        if mode == BackendMode.fast:
+            clf = TabPFNClassifier.create_default_for_version("v3.5-fast", **overrides)
         else:
-            # plus (default client path)
-            clf = TabPFNClassifier.create_default_for_version("v3.5")
+            # plus + thinking share v3.5 weights; thinking differs via overrides
+            clf = TabPFNClassifier.create_default_for_version("v3.5", **overrides)
 
-        # Pass raw DataFrames when using TabPFN
-        fit_kwargs = {k: v for k, v in kwargs.items() if k in ("thinking_mode", "group_col", "group_time_col")}
-        # Some client versions take thinking flags at construct / fit — try fit first
-        try:
-            clf.fit(X_train, y_train, **{k: v for k, v in fit_kwargs.items() if k != "thinking_mode"})
-        except TypeError:
-            clf.fit(X_train, y_train)
-
-        if hasattr(clf, "thinking_mode") and mode == BackendMode.thinking:
-            try:
-                clf.thinking_mode = True
-            except Exception:
-                pass
+        clf.fit(X_train, y_train)
 
         proba = clf.predict_proba(X_test)
         if proba.ndim == 1:
