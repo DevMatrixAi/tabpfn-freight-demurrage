@@ -21,7 +21,7 @@ main{padding:1.25rem 1.5rem;max-width:1100px;margin:0 auto}
 .metric{font-size:1.75rem;font-weight:700;color:var(--warn);font-variant-numeric:tabular-nums}
 .muted{color:var(--muted);font-size:.85rem}
 form.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
-select,button,input[type=checkbox]{background:#243044;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.45rem .75rem;font-size:.9rem}
+select,button,input[type=checkbox],input[type=number]{background:#243044;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.45rem .75rem;font-size:.9rem}
 button{background:var(--accent);color:#041018;font-weight:600;cursor:pointer;border:none}
 button.secondary{background:#2c3a50;color:var(--text)}
 .disabled-ctrl{opacity:.45;cursor:not-allowed;pointer-events:none}
@@ -150,11 +150,88 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 {% if state.action_counts %}
 <p class="counts muted" style="margin-top:.75rem">{% for k, v in state.action_counts.items() %}<span><strong>{{ k }}</strong>: {{ v }}</span>{% endfor %}</p>
 {% endif %}
-<div class="todo-row" title="Not blocking this PR">
-<span class="todo-chip disabled-ctrl">TODO: second head (blank sailing)</span>
-<span class="todo-chip disabled-ctrl">TODO: stream re-score</span>
-<span class="todo-chip disabled-ctrl">TODO: what-if free days</span>
+{% if state.blank_metrics %}
+<h2 style="margin-top:1rem">Second head · blank sailing <span class="badge">{{ state.blank_label or 'blank_sailing' }}</span></h2>
+<p class="muted" style="margin:0 0 .5rem">Same table, <code>label_col</code> override — binary blank-sailing risk. Primary judge card above stays demurrage + HistGBM Δ.
+{% if state.blank_backend %} · backend {{ state.blank_backend }}{% endif %}</p>
+{% if state.blank_warning %}<div class="warn-banner">{{ state.blank_warning }}</div>{% endif %}
+<div class="metrics-grid">
+{% for k in metric_keys %}
+<div class="metric-cell">
+<div class="label">{{ k }}{% if k == 'avg_precision' %} (AP){% endif %}</div>
+<div class="val">{% if state.blank_metrics.get(k) is number %}{{ "%.3f"|format(state.blank_metrics[k]|float) }}{% else %}—{% endif %}</div>
 </div>
+{% endfor %}
+</div>
+{% elif state.blank_warning %}
+<div class="warn-banner" style="margin-top:.75rem">Blank sailing head: {{ state.blank_warning }}</div>
+{% endif %}
+<div class="todo-row" title="Backlog">
+<span class="todo-chip disabled-ctrl">TODO: stream re-score</span>
+</div>
+</section>
+
+<section class="card full" id="what-if">
+<h2>What-if simulation <span class="badge">synthetic</span></h2>
+<p class="muted">Tweak free days / projected fee / divert on one container, re-score with a hold-out fit. Honest sandbox — not a live booking change.</p>
+<form method="post" action="/what-if" class="row" style="align-items:flex-end;gap:.75rem;flex-wrap:wrap">
+<label class="muted">Container
+<select name="row_id" required>
+{% for rid in state.sample_row_ids or [] %}
+<option value="{{ rid }}" {% if state.what_if and state.what_if.row_id == rid %}selected{% endif %}>{{ rid }}</option>
+{% endfor %}
+</select>
+</label>
+<label class="muted">free_days_left
+<input type="number" step="0.1" name="free_days_left" placeholder="e.g. 8" style="width:6rem" />
+</label>
+<label class="muted">projected_demurrage_usd
+<input type="number" step="1" name="projected_demurrage_usd" placeholder="fee $" style="width:7rem" />
+</label>
+<label class="muted" style="display:flex;align-items:center;gap:.35rem">
+<input type="checkbox" name="divert" value="1" /> divert (+3 free days, inland beat)
+</label>
+<input type="hidden" name="mode" value="{{ state.requested_mode or 'mock' }}" />
+<button type="submit">Run what-if</button>
+</form>
+{% if state.what_if %}
+{% if state.what_if.error %}
+<div class="warn-banner" style="margin-top:.75rem">{{ state.what_if.error }}</div>
+{% else %}
+<div class="metrics-grid" style="margin-top:.75rem">
+<div class="metric-cell">
+<div class="label">proba before</div>
+<div class="val">{{ "%.3f"|format(state.what_if.proba_before|float) }}</div>
+<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_before }}</div>
+</div>
+<div class="metric-cell">
+<div class="label">proba after</div>
+<div class="val">{{ "%.3f"|format(state.what_if.proba_after|float) }}</div>
+<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_after }}</div>
+</div>
+<div class="metric-cell">
+<div class="label">Δ proba</div>
+{% set dp = state.what_if.delta_proba|float %}
+<div class="val">{{ "%+.3f"|format(dp) }}</div>
+<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.label }}</div>
+</div>
+<div class="metric-cell">
+<div class="label">suggested action</div>
+<div class="val" style="font-size:1rem">{{ state.what_if.action_before }} → {{ state.what_if.action_after }}</div>
+</div>
+</div>
+{% if state.what_if.overrides_applied %}
+<p class="muted" style="margin-top:.5rem">Overrides:
+{% for col, pair in state.what_if.overrides_applied.items() %}
+<span class="badge">{{ col }}: {{ pair.before }} → {{ pair.after }}</span>
+{% endfor %}
+</p>
+{% endif %}
+{% if state.what_if.reason_after %}
+<p class="muted">After: {{ state.what_if.reason_after }}</p>
+{% endif %}
+{% endif %}
+{% endif %}
 </section>
 <section class="card full">
 <h2>Preview</h2>
