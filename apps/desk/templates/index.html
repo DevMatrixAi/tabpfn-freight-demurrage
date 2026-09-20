@@ -3,68 +3,30 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Freight Demurrage Desk</title>
-<style>
-:root{--bg:#0f1419;--panel:#1a2332;--text:#e7ecf3;--muted:#8b9bb4;--accent:#3d9cf0;--warn:#f0a030;--good:#3ecf8e;--bad:#f07178;--border:#2a3548;--plus:#5b8def;--thinking:#a78bfa;--mock:#6b7c93}
-*{box-sizing:border-box}
-body{margin:0;font-family:"IBM Plex Sans",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);background:linear-gradient(90deg,#152033,#1a2838)}
-header h1{margin:0 0 .25rem;font-size:1.35rem;font-weight:600}
-header p{margin:0;color:var(--muted);font-size:.9rem}
-main{padding:1.25rem 1.5rem;max-width:1100px;margin:0 auto}
-.grid{display:grid;gap:1rem;grid-template-columns:1fr 1fr}
-@media(max-width:800px){.grid{grid-template-columns:1fr}}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
-.card.priority{border-color:var(--accent);box-shadow:0 0 0 1px rgba(61,156,240,.25)}
-.card h2{margin:0 0 .75rem;font-size:1rem;color:var(--accent)}
-.card h2 .req{font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--warn);margin-left:.4rem}
-.metric{font-size:1.75rem;font-weight:700;color:var(--warn);font-variant-numeric:tabular-nums}
-.muted{color:var(--muted);font-size:.85rem}
-form.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
-select,button,input[type=checkbox]{background:#243044;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.45rem .75rem;font-size:.9rem}
-button{background:var(--accent);color:#041018;font-weight:600;cursor:pointer;border:none}
-button.secondary{background:#2c3a50;color:var(--text)}
-.disabled-ctrl{opacity:.45;cursor:not-allowed;pointer-events:none}
-table{width:100%;border-collapse:collapse;font-size:.8rem}
-th,td{text-align:left;padding:.4rem .5rem;border-bottom:1px solid var(--border)}
-th{color:var(--muted);font-weight:500}
-.badge{display:inline-block;padding:.15rem .45rem;border-radius:4px;background:#243044;font-size:.75rem}
-.badge.risk{background:#3a2030;color:var(--bad)}
-.badge.ok{background:#1e3328;color:var(--good)}
-.badge.delta-pos{background:#1e3328;color:var(--good)}
-.badge.delta-neg{background:#3a2030;color:var(--bad)}
-.badge.delta-zero{background:#243044;color:var(--muted)}
-footer{padding:1rem 1.5rem;color:var(--muted);font-size:.8rem}
-.full{grid-column:1/-1}
-.counts span{margin-right:.75rem}
-.mode-toggle{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0 .75rem}
-.mode-toggle label{flex:1 1 auto;min-width:5.5rem;text-align:center;padding:.55rem .6rem;border-radius:8px;border:2px solid var(--border);background:#121a26;cursor:pointer;font-weight:600;font-size:.9rem;user-select:none}
-.mode-toggle input{position:absolute;opacity:0;pointer-events:none}
-.mode-toggle input:checked+label[data-mode=plus]{background:#1a3358;border-color:var(--plus);color:#cfe0ff;box-shadow:0 0 0 2px rgba(91,141,239,.35)}
-.mode-toggle input:checked+label[data-mode=thinking]{background:#2a1f48;border-color:var(--thinking);color:#e8dfff;box-shadow:0 0 0 2px rgba(167,139,250,.35)}
-.mode-toggle input:checked+label[data-mode=mock]{background:#243044;border-color:var(--mock);color:#d0d8e4;box-shadow:0 0 0 2px rgba(107,124,147,.35)}
-.mode-hint{font-size:.8rem;color:var(--muted);margin:0 0 .75rem}
-.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-top:.75rem}
-@media(max-width:700px){.metrics-grid{grid-template-columns:repeat(2,1fr)}}
-.metric-cell{background:#121a26;border:1px solid var(--border);border-radius:8px;padding:.55rem .65rem}
-.metric-cell .label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.metric-cell .val{font-size:1.15rem;font-weight:700;font-variant-numeric:tabular-nums;margin-top:.15rem}
-.metric-cell .delta{font-size:.8rem;margin-top:.2rem;font-variant-numeric:tabular-nums}
-.warn-banner{margin-top:.75rem;padding:.55rem .7rem;border-radius:6px;background:#3a2a10;border:1px solid var(--warn);color:var(--warn);font-size:.85rem}
-.todo-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
-.todo-chip{padding:.35rem .6rem;border-radius:6px;border:1px dashed var(--border);color:var(--muted);font-size:.75rem;background:#121a26}
-.fast-ab-box{margin-top:.75rem;padding:.6rem .7rem;border-radius:8px;border:1px solid #3a4060;background:#151c2c;font-size:.85rem}
-.token-pill{display:inline-block;margin-left:.35rem;padding:.1rem .4rem;border-radius:4px;font-size:.7rem}
-.token-pill.ok{background:#1e3328;color:var(--good)}
-.token-pill.missing{background:#3a2a10;color:var(--warn)}
-</style>
+<title>Freight Ops Board</title>
+<link rel="stylesheet" href="/static/ops_board.css" />
 </head>
 <body>
 <header>
-<h1>Freight Demurrage Desk</h1>
-<p>TabPFN-3.5 triage · Plus / Thinking / Mock · always Δ vs HistGBM
-· pack: <strong>{{ state.pack_label or state.pack }}</strong>
+<div class="top">
+<div>
+<h1>Freight Ops Board</h1>
+<p class="tagline">Dollar-first triage · pack <strong>{{ state.pack_label or state.pack }}</strong>
 <span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% else %}no TABPFN_TOKEN → mock fallback{% endif %}</span></p>
+</div>
+</div>
+<div class="ticker" role="status" aria-live="polite">
+<div>
+<div class="lbl">{{ state.money_label or ('Projected demurrage' if is_spine else 'Pack exposure') }}</div>
+<div class="dollars">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
+</div>
+<div class="meta">
+<span class="badge">{{ state.source }}</span>
+· {{ state.n_rows }} rows
+{% if state.backend %} · {{ state.backend }} ({{ state.requested_mode or state.mode }} → {{ state.mode }}){% endif %}
+{% if state.elapsed_s is not none %} · {{ state.elapsed_s }}s{% endif %}
+</div>
+</div>
 </header>
 <main>
 <div class="grid">
@@ -79,15 +41,9 @@ footer{padding:1rem 1.5rem;color:var(--muted);font-size:.8rem}
 </select>
 <button type="submit">Switch pack</button>
 </form>
-<p class="muted" style="margin:.5rem 0 0">Demurrage is the spine desk. Equipment-size and inland-mode are fixture coda packs (CLI also works).</p>
+<p class="muted" style="margin:.5rem 0 0">Demurrage is the spine desk. Equipment-size, inland-mode, and air-freight are fixture coda packs (CLI also works).</p>
 </section>
-<section class="card">
-<h2>{% if is_spine %}Projected demurrage on table{% else %}Pack money / exposure rollup{% endif %}</h2>
-<div class="metric">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
-<p class="muted">Source: <span class="badge">{{ state.source }}</span> · rows: {{ state.n_rows }}
-{% if state.backend %} · backend: {{ state.backend }} (requested {{ state.requested_mode or state.mode }} → {{ state.mode }}){% endif %}
-{% if state.elapsed_s is not none %} · {{ state.elapsed_s }}s{% endif %}</p>
-</section>
+
 <section class="card">
 <h2>Load feed</h2>
 <form class="row" method="post" action="/load-adapter">
@@ -103,10 +59,21 @@ footer{padding:1rem 1.5rem;color:var(--muted);font-size:.8rem}
 <button class="secondary" type="submit">Reload pack CSV</button>
 </form>
 </section>
+
+<section class="card">
+<h2>Board snapshot</h2>
+<p class="muted" style="margin:0">Run triage to paint risk cards green / amber / red by score. Suggested next move sits on each card.</p>
+{% if state.action_counts %}
+<p class="counts muted" style="margin-top:.75rem">{% for k, v in state.action_counts.items() %}<span><strong>{{ k }}</strong>: {{ v }}</span>{% endfor %}</p>
+{% else %}
+<p class="muted" style="margin-top:.75rem">No triage yet — pick Plus / Thinking / Mock below.</p>
+{% endif %}
+</section>
+
 <section class="card priority full">
-<h2>Run triage <span class="req">must-have · judge #1</span></h2>
+<h2>Run triage <span class="req">judge card · Plus | Thinking | Mock + HistGBM Δ</span></h2>
 <form method="post" action="/run-triage">
-<p class="mode-hint">Primary modes: <strong>Plus</strong> (messy text cols) · <strong>Thinking</strong> (vessel over time) · <strong>Mock</strong> (offline). Baseline Δ vs HistGBM runs on every triage.</p>
+<p class="mode-hint">Modes: <strong>Plus</strong> (messy notes) · <strong>Thinking</strong> (vessel / flight over time) · <strong>Mock</strong> (offline). Every run shows lift vs HistGBM.</p>
 <div class="mode-toggle" role="radiogroup" aria-label="TabPFN mode">
 {% set sel = state.requested_mode or 'mock' %}
 <input type="radio" name="mode" id="mode-plus" value="plus" {% if sel == 'plus' %}checked{% endif %} />
@@ -116,23 +83,27 @@ footer{padding:1rem 1.5rem;color:var(--muted);font-size:.8rem}
 <input type="radio" name="mode" id="mode-mock" value="mock" {% if sel != 'plus' and sel != 'thinking' %}checked{% endif %} />
 <label for="mode-mock" data-mode="mock">Mock</label>
 </div>
-<p class="mode-hint">Thinking constructor overrides:
+<p class="mode-hint">Thinking overrides:
 <span class="badge">thinking_mode=True</span>
-<span class="badge">group_col={{ state.group_col or 'vessel_id' }}</span>
-<span class="badge">group_time_col={{ state.group_time_col or 'event_ts' }}</span>
-<span class="badge">never time_col + group_col</span></p>
+<span class="badge">group={{ state.group_col or 'vessel_id' }}</span>
+<span class="badge">time={{ state.group_time_col or 'event_ts' }}</span>
+</p>
 <div class="row" style="margin-bottom:.75rem">
 <label class="muted" style="display:flex;align-items:center;gap:.4rem">
 <input type="checkbox" name="fast_ab" value="1" />
-Fast A/B (optional stub — latency vs score; not required for judges)
+Fast A/B stub (optional)
 </label>
 <button type="submit">Run triage + baseline Δ</button>
 </div>
 </form>
 {% if state.warning %}<div class="warn-banner">{{ state.warning }}</div>{% endif %}
 {% if state.metrics %}
-<h2 style="margin-top:1rem">Metrics + Δ vs HistGBM</h2>
-<p class="muted" style="margin:0 0 .5rem">Primary TabPFN metrics and lift over sklearn HistGradientBoosting on the same split.
+<div class="judge-strip">
+<span class="badge">Scorecard</span>
+<span class="badge">Δ vs HistGBM</span>
+{% if state.backend %}<span class="badge">{{ state.backend }}</span>{% endif %}
+</div>
+<p class="muted" style="margin:0 0 .5rem">Primary scores and lift over HistGBM on the same split.
 {% if state.baseline_narrative %}<br>{{ state.baseline_narrative }}{% endif %}</p>
 <div class="metrics-grid">
 {% for k in metric_keys %}
@@ -161,13 +132,10 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 {% if state.fast_ab.warning %}<div class="warn-banner" style="margin-top:.5rem">{{ state.fast_ab.warning }}</div>{% endif %}
 </div>
 {% endif %}
-{% if state.action_counts %}
-<p class="counts muted" style="margin-top:.75rem">{% for k, v in state.action_counts.items() %}<span><strong>{{ k }}</strong>: {{ v }}</span>{% endfor %}</p>
-{% endif %}
 {% if is_spine and state.blank_metrics %}
-<h2 style="margin-top:1rem">Second head · blank sailing <span class="badge">{{ state.blank_label or 'blank_sailing' }}</span></h2>
-<p class="muted" style="margin:0 0 .5rem">Same table, <code>label_col</code> override — binary blank-sailing risk. Primary judge card above stays demurrage + HistGBM Δ.
-{% if state.blank_backend %} · backend {{ state.blank_backend }}{% endif %}</p>
+<h2 style="margin-top:1rem">Blank-sailing head <span class="badge">{{ state.blank_label or 'blank_sailing' }}</span></h2>
+<p class="muted" style="margin:0 0 .5rem">Same table, second label — sail / hold risk. Primary judge card above stays demurrage + HistGBM Δ.
+{% if state.blank_backend %} · {{ state.blank_backend }}{% endif %}</p>
 {% if state.blank_warning %}<div class="warn-banner">{{ state.blank_warning }}</div>{% endif %}
 <div class="metrics-grid">
 {% for k in metric_keys %}
@@ -185,10 +153,32 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 </div>
 </section>
 
+{% if state.risk_cards %}
+<section class="card full" id="risk-board">
+<h2>{% if is_spine %}Container risk board{% else %}Shipment risk board{% endif %}</h2>
+<div class="legend"><span><i class="r"></i>Hot (≥0.65)</span><span><i class="a"></i>Watch (0.40–0.65)</span><span><i class="g"></i>Calm (<0.40)</span></div>
+<div class="risk-board">
+{% for c in state.risk_cards %}
+<article class="risk-card {{ c.tier }}">
+<div class="id">{{ c.row_id }}</div>
+<div class="sub">{{ c.subtitle or '—' }}</div>
+<div class="money">{% if c.money is not none %}${{ "{:,.0f}".format(c.money|float) }}{% else %}—{% endif %}</div>
+<div class="foot">
+<span class="tier-pill">{{ c.tier }}</span>
+<span class="badge">score {{ "%.0f"|format((c.proba|float)*100) }}%</span>
+<span class="badge">{{ c.action }}</span>
+</div>
+{% if c.reason %}<p class="muted" style="margin:.45rem 0 0;font-size:.72rem;line-height:1.35">{{ c.reason }}</p>{% endif %}
+</article>
+{% endfor %}
+</div>
+</section>
+{% endif %}
+
 {% if is_spine %}
 <section class="card full" id="what-if">
-<h2>What-if simulation <span class="badge">synthetic</span></h2>
-<p class="muted">Tweak free days / projected fee / divert on one container, re-score with a hold-out fit. Honest sandbox — not a live booking change.</p>
+<h2>What-if <span class="badge">sandbox</span></h2>
+<p class="muted">Tweak free days / projected fee / divert on one container — re-score. Honest sandbox, not a live booking change.</p>
 <form method="post" action="/what-if" class="row" style="align-items:flex-end;gap:.75rem;flex-wrap:wrap">
 <label class="muted">Container
 <select name="row_id" required>
@@ -197,14 +187,14 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 {% endfor %}
 </select>
 </label>
-<label class="muted">free_days_left
-<input type="number" step="0.1" name="free_days_left" placeholder="e.g. 8" style="width:6rem;background:#243044;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.45rem .6rem" />
+<label class="muted">Free days left
+<input type="number" step="0.1" name="free_days_left" placeholder="e.g. 8" style="width:6rem" />
 </label>
-<label class="muted">projected_demurrage_usd
-<input type="number" step="1" name="projected_demurrage_usd" placeholder="fee $" style="width:7rem;background:#243044;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.45rem .6rem" />
+<label class="muted">Projected fee $
+<input type="number" step="1" name="projected_demurrage_usd" placeholder="fee $" style="width:7rem" />
 </label>
 <label class="muted" style="display:flex;align-items:center;gap:.35rem">
-<input type="checkbox" name="divert" value="1" /> divert (+3 free days, inland beat)
+<input type="checkbox" name="divert" value="1" /> divert (+3 free days)
 </label>
 <input type="hidden" name="mode" value="{{ state.requested_mode or 'mock' }}" />
 <button type="submit">Run what-if</button>
@@ -215,23 +205,23 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 {% else %}
 <div class="metrics-grid" style="margin-top:.75rem">
 <div class="metric-cell">
-<div class="label">proba before</div>
+<div class="label">Score before</div>
 <div class="val">{{ "%.3f"|format(state.what_if.proba_before|float) }}</div>
 <div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_before }}</div>
 </div>
 <div class="metric-cell">
-<div class="label">proba after</div>
+<div class="label">Score after</div>
 <div class="val">{{ "%.3f"|format(state.what_if.proba_after|float) }}</div>
 <div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_after }}</div>
 </div>
 <div class="metric-cell">
-<div class="label">Δ proba</div>
+<div class="label">Δ score</div>
 {% set dp = state.what_if.delta_proba|float %}
 <div class="val">{{ "%+.3f"|format(dp) }}</div>
 <div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.label }}</div>
 </div>
 <div class="metric-cell">
-<div class="label">suggested action</div>
+<div class="label">Next move</div>
 <div class="val" style="font-size:1rem">{{ state.what_if.action_before }} → {{ state.what_if.action_after }}</div>
 </div>
 </div>
@@ -249,8 +239,9 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 {% endif %}
 </section>
 {% endif %}
+
 <section class="card full">
-<h2>Preview</h2>
+<h2>Feed preview</h2>
 {% if state.preview_rows %}
 <div style="overflow-x:auto">
 <table>
@@ -262,6 +253,17 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 <td>{{ r.container_id }}</td><td>{{ r.vessel_id }}</td><td>{{ r.pod }}</td>
 <td>{{ r.free_days_left }}</td><td>{{ r.projected_demurrage_usd }}</td>
 <td>{% if r.demurrage_risk == 1 or r.demurrage_risk == "1" %}<span class="badge risk">high</span>{% else %}<span class="badge ok">low</span>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+{% elif state.pack == 'air-freight' %}
+<thead><tr><th>AWB</th><th>flight</th><th>lane</th><th>carrier</th><th>client</th><th>delay $</th><th>risk</th></tr></thead>
+<tbody>
+{% for r in state.preview_rows %}
+<tr>
+<td>{{ r.awb_id }}</td><td>{{ r.flight_id }}</td><td>{{ r.route_id }}</td>
+<td>{{ r.carrier }}</td><td>{{ r.client_id }}</td><td>{{ r.projected_delay_cost_usd }}</td>
+<td>{% if r.miss_connection_risk == 1 or r.miss_connection_risk == "1" %}<span class="badge risk">high</span>{% else %}<span class="badge ok">low</span>{% endif %}</td>
 </tr>
 {% endfor %}
 </tbody>
@@ -283,12 +285,13 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 </div>
 {% else %}<p class="muted">No rows loaded.</p>{% endif %}
 </section>
+
 {% if state.actions %}
 <section class="card full">
-<h2>Suggested actions</h2>
+<h2>Suggested moves (table)</h2>
 <div style="overflow-x:auto">
 <table>
-<thead><tr><th>row</th><th>proba</th><th>action</th><th>reason</th></tr></thead>
+<thead><tr><th>row</th><th>score</th><th>move</th><th>reason</th></tr></thead>
 <tbody>
 {% for a in state.actions %}
 <tr><td>{{ a.row_id }}</td><td>{{ a.proba }}</td><td><span class="badge">{{ a.action }}</span></td><td>{{ a.reason }}</td></tr>
