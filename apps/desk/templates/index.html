@@ -21,7 +21,7 @@ main{padding:1.25rem 1.5rem;max-width:1100px;margin:0 auto}
 .metric{font-size:1.75rem;font-weight:700;color:var(--warn);font-variant-numeric:tabular-nums}
 .muted{color:var(--muted);font-size:.85rem}
 form.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
-select,button,input[type=checkbox],input[type=number]{background:#243044;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.45rem .75rem;font-size:.9rem}
+select,button,input[type=checkbox]{background:#243044;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.45rem .75rem;font-size:.9rem}
 button{background:var(--accent);color:#041018;font-weight:600;cursor:pointer;border:none}
 button.secondary{background:#2c3a50;color:var(--text)}
 .disabled-ctrl{opacity:.45;cursor:not-allowed;pointer-events:none}
@@ -63,12 +63,26 @@ footer{padding:1rem 1.5rem;color:var(--muted);font-size:.8rem}
 <header>
 <h1>Freight Demurrage Desk</h1>
 <p>TabPFN-3.5 triage · Plus / Thinking / Mock · always Δ vs HistGBM
+· pack: <strong>{{ state.pack_label or state.pack }}</strong>
 <span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% else %}no TABPFN_TOKEN → mock fallback{% endif %}</span></p>
 </header>
 <main>
 <div class="grid">
+<section class="card full">
+<h2>Domain pack</h2>
+<form class="row" method="post" action="/switch-pack">
+<label class="muted" for="pack">Spine + coda packs</label>
+<select name="pack" id="pack">
+{% for p in packs %}
+<option value="{{ p.id }}" {% if state.pack == p.id %}selected{% endif %}>{{ p.label }}{% if p.spine %} ★{% endif %}</option>
+{% endfor %}
+</select>
+<button type="submit">Switch pack</button>
+</form>
+<p class="muted" style="margin:.5rem 0 0">Demurrage is the spine desk. Equipment-size and inland-mode are fixture coda packs (CLI also works).</p>
+</section>
 <section class="card">
-<h2>Projected demurrage on table</h2>
+<h2>{% if is_spine %}Projected demurrage on table{% else %}Pack money / exposure rollup{% endif %}</h2>
 <div class="metric">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
 <p class="muted">Source: <span class="badge">{{ state.source }}</span> · rows: {{ state.n_rows }}
 {% if state.backend %} · backend: {{ state.backend }} (requested {{ state.requested_mode or state.mode }} → {{ state.mode }}){% endif %}
@@ -86,7 +100,7 @@ footer{padding:1rem 1.5rem;color:var(--muted);font-size:.8rem}
 <button type="submit">Load adapter</button>
 </form>
 <form class="row" method="post" action="/load-domain-csv" style="margin-top:.75rem">
-<button class="secondary" type="submit">Reload domain CSV (1200)</button>
+<button class="secondary" type="submit">Reload pack CSV</button>
 </form>
 </section>
 <section class="card priority full">
@@ -150,7 +164,7 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 {% if state.action_counts %}
 <p class="counts muted" style="margin-top:.75rem">{% for k, v in state.action_counts.items() %}<span><strong>{{ k }}</strong>: {{ v }}</span>{% endfor %}</p>
 {% endif %}
-{% if state.blank_metrics %}
+{% if is_spine and state.blank_metrics %}
 <h2 style="margin-top:1rem">Second head · blank sailing <span class="badge">{{ state.blank_label or 'blank_sailing' }}</span></h2>
 <p class="muted" style="margin:0 0 .5rem">Same table, <code>label_col</code> override — binary blank-sailing risk. Primary judge card above stays demurrage + HistGBM Δ.
 {% if state.blank_backend %} · backend {{ state.blank_backend }}{% endif %}</p>
@@ -163,7 +177,7 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 </div>
 {% endfor %}
 </div>
-{% elif state.blank_warning %}
+{% elif is_spine and state.blank_warning %}
 <div class="warn-banner" style="margin-top:.75rem">Blank sailing head: {{ state.blank_warning }}</div>
 {% endif %}
 <div class="todo-row" title="Backlog">
@@ -171,6 +185,7 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 </div>
 </section>
 
+{% if is_spine %}
 <section class="card full" id="what-if">
 <h2>What-if simulation <span class="badge">synthetic</span></h2>
 <p class="muted">Tweak free days / projected fee / divert on one container, re-score with a hold-out fit. Honest sandbox — not a live booking change.</p>
@@ -183,10 +198,10 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 </select>
 </label>
 <label class="muted">free_days_left
-<input type="number" step="0.1" name="free_days_left" placeholder="e.g. 8" style="width:6rem" />
+<input type="number" step="0.1" name="free_days_left" placeholder="e.g. 8" style="width:6rem;background:#243044;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.45rem .6rem" />
 </label>
 <label class="muted">projected_demurrage_usd
-<input type="number" step="1" name="projected_demurrage_usd" placeholder="fee $" style="width:7rem" />
+<input type="number" step="1" name="projected_demurrage_usd" placeholder="fee $" style="width:7rem;background:#243044;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.45rem .6rem" />
 </label>
 <label class="muted" style="display:flex;align-items:center;gap:.35rem">
 <input type="checkbox" name="divert" value="1" /> divert (+3 free days, inland beat)
@@ -233,11 +248,13 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 {% endif %}
 {% endif %}
 </section>
+{% endif %}
 <section class="card full">
 <h2>Preview</h2>
 {% if state.preview_rows %}
 <div style="overflow-x:auto">
 <table>
+{% if is_spine %}
 <thead><tr><th>container</th><th>vessel</th><th>pod</th><th>free days</th><th>projected $</th><th>risk</th></tr></thead>
 <tbody>
 {% for r in state.preview_rows %}
@@ -248,6 +265,20 @@ Fast A/B (optional stub — latency vs score; not required for judges)
 </tr>
 {% endfor %}
 </tbody>
+{% else %}
+<thead><tr><th>id</th><th>col2</th><th>col3</th><th>note</th><th>label</th></tr></thead>
+<tbody>
+{% for r in state.preview_rows %}
+<tr>
+<td>{{ r.booking_id or r.move_id or r.container_id or "—" }}</td>
+<td>{{ r.trade_lane or r.lane_id or r.vessel_id or "—" }}</td>
+<td>{{ r.current_equip or r.terminal or r.pod or "—" }}</td>
+<td style="max-width:18rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.booking_note or r.shipper_note or r.terminal_note or "" }}</td>
+<td>{% set lab = r.special_equip_fit if r.special_equip_fit is defined else r.prefer_rail %}{% if lab == 1 or lab == "1" %}<span class="badge risk">1</span>{% else %}<span class="badge ok">0</span>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+{% endif %}
 </table>
 </div>
 {% else %}<p class="muted">No rows loaded.</p>{% endif %}
