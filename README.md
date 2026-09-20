@@ -43,18 +43,18 @@ Swap the **story** with a thin domain pack (`domain.yaml` + CSV). The plumbing s
 
 ```
  domain.yaml + data/*.csv          (swap per idea)
-            │
-            ▼
-   ┌────────────────────┐
-   │  PipelineSession   │  load → profile → fit_predict
-   │  (core/pipeline)   │         → explain → baseline
-   └─────────┬──────────┘         → suggest_actions → report
-             │
-             ▼
+            |
+            v
+   +--------------------+
+   |  PipelineSession   |  load -> profile -> fit_predict
+   |  (core/pipeline)   |         -> explain -> baseline
+   +---------+----------+         -> suggest_actions -> report
+             |
+             v
    backend.py: plus | thinking | fast | local | mock
-             │
-     ┌───────┴────────┐
-     ▼                ▼
+             |
+     +-------+--------+
+     v                v
   CLI (demo/gen)   MCP stdio (7 tools)
 ```
 
@@ -69,7 +69,7 @@ cd /workspace/tabpfn-hack-core
 pip install -e ".[dev]"
 # or: uv sync
 
-tabpfn-hack demo              # → artifacts/demo_report.md + predictions.json
+tabpfn-hack demo              # -> artifacts/demo_report.md + predictions.json
 tabpfn-hack demo --mode mock
 tabpfn-hack gen --n 1000
 pytest
@@ -113,7 +113,7 @@ Cursor example:
 | --- | --- |
 | `load_table` | Load CSV / inline CSV into a session table |
 | `profile` | Types, missingness, cardinality, text stats, group/time hints |
-| `fit_predict` | `mode=plus\|thinking\|fast\|local\|mock` → labels + probabilities |
+| `fit_predict` | `mode=plus|thinking|fast|local|mock` -> labels + probabilities |
 | `explain` | Feature attributions (permutation / extensions fallback) |
 | `export_report` | Markdown / HTML / JSON under `artifacts/` |
 | `compare_baseline` | Delta vs sklearn HistGBM / logistic |
@@ -155,6 +155,23 @@ Optional example: `examples/er-triage/` (thin pack; ER narrative lives there, no
 
 ---
 
+## Web desk + freight adapters
+
+Fixture-only ingest + FastAPI desk for demurrage triage demos:
+
+- Adapters: `src/tabpfn_hack_core/adapters/` (Terminal49 / project44 / EDI 315 fixtures)
+- Fixtures: `fixtures/adapters/*.json`
+- Desk: `apps/desk/` — home, load adapter, run triage (mock default; honors `TABPFN_TOKEN` for plus)
+
+```bash
+pip install -e ".[dev,desk]"
+tabpfn-hack desk --port 8765
+# -> http://127.0.0.1:8765
+pytest   # includes adapter unit tests
+```
+
+See [`apps/desk/README.md`](apps/desk/README.md).
+
 ## Layout
 
 ```
@@ -162,9 +179,13 @@ tabpfn-hack-core/
   LICENSE  README.md  CLOUD_AGENT_HANDOFF.md  pyproject.toml  .env.example
   domain.yaml
   data/synthetic_table.csv  data/DATA.md
+  domains/freight-demurrage/
+  fixtures/adapters/*.json
+  apps/desk/                 # FastAPI demurrage desk
   scripts/gen_synthetic_table.py
   src/tabpfn_hack_core/
     cli.py  tools_api.py  domain.py
+    adapters/                # fixture freight feeds
     core/{backend,pipeline}.py
     server/mcp_server.py
     demo/run_demo.py
@@ -177,7 +198,7 @@ tabpfn-hack-core/
 
 ## License
 
-Apache-2.0 for **this repo’s code**. TabPFN weights/API remain under Prior Labs terms and metering.
+Apache-2.0 for **this repo's code**. TabPFN weights/API remain under Prior Labs terms and metering.
 
 ## Links
 
