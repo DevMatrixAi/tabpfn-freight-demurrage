@@ -1,0 +1,48 @@
+name: freight-demurrage
+label_col: demurrage_risk
+group_col: vessel_id
+time_col: event_ts
+text_cols: [terminal_note, weather_alert]
+high_card_cols: [bol_id, container_id, pol, pod]
+id_col: container_id
+data_path: domains/freight-demurrage/data/containers.csv
+feature_exclude: []
+action_thresholds:
+  high: 0.78
+  mid_high: 0.65
+  mid: 0.50
+  mid_low: 0.40
+actions:
+  high: divert
+  mid_high: rebook
+  mid: expedite
+  mid_low: authorize_fee
+  low: monitor
+playbook:
+  - action: cancel_booking
+    min_proba: 0.35
+    when_col: cargo_vs_fee_collapse
+    when_equals: "1"
+    reason: "Cancel booking — projected demurrage exceeds cargo economics"
+  - action: divert
+    min_proba: 0.78
+    reason: "Divert — upper-tail dwell will burn free days at current terminal"
+  - action: rebook
+    min_proba: 0.55
+    when_col: blank_sailing
+    when_equals: "1"
+    reason: "Rebook — blank sailing + elevated demurrage risk"
+  - action: expedite
+    min_proba: 0.45
+    when_col: inland_can_beat_freedays
+    when_equals: "1"
+    reason: "Expedite inland — still can beat free-day cutoff"
+  - action: authorize_fee
+    min_proba: 0.35
+    when_col: fee_inevitable
+    when_equals: "1"
+    reason: "Authorize fee — lock p90 exposure; cheaper than surprise invoice"
+  - action: monitor
+    min_proba: 0.0
+    reason: "Monitor — log score; leave in normal path"
+disclaimer: "Synthetic / public-derived ocean freight demo only. Not a carrier system of record, not customs advice, not production routing."
