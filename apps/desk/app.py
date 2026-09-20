@@ -39,7 +39,14 @@ except ImportError:
 
 PACKS = build_packs(ROOT)
 
-app = FastAPI(title="Freight Ops Board", version="0.4.0")
+app = FastAPI(
+    title="Freight Ops Board",
+    version="0.5.0",
+    description=(
+        "Human ops board for demurrage / coda packs. "
+        "Robot/TMS consumer API under /api/v1 (decisions only)."
+    ),
+)
 templates = Jinja2Templates(directory=str(DESK_DIR / "templates"))
 static_dir = DESK_DIR / "static"
 static_dir.mkdir(exist_ok=True)
@@ -238,6 +245,13 @@ register_triage_routes(
     load_default_csv=_load_default_csv,
     sample_ids=sample_ids,
 )
+
+try:
+    from apps.desk.api_robot import register_robot_api
+except ImportError:
+    from api_robot import register_robot_api  # type: ignore
+
+register_robot_api(app)
 
 
 def create_app() -> FastAPI:
