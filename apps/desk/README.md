@@ -11,7 +11,7 @@ From the repo root (with the package editable-installed):
 ```bash
 cd /workspace/tabpfn-hack-core
 pip install -e ".[dev,desk]"
-# mock by default; set TABPFN_TOKEN for Plus
+# mock by default; set TABPFN_TOKEN for Plus / Thinking / Fast
 tabpfn-hack desk --host 127.0.0.1 --port 8765
 # or:
 uvicorn apps.desk.app:app --app-dir . --host 127.0.0.1 --port 8765
@@ -19,11 +19,19 @@ uvicorn apps.desk.app:app --app-dir . --host 127.0.0.1 --port 8765
 
 Open http://127.0.0.1:8765
 
-## Flows
+## Judge-priority flows
 
-1. **Home** — loads domain CSV; shows projected demurrage $.
-2. **Load adapter** — Terminal49 / project44 / EDI 315 fixtures → domain columns.
-3. **Run triage** — `PipelineSession.fit_predict` (mock unless `TABPFN_TOKEN` + plus) + action table.
+1. **Mode toggle (must-have)** — segmented **Plus | Thinking | Mock**.
+   - Plus: messy terminal/weather text cols (no NLP pipeline).
+   - Thinking: constructor overrides `thinking_mode` + `group_col=vessel_id` +
+     `group_time_col=event_ts` (never `time_col` together with `group_col`).
+   - Mock: offline HistGBM-style path; always works without `TABPFN_TOKEN`.
+2. **Baseline Δ** — every triage calls `compare_baseline` vs sklearn HistGBM and
+   shows accuracy / f1 / roc_auc / AP plus Δ on the metrics panel.
+3. **Fast A/B (optional stub)** — checkbox; latency vs score side-by-side, not required.
+4. **Not blocking** — second head / stream re-score / what-if are disabled TODO chips.
+
+Missing or failing `TABPFN_TOKEN` falls back to mock with a visible warning banner.
 
 ## Adapters
 
