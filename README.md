@@ -1,22 +1,32 @@
 <!-- FREIGHT_FACE_START -->
 # Freight demurrage triage (TabPFN-3.5)
 
-**Demo open:** **$1.27M** projected demurrage sitting on the table — then divert / rebook / expedite / authorize_fee / cancel_booking before free days burn.
+**Demo open:** **$1.27M** projected demurrage — then divert / rebook / expedite / authorize_fee / cancel_booking before free days burn.
 
-Predict which containers will blow free-time. Score a messy vessel/BOL table (terminal notes, weather text, high-card IDs, missing milestones, vessel groups + time) with TabPFN-3.5 Plus / Thinking / Fast. Show risk vs a GBDT baseline. Propose money moves via MCP.
-
-Synthetic / public-derived demo only. Not a carrier system of record.
+Messy vessel/BOL tables → TabPFN-3.5 Plus / Thinking / Fast → baseline vs HistGBM → MCP money moves. **Web desk:** load Terminal49 / project44 / EDI-315 fixtures and triage in the browser.
 
 ```bash
-pip install -e ".[dev]"
+pip install -e ".[dev,desk]"
 tabpfn-hack demo --domain domains/freight-demurrage/domain.yaml --data domains/freight-demurrage/data/containers.csv
-# opens artifacts/freight-demurrage/demo_report.md with the $1.27M line + action counts
+tabpfn-hack desk --host 127.0.0.1 --port 8765   # http://127.0.0.1:8765
 ```
 
-Judging map, architecture, and engine docs are below. Pack: [`domains/freight-demurrage/`](domains/freight-demurrage/). Pitch: [`docs/FREIGHT_DEMURRAGE_PITCH_v0.md`](docs/FREIGHT_DEMURRAGE_PITCH_v0.md).
+Synthetic / public-derived demo only. Fixture adapters only — not live carrier APIs. Pack: [`domains/freight-demurrage/`](domains/freight-demurrage/). Pitch: [`docs/FREIGHT_DEMURRAGE_PITCH_v0.md`](docs/FREIGHT_DEMURRAGE_PITCH_v0.md). 90s: [`docs/DEMO_90S_AND_FORM_v1.md`](docs/DEMO_90S_AND_FORM_v1.md).
 
 ---
 <!-- FREIGHT_FACE_END -->
+
+## Multi-desk note
+
+**Spine:** `domains/freight-demurrage/` — demurrage triage is the default desk story.  
+**Coda packs** (same engine, fixtures only — not live TOS):
+
+| Pack | Path | Mock demo (no token) |
+| --- | --- | --- |
+| Equipment size (box / TEU / reefer vs dry) | [`domains/equipment-size/`](domains/equipment-size/) | `tabpfn-hack demo --domain domains/equipment-size/domain.yaml` |
+| Inland truck vs rail | [`domains/inland-mode/`](domains/inland-mode/) | `tabpfn-hack demo --domain domains/inland-mode/domain.yaml` |
+
+Desk home has a light **pack selector**; coda packs also run CLI-only. Chargeback remains an extra story under `domains/chargeback-desk/`.
 
 # Engine: tabpfn-hack-core
 
@@ -43,18 +53,18 @@ Swap the **story** with a thin domain pack (`domain.yaml` + CSV). The plumbing s
 
 ```
  domain.yaml + data/*.csv          (swap per idea)
-            |
-            v
-   +--------------------+
-   |  PipelineSession   |  load -> profile -> fit_predict
-   |  (core/pipeline)   |         -> explain -> baseline
-   +---------+----------+         -> suggest_actions -> report
-             |
-             v
+            │
+            ▼
+   ┌────────────────────┐
+   │  PipelineSession   │  load → profile → fit_predict
+   │  (core/pipeline)   │         → explain → baseline
+   └─────────┬──────────┘         → suggest_actions → report
+             │
+             ▼
    backend.py: plus | thinking | fast | local | mock
-             |
-     +-------+--------+
-     v                v
+             │
+     ┌───────┴────────┐
+     ▼                ▼
   CLI (demo/gen)   MCP stdio (7 tools)
 ```
 
@@ -69,7 +79,7 @@ cd /workspace/tabpfn-hack-core
 pip install -e ".[dev]"
 # or: uv sync
 
-tabpfn-hack demo              # -> artifacts/demo_report.md + predictions.json
+tabpfn-hack demo              # → artifacts/demo_report.md + predictions.json
 tabpfn-hack demo --mode mock
 tabpfn-hack gen --n 1000
 pytest
@@ -113,7 +123,7 @@ Cursor example:
 | --- | --- |
 | `load_table` | Load CSV / inline CSV into a session table |
 | `profile` | Types, missingness, cardinality, text stats, group/time hints |
-| `fit_predict` | `mode=plus|thinking|fast|local|mock` -> labels + probabilities |
+| `fit_predict` | `mode=plus\|thinking\|fast\|local\|mock` → labels + probabilities |
 | `explain` | Feature attributions (permutation / extensions fallback) |
 | `export_report` | Markdown / HTML / JSON under `artifacts/` |
 | `compare_baseline` | Delta vs sklearn HistGBM / logistic |
@@ -155,6 +165,7 @@ Optional example: `examples/er-triage/` (thin pack; ER narrative lives there, no
 
 ---
 
+
 ## Web desk + freight adapters
 
 Fixture-only ingest + FastAPI desk for demurrage triage demos:
@@ -166,7 +177,7 @@ Fixture-only ingest + FastAPI desk for demurrage triage demos:
 ```bash
 pip install -e ".[dev,desk]"
 tabpfn-hack desk --port 8765
-# -> http://127.0.0.1:8765
+# → http://127.0.0.1:8765
 pytest   # includes adapter unit tests
 ```
 
@@ -179,9 +190,11 @@ tabpfn-hack-core/
   LICENSE  README.md  CLOUD_AGENT_HANDOFF.md  pyproject.toml  .env.example
   domain.yaml
   data/synthetic_table.csv  data/DATA.md
-  domains/freight-demurrage/
+  domains/freight-demurrage/   # spine
+  domains/equipment-size/      # coda
+  domains/inland-mode/         # coda
   fixtures/adapters/*.json
-  apps/desk/                 # FastAPI demurrage desk
+  apps/desk/                 # FastAPI demurrage desk (+ pack selector)
   scripts/gen_synthetic_table.py
   src/tabpfn_hack_core/
     cli.py  tools_api.py  domain.py
@@ -198,7 +211,7 @@ tabpfn-hack-core/
 
 ## License
 
-Apache-2.0 for **this repo's code**. TabPFN weights/API remain under Prior Labs terms and metering.
+Apache-2.0 for **this repo’s code**. TabPFN weights/API remain under Prior Labs terms and metering.
 
 ## Links
 
