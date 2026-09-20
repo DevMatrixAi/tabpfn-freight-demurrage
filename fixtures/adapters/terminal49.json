@@ -1,0 +1,80 @@
+{
+  "source": "terminal49_fixture",
+  "shipments": [
+    {
+      "attributes": {
+        "container_number": "T49U1234567",
+        "event_timestamp": "2026-09-18T14:20:00Z",
+        "vessel_imo": "VSL-T49-01",
+        "bill_of_lading": "BOL-T49-88001",
+        "port_of_lading": "CNSHA",
+        "port_of_discharge": "USLAX",
+        "terminal_remarks": "Gate congestion; dual transactions stacked.",
+        "weather": "Fog thinning; ops normal.",
+        "free_days_remaining": 1.2,
+        "dwell_days": 8.5,
+        "teu": 1,
+        "cargo_value_usd": 48200,
+        "demurrage_rate_usd": 175,
+        "projected_demurrage_usd": 980,
+        "demurrage_risk": 1,
+        "risk_flags": {
+          "blank_sailing": 0,
+          "inland_can_beat_freedays": 1,
+          "fee_inevitable": 0,
+          "cargo_vs_fee_collapse": 0
+        }
+      }
+    },
+    {
+      "attributes": {
+        "container_number": "T49U7654321",
+        "event_timestamp": "2026-09-18T18:05:00Z",
+        "vessel_imo": "VSL-T49-02",
+        "bill_of_lading": "BOL-T49-88002",
+        "port_of_lading": "KRPUS",
+        "port_of_discharge": "NLRTM",
+        "terminal_remarks": "On schedule; chassis available.",
+        "weather": "All clear.",
+        "free_days_remaining": 6.4,
+        "dwell_days": 2.1,
+        "teu": 2,
+        "cargo_value_usd": 91000,
+        "demurrage_rate_usd": 100,
+        "projected_demurrage_usd": 0,
+        "demurrage_risk": 0,
+        "risk_flags": {
+          "blank_sailing": 0,
+          "inland_can_beat_freedays": 0,
+          "fee_inevitable": 0,
+          "cargo_vs_fee_collapse": 0
+        }
+      }
+    },
+    {
+      "attributes": {
+        "container_number": "T49U9988776",
+        "event_timestamp": "2026-09-19T09:40:00Z",
+        "vessel_imo": "VSL-T49-01",
+        "bill_of_lading": "BOL-T49-88003",
+        "port_of_lading": "SGSIN",
+        "port_of_discharge": "DEHAM",
+        "terminal_remarks": "Crane outage berth 2 — expect 22h delay.",
+        "weather": "Gale warning outer anchorage.",
+        "free_days_remaining": -0.5,
+        "dwell_days": 11.0,
+        "teu": 1,
+        "cargo_value_usd": 15500,
+        "demurrage_rate_usd": 200,
+        "projected_demurrage_usd": 2400,
+        "demurrage_risk": 1,
+        "risk_flags": {
+          "blank_sailing": 1,
+          "inland_can_beat_freedays": 0,
+          "fee_inevitable": 1,
+          "cargo_vs_fee_collapse": 1
+        }
+      }
+    }
+  ]
+}
