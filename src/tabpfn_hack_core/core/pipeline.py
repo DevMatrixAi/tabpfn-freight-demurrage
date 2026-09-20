@@ -1,1 +1,12 @@
-file:///tmp/exact_push/pipeline_FROZEN.py
+"""In-memory table session + pipeline steps for MCP / demo."""
+from __future__ import annotations
+
+from tabpfn_hack_core.core.pipeline_actions import _BaselineActionsMixin
+from tabpfn_hack_core.core.pipeline_explain import _ExplainExportMixin
+from tabpfn_hack_core.core.pipeline_fit import _FitMixin
+
+
+class PipelineSession(_FitMixin, _ExplainExportMixin, _BaselineActionsMixin):
+    """Holds loaded tables, last fit results, and domain config."""
+
+    pass
