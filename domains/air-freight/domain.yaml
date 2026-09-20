@@ -1,0 +1,40 @@
+name: air-freight
+label_col: miss_connection_risk
+group_col: flight_id
+time_col: event_ts
+text_cols: [handling_note, ops_note]
+high_card_cols: [awb_id, route_id, origin, dest, client_id, carrier]
+id_col: awb_id
+data_path: domains/air-freight/data/shipments.csv
+feature_exclude: []
+action_thresholds:
+  high: 0.78
+  mid_high: 0.62
+  mid: 0.48
+  mid_low: 0.35
+actions:
+  high: expedite_aog
+  mid_high: hold_for_connection
+  mid: rebook_belly
+  mid_low: rebook_belly
+  low: monitor
+playbook:
+  - action: expedite_aog
+    min_proba: 0.55
+    when_col: expedite_aog
+    when_equals: "1"
+    reason: "Expedite AOG — aircraft-on-ground spare; premium path beats grounded fleet cost (synthetic)"
+  - action: hold_for_connection
+    min_proba: 0.50
+    when_col: hold_for_connection
+    when_equals: "1"
+    reason: "Hold for connection — tight MCT; wait for inbound rather than misconnect (synthetic)"
+  - action: rebook_belly
+    min_proba: 0.40
+    when_col: rebook_belly
+    when_equals: "1"
+    reason: "Rebook belly — passenger-flight belly capacity available; avoid freighter premium (synthetic)"
+  - action: monitor
+    min_proba: 0.0
+    reason: "Monitor — log score; leave station / GSA path unchanged"
+disclaimer: "Synthetic air-freight coda pack only. Multi-client / multi-carrier are fixture labels. Not a live GSA, GHA, or airline system of record."

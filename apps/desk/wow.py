@@ -21,7 +21,7 @@ def metric_slice(metrics: dict[str, float] | None) -> dict[str, float]:
 
 
 def sample_ids(df, id_col: str | None = "container_id", limit: int = 18) -> list[str]:
-    candidates = [c for c in (id_col, "container_id", "booking_id", "move_id", "row_id") if c]
+    candidates = [c for c in (id_col, "container_id", "booking_id", "move_id", "awb_id", "row_id") if c]
     col = next((c for c in candidates if c in df.columns), None)
     if not col:
         return []
