@@ -1,0 +1,31 @@
+"""Desk domain pack registry (spine + coda)."""
+from __future__ import annotations
+from pathlib import Path
+from typing import Any
+
+def build_packs(root: Path) -> dict[str, dict[str, Any]]:
+    return {
+        "freight-demurrage": {
+            "label": "Freight demurrage (spine)",
+            "domain": root / "domains" / "freight-demurrage" / "domain.yaml",
+            "csv": root / "domains" / "freight-demurrage" / "data" / "containers.csv",
+            "spine": True,
+            "money_col": "projected_demurrage_usd",
+        },
+        "equipment-size": {
+            "label": "Equipment size (coda)",
+            "domain": root / "domains" / "equipment-size" / "domain.yaml",
+            "csv": root / "domains" / "equipment-size" / "data" / "bookings.csv",
+            "spine": False,
+            "money_col": "cargo_value_usd",
+        },
+        "inland-mode": {
+            "label": "Inland truck vs rail (coda)",
+            "domain": root / "domains" / "inland-mode" / "domain.yaml",
+            "csv": root / "domains" / "inland-mode" / "data" / "moves.csv",
+            "spine": False,
+            "money_col": "truck_cost_usd",
+        },
+    }
+
+DEFAULT_PACK = "freight-demurrage"
