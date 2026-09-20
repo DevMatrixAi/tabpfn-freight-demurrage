@@ -1,4 +1,4 @@
-"""Typer CLI: demo | mcp | gen."""
+"""Typer CLI: demo | mcp | gen | desk."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -9,7 +9,7 @@ from rich.console import Console
 
 app = typer.Typer(
     name="tabpfn-hack",
-    help="Domain-agnostic TabPFN-3.5 hackathon core (demo / mcp / gen).",
+    help="Domain-agnostic TabPFN-3.5 hackathon core (demo / mcp / gen / desk).",
     add_completion=False,
 )
 console = Console()
@@ -87,6 +87,41 @@ def gen(
     out_path = out if out.is_absolute() else root / out
     path = generate_synthetic_table(n=n, out=out_path, seed=seed)
     console.print(f"[green]Wrote[/green] {path} ({n} rows)")
+
+
+@app.command()
+def desk(
+    host: str = typer.Option("127.0.0.1", "--host", help="Bind host"),
+    port: int = typer.Option(8765, "--port", "-p", help="Bind port"),
+    reload: bool = typer.Option(False, "--reload", help="Dev auto-reload"),
+) -> None:
+    """Start the freight demurrage web desk (FastAPI)."""
+    from dotenv import load_dotenv
+
+    root = _project_root()
+    load_dotenv(root / ".env")
+    try:
+        import uvicorn
+    except ImportError:
+        console.print(
+            "[red]Desk requires optional deps:[/red] pip install -e '.[desk]' "
+            "(fastapi, uvicorn, jinja2, python-multipart)"
+        )
+        raise typer.Exit(code=1)
+
+    import sys
+
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+
+    console.print(f"[green]Desk[/green] http://{host}:{port}  (root={root})")
+    uvicorn.run(
+        "apps.desk.app:app",
+        host=host,
+        port=port,
+        reload=reload,
+        app_dir=str(root),
+    )
 
 
 def main() -> None:
