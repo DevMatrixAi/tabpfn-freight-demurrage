@@ -139,6 +139,10 @@
       {% endfor %}
     </div>
   </section>
+  {% if result.learning_curve %}
+  {% include "partials_learning_curve.html" %}
+  {% endif %}
+
   {% else %}
   <section class="card">
     <h2>No run yet</h2>
