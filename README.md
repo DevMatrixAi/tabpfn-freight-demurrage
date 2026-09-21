@@ -20,6 +20,8 @@ Synthetic / public-derived demo only. Fixture adapters only — not live carrier
 
 ## How judges demo in 3 minutes
 
+One-pager: [`docs/JUDGE_3MIN.md`](docs/JUDGE_3MIN.md) · MCP smoke: [`docs/MCP_SMOKE.md`](docs/MCP_SMOKE.md).
+
 **Fastest honest path = local full desk** (deep panels live here). The public Vercel URL is a **mock stub only**.
 
 | Min | Do this |
@@ -28,7 +30,6 @@ Synthetic / public-derived demo only. Fixture adapters only — not live carrier
 | 0:30 | Open http://127.0.0.1:8765 → login `demo` / `demurrage` → **Run triage** (Mock) → risk cards + HistGBM Δ |
 | 1:30 | Open **/eval** → **Run eval** → latency · Thinking · ablations · calibration · small-n learning curve |
 | 2:30 | Optional: `TABPFN_TOKEN= python scripts/mcp_cookbook_demo.py` (7 MCP tools) · `TABPFN_TOKEN= pytest -q` · `tabpfn-hack demo --mode mock` |
-|
 
 
 **Deterministic mock path:** keep the inline `TABPFN_TOKEN=` on the local desk command.

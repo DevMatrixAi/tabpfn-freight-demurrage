@@ -23,6 +23,13 @@ from tabpfn_hack_core.core.calibration import calibration_from_predictions
 from tabpfn_hack_core.core.pipeline import PipelineSession
 from tabpfn_hack_core.domain import load_domain
 from tabpfn_hack_core.tools_api import BackendMode, TOOL_SPECS
+import os
+
+def _prefer_mock() -> BackendMode:
+    """Avoid live Thinking spam when TABPFN_TOKEN is unset/empty."""
+    if os.environ.get("TABPFN_TOKEN", "").strip():
+        return BackendMode.thinking
+    return BackendMode.mock
 
 
 def main() -> int:
@@ -59,10 +66,13 @@ def main() -> int:
         thinking_effort="high",
     )
     # Force thinking narrative path for showcase receipt
+    think_mode = _prefer_mock()
     fit_think = sess.fit_predict(
         "freight",
-        mode=BackendMode.thinking,
+        mode=think_mode,
         test_size=0.25,
+        group_col=domain.group_col,
+        group_time_col=domain.time_col,
         thinking_effort="high",
     )
     receipt["steps"].append(

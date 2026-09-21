@@ -113,9 +113,15 @@ try:
 except ImportError:
     from risk_board import build_risk_cards as _build_risk_cards_impl  # type: ignore
 
+try:
+    from apps.desk.missingness import missingness_summary
+except ImportError:
+    from missingness import missingness_summary  # type: ignore
+
 
 def _build_risk_cards(sess: PipelineSession, tid: str, actions: list[dict[str, Any]], limit: int = 12) -> list[dict[str, Any]]:
     return _build_risk_cards_impl(sess, tid, actions, _pack_meta(), limit=limit)
+
 
 
 def _load_default_csv(session: PipelineSession | None = None) -> None:
@@ -142,6 +148,7 @@ def _load_default_csv(session: PipelineSession | None = None) -> None:
     _STATE["group_col"] = sess.domain.group_col
     _STATE["group_time_col"] = sess.domain.time_col
     _STATE["sample_row_ids"] = sample_ids(df, id_col=sess.domain.id_col or "container_id")
+    _STATE["missingness"] = missingness_summary(df)
     _STATE["blank_label"] = getattr(sess.domain, "secondary_label_col", None) or "blank_sailing"
     _STATE["money_label"] = meta.get("money_label") or "Exposure"
     _STATE["pack_gloss"] = meta.get("gloss")

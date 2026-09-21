@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Freight Ops Board</title>
 <link rel="stylesheet" href="/static/ops_board.css" />
+<link rel="stylesheet" href="/static/stream_board.css" />
 </head>
 <body>
 <header class="saas-crumb" style="padding:.5rem 1rem;border-bottom:1px solid #243044;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
@@ -32,12 +33,12 @@
 <div class="ticker" role="status" aria-live="polite">
 <div>
 <div class="lbl">{{ state.money_label or ('Money at risk' if is_spine else 'Pack exposure') }}</div>
-<div class="dollars">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
+<div class="dollars" id="ticker-dollars">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
 {% if is_spine %}<div class="ticker-gloss">Projected late-container fees if nothing changes</div>{% endif %}
 </div>
 <div class="meta">
 <span class="badge">{{ state.source }}</span>
-· {{ state.n_rows }} rows
+· <span id="ticker-rows">{{ state.n_rows }}</span> rows
 {% if state.backend %} · {{ state.backend }} ({{ state.requested_mode or state.mode }} → {{ state.mode }}){% endif %}
 {% if state.elapsed_s is not none %} · {{ state.elapsed_s }}s{% endif %}
 </div>
@@ -64,6 +65,8 @@
 </p>
 </section>
 
+{% include "partials_missingness.html" %}
+
 <section class="card">
 <h2>Load feed</h2>
 <form class="row" method="post" action="/load-adapter">
@@ -77,6 +80,9 @@
 </form>
 <form class="row" method="post" action="/load-domain-csv" style="margin-top:.75rem">
 <button class="secondary" type="submit">Reload pack CSV</button>
+</form>
+<form class="row" method="post" action="/load-stress-missing" style="margin-top:.75rem">
+<button class="secondary" type="submit" title="fixtures/stress/missing_wide_demurrage.csv">Load stress missing/wide</button>
 </form>
 </section>
 
@@ -105,6 +111,7 @@
 </div>
 <p class="mode-hint">Thinking overrides:
 <span class="badge">thinking_mode=True</span>
+<span class="badge">thinking_effort={{ state.thinking_effort or 'medium' }}</span>
 <span class="badge">group={{ state.group_col or 'vessel_id' }}</span>
 <span class="badge">time={{ state.group_time_col or 'event_ts' }}</span>
 </p>
@@ -122,9 +129,15 @@ Fast A/B stub (optional)
 <span class="badge">Scorecard</span>
 <span class="badge">Δ vs HistGBM</span>
 {% if state.backend %}<span class="badge">{{ state.backend }}</span>{% endif %}
+{% if state.judge_card and state.judge_card.headline %}<span class="badge">{{ state.judge_card.headline }}</span>{% endif %}
+{% if state.thinking_effort %}<span class="badge">effort={{ state.thinking_effort }}</span>{% endif %}
 </div>
 <p class="muted" style="margin:0 0 .35rem">Primary scores and lift over HistGBM on the same split.
-{% if state.baseline_narrative %}<br>{{ state.baseline_narrative }}{% endif %}</p>
+{% if state.baseline_narrative %}<br>{{ state.baseline_narrative }}{% endif %}
+{% if state.thinking_narrative %}<br><em>{{ state.thinking_narrative }}</em>{% endif %}</p>
+{% if state.calibration and state.calibration.n %}
+<p class="muted" style="margin:0 0 .5rem;font-size:.8rem">Calibration · Brier={{ state.calibration.brier }} · ECE={{ state.calibration.ece }} · mean p={{ state.calibration.mean_proba }} (n={{ state.calibration.n }})</p>
+{% endif %}
 <p class="metrics-gloss">Plain English: how often we correctly flag late-fee risk, and how much better we are than a plain HistGBM baseline (Δ).</p>
 <div class="metrics-grid">
 {% for k in metric_keys %}
@@ -167,45 +180,25 @@ Fast A/B stub (optional)
 {% endfor %}
 </div>
 {% elif is_spine and state.blank_warning %}
-<div class="warn-banner" style="margin-top:.75rem">Cancelled sailing (blank): {{ state.blank_warning }}</div>{% endif %}
-<div class="todo-row" title="Backlog">
-<span class="todo-chip disabled-ctrl">TODO: stream re-score</span>
+<div class="warn-banner" style="margin-top:.75rem">Cancelled sailing (blank): {{ state.blank_warning }}</div>
+{% endif %}
+<div class="stream-panel" id="stream-panel">
+  <div class="stream-controls">
+    <label class="muted" for="stream-mode">Stream mode</label>
+    <select id="stream-mode" name="stream-mode">
+      {% set sel = state.requested_mode or 'mock' %}
+      <option value="mock" {% if sel == 'mock' %}selected{% endif %}>Mock</option>
+      <option value="plus" {% if sel == 'plus' %}selected{% endif %}>Plus</option>
+      <option value="thinking" {% if sel == 'thinking' %}selected{% endif %}>Thinking</option>
+    </select>
+    <button type="button" id="btn-stream-rescore" class="stream-btn">Stream event + re-score</button>
+    <label class="muted stream-auto-label"><input type="checkbox" id="stream-auto" /> Auto-poll (5s)</label>
+  </div>
+  <p class="muted stream-hint">Appends a synthetic Terminal49 / project44 / EDI fixture row, then re-runs triage and refreshes risk cards — no full page reload.</p>
 </div>
 </section>
 
-{% include "polish_charts.html" %}
-{% if state.risk_cards %}
-<section class="card full" id="risk-board">
-<h2>{% if is_spine %}Late fee risk board{% else %}Shipment risk board{% endif %} <span class="badge">click card → moves</span></h2>
-<div class="legend"><span><i class="r"></i>High (≥0.65)</span><span><i class="a"></i>Med (0.40–0.65)</span><span><i class="g"></i>Low (&lt;0.40)</span></div>
-<div class="risk-board">
-{% for c in state.risk_cards %}
-<article class="risk-card {{ c.tier }} clickable" tabindex="0" role="button"
-  data-row-id="{{ c.row_id }}"
-  data-action="{{ c.action }}"
-  data-action-label="{{ c.action_label or (c.action|human_action) }}"
-  data-reason="{{ c.reason or '' }}"
-  data-proba="{{ c.proba }}"
-  data-tier="{{ c.risk_label or c.tier }}"
-  data-money="{% if c.money is not none %}{{ c.money }}{% endif %}"
-  data-subtitle="{{ c.subtitle or '' }}"
-  title="Open suggested move — Late fee risk: {{ c.risk_label or c.tier }}"
-  onclick="openActionDrawer(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openActionDrawer(this)}">
-<div class="id">{{ c.row_id }}</div>
-<div class="sub">{{ c.subtitle or '—' }}</div>
-<div class="money">{% if c.money is not none %}${{ "{:,.0f}".format(c.money|float) }}{% else %}—{% endif %}</div>
-<div class="money-caption">{% if is_spine %}Money at risk{% else %}Exposure{% endif %}</div>
-<div class="foot">
-<span class="tier-pill" title="Late fee risk">{{ c.risk_label or c.tier }}</span>
-<span class="badge">Late fee risk {{ "%.0f"|format((c.proba|float)*100) }}%</span>
-<span class="badge" title="{{ c.action }}">{{ c.action_label or (c.action|human_action) }}</span>
-</div>
-{% if c.reason %}<p class="muted" style="margin:.45rem 0 0;font-size:.72rem;line-height:1.35">{{ c.reason }}</p>{% endif %}
-</article>
-{% endfor %}
-</div>
-</section>
-{% endif %}
+{% include "live_board.html" %}
 
 {% if is_spine %}
 <section class="card full" id="what-if">
@@ -350,6 +343,71 @@ Fast A/B stub (optional)
 
 {% include "polish_drawer.html" %}
 
+
+
+<script>
+(function(){
+  var btn = document.getElementById('btn-stream-rescore');
+  var auto = document.getElementById('stream-auto');
+  var modeSel = document.getElementById('stream-mode');
+  var timer = null;
+  var busy = false;
+
+  function syncTicker(board){
+    if(!board) return;
+    var dollars = document.getElementById('ticker-dollars');
+    var rows = document.getElementById('ticker-rows');
+    if(dollars && board.dataset.demurrage != null){
+      var n = Number(board.dataset.demurrage);
+      dollars.textContent = '$' + n.toLocaleString(undefined, {maximumFractionDigits:0});
+    }
+    if(rows && board.dataset.nRows != null){
+      rows.textContent = board.dataset.nRows;
+    }
+  }
+
+  async function streamRescore(){
+    if(busy) return;
+    busy = true;
+    if(btn){ btn.disabled = true; btn.textContent = 'Re-scoring…'; }
+    try {
+      var mode = modeSel ? modeSel.value : 'mock';
+      var body = new URLSearchParams({mode: mode, count: '1', partial: '1'});
+      var res = await fetch('/stream-rescore', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'text/html'},
+        body: body,
+        credentials: 'same-origin'
+      });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      var html = await res.text();
+      var tmp = document.createElement('div');
+      tmp.innerHTML = html.trim();
+      var neu = tmp.querySelector('#live-board') || tmp.querySelector('#risk-board') || tmp.firstElementChild;
+      var cur = document.getElementById('live-board') || document.getElementById('risk-board');
+      if(neu && cur){
+        cur.replaceWith(neu);
+        syncTicker(document.getElementById('live-board') || document.getElementById('risk-board'));
+      }
+    } catch(err){
+      console.error(err);
+      var st = document.getElementById('stream-status');
+      if(st) st.innerHTML = '<span class="warn-banner">Stream re-score failed: ' + err.message + '</span>';
+    } finally {
+      busy = false;
+      if(btn){ btn.disabled = false; btn.textContent = 'Stream event + re-score'; }
+    }
+  }
+
+  if(btn) btn.addEventListener('click', streamRescore);
+  if(auto){
+    auto.addEventListener('change', function(){
+      if(timer){ clearInterval(timer); timer = null; }
+      if(auto.checked){ timer = setInterval(streamRescore, 5000); streamRescore(); }
+    });
+  }
+})();
+</script>
 
 </body>
 </html>

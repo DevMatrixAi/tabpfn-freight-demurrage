@@ -14,6 +14,8 @@ Robot/TMS JSON API (`/api/v1/*`) and OpenAPI (`/docs`) stay open without login.
 
 ## How judges demo in 3 minutes
 
+Canonical: [`JUDGE_3MIN.md`](JUDGE_3MIN.md) · MCP: [`MCP_SMOKE.md`](MCP_SMOKE.md).
+
 **Fastest honest path = local full desk** (deep panels live here). The public Vercel URL is a **mock stub only**.
 
 | Min | Do this |
@@ -22,7 +24,6 @@ Robot/TMS JSON API (`/api/v1/*`) and OpenAPI (`/docs`) stay open without login.
 | 0:30 | Open http://127.0.0.1:8765 → login `demo` / `demurrage` → **Run triage** (Mock) → risk cards + HistGBM Δ |
 | 1:30 | Open **/eval** → **Run eval** → latency · Thinking · ablations · calibration · small-n learning curve |
 | 2:30 | Optional: `TABPFN_TOKEN= python scripts/mcp_cookbook_demo.py` (7 MCP tools) · `TABPFN_TOKEN= pytest -q` · `tabpfn-hack demo --mode mock` |
-|
 
 
 **Deterministic mock path:** keep the inline `TABPFN_TOKEN=` on the local desk command.

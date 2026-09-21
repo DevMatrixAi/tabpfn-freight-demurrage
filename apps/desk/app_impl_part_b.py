@@ -117,6 +117,11 @@ async def load_adapter(adapter_name: str = Form(...)) -> RedirectResponse:
     _STATE["group_col"] = sess.domain.group_col
     _STATE["group_time_col"] = sess.domain.time_col
     _STATE["sample_row_ids"] = sample_ids(loaded, id_col=sess.domain.id_col or "container_id")
+    try:
+        from apps.desk.missingness import missingness_summary as _miss
+    except ImportError:
+        from missingness import missingness_summary as _miss  # type: ignore
+    _STATE["missingness"] = _miss(loaded)
     _reset_triage_state()
     return RedirectResponse(url="/desk", status_code=303)
 
@@ -126,6 +131,34 @@ async def load_domain_csv() -> RedirectResponse:
     _load_default_csv(app.state.session)
     return RedirectResponse(url="/desk", status_code=303)
 
+
+
+@app.post("/load-stress-missing")
+async def load_stress_missing() -> RedirectResponse:
+    """Load fixtures/stress/missing_wide_demurrage.csv for missingness showcase."""
+    sess = app.state.session
+    path = ROOT / "fixtures" / "stress" / "missing_wide_demurrage.csv"
+    if not path.exists():
+        import runpy
+        runpy.run_path(str(ROOT / "fixtures" / "stress" / "_unpack_missing_wide.py"))
+    result = sess.load_table(path=str(path), table_id="desk")
+    loaded = sess.tables[result.table_id]
+    _STATE["source"] = "stress:missing_wide"
+    _STATE["adapter"] = None
+    _STATE["table_id"] = result.table_id
+    _STATE["n_rows"] = result.n_rows
+    _STATE["demurrage_total"] = _money_total(loaded)
+    _STATE["preview_rows"] = loaded.head(8).fillna("").to_dict(orient="records")
+    _STATE["group_col"] = sess.domain.group_col
+    _STATE["group_time_col"] = sess.domain.time_col
+    _STATE["sample_row_ids"] = sample_ids(loaded, id_col=sess.domain.id_col or "container_id")
+    try:
+        from apps.desk.missingness import missingness_summary as _miss
+    except ImportError:
+        from missingness import missingness_summary as _miss  # type: ignore
+    _STATE["missingness"] = _miss(loaded)
+    _reset_triage_state()
+    return RedirectResponse(url="/desk", status_code=303)
 
 @app.post("/switch-pack")
 async def switch_pack(pack: str = Form(...)) -> RedirectResponse:
