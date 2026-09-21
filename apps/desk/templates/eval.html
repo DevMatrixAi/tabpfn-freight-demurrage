@@ -43,6 +43,7 @@
   <div class="crumb">
     <a href="{{ saas_home }}">← Desks</a>
     <span class="muted" style="font-size:.85rem">Eval dashboard</span>
+    <a href="/anti-wrapper">Anti-wrapper</a>
     <form method="post" action="/logout" style="margin-left:auto"><button class="signout" type="submit">Sign out</button></form>
   </div>
 
@@ -84,7 +85,7 @@
     <p class="muted" style="margin:0 0 .75rem">
       Pack <strong>{{ result.pack_label or result.pack }}</strong>
       · n={{ result.n_rows }} · test_size={{ result.test_size }}
-      {% if result.has_token %}<span class="live-pill">live token</span>{% else %}<span class="mock-pill">mock / offline</span>{% endif %}
+      {% if result.has_token %}<span class="live-pill">live</span>{% else %}<span class="mock-pill">mock / offline</span>{% endif %}
     </p>
     {% if result.warnings %}
     <div class="warn-banner" style="margin-bottom:.75rem">
@@ -200,7 +201,6 @@
   </section>
   {% endif %}
 
-
   {% if result.learning_curve %}
   {% include "partials_learning_curve.html" %}
 {% endif %}
@@ -254,6 +254,7 @@
       <div class="card" style="background:var(--panel2);padding:.65rem"><div class="muted" style="font-size:.7rem">mean p</div><div style="font-size:1.1rem">{% if result.calibration.mean_proba is not none %}{{ "%.3f"|format(result.calibration.mean_proba) }}{% else %}—{% endif %}</div></div>
       <div class="card" style="background:var(--panel2);padding:.65rem"><div class="muted" style="font-size:.7rem">n</div><div style="font-size:1.1rem">{{ result.calibration.n }}</div></div>
     </div>
+    {% include "partials_reliability_chart.html" %}
     <div style="overflow-x:auto">
     <table>
       <thead><tr><th>Bin</th><th>n</th><th>mean p</th><th>mean y</th><th>|gap|</th></tr></thead>
