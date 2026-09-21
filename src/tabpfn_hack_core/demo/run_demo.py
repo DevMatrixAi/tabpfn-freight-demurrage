@@ -112,13 +112,14 @@ def run_demo(
         csv_path = root / "data" / "synthetic_table.csv"
     if not Path(csv_path).is_file():
         # Coda packs: regenerate when CSV absent (same as scripts/gen_coda_packs.py).
-        coda = {"equipment-size", "inland-mode", "air-freight"}
+        coda = {"equipment-size", "inland-mode", "air-freight", "stow-fit"}
         if domain.name in coda and data_path is None:
             try:
                 from tabpfn_hack_core.demo.gen_coda_packs import (
                     gen_air_freight,
                     gen_equipment_size,
                     gen_inland_mode,
+                    gen_stow_fit,
                 )
             except ImportError as exc:  # pragma: no cover
                 raise FileNotFoundError(
@@ -129,8 +130,10 @@ def run_demo(
                 gen_equipment_size(n=250, seed=42).to_csv(csv_path, index=False)
             elif domain.name == "inland-mode":
                 gen_inland_mode(n=250, seed=43).to_csv(csv_path, index=False)
-            else:
+            elif domain.name == "air-freight":
                 gen_air_freight(n=250, seed=44).to_csv(csv_path, index=False)
+            else:
+                gen_stow_fit(n=250, seed=45).to_csv(csv_path, index=False)
         elif domain.data_path and data_path is None:
             raise FileNotFoundError(
                 f"Domain data_path missing: {csv_path} "
