@@ -18,3 +18,15 @@
 | 3:00 | Stop | |
 
 Long form: `docs/DEMO_90S_AND_FORM_v2.md`.
+
+
+## First screens (mock UI frames)
+
+| Beat | Frame |
+| --- | --- |
+| Login | ![login](images/judge/login.png) |
+| Home desks | ![home](images/judge/home.png) |
+| Ops board | ![desk](images/judge/desk.png) |
+| /eval | ![eval](images/judge/eval.png) |
+
+Frames are synthetic dark-theme panels committed for README / JUDGE_3MIN — label: mock UI frames.

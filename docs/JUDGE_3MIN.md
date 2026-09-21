@@ -22,3 +22,17 @@ More depth: [`DEEP_SHOWCASE_v0.md`](DEEP_SHOWCASE_v0.md) · preview honesty: [`P
 
 Prefer **small-n live** Thinking/Plus: desk `sample_n` 40–80, or env `TABPFN_DEV_N=60`.
 Full-table mock anytime (`TABPFN_TOKEN=`). One full live Thinking pass near shoot/submit only.
+
+
+## First-screen screenshots (mock UI frames)
+
+Labeled **mock UI frames** for the 3-minute path (not live browser captures). Dark theme matches the desk crib.
+
+| Screen | Image |
+| --- | --- |
+| Login | ![Login](images/judge/login.png) |
+| Home desks | ![Home](images/judge/home.png) |
+| Ops board | ![Desk](images/judge/desk.png) |
+| /eval pre-run | ![Eval](images/judge/eval.png) |
+
+Also: Settings at `/settings` (demo prefs · mode badge · judge crib).
