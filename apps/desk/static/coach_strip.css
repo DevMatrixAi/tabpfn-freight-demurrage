@@ -1,0 +1,32 @@
+/* --- in-desk coach strip --- */
+.coach-strip{margin:0 0 .85rem;padding:.65rem .85rem;border-radius:10px;border:1px solid rgba(167,139,250,.4);background:linear-gradient(135deg,#14101f,#0f1724);position:relative}
+.coach-strip[hidden],.coach-strip.dismissed{display:none!important}
+.coach-strip-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.coach-kicker{font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#c4b5fd}
+.coach-title{font-size:.82rem;color:#e8eef7;font-weight:650}
+.coach-dismiss{margin-left:auto;background:transparent;border:1px solid #243044;color:#9aa8bc;border-radius:6px;width:1.6rem;height:1.6rem;cursor:pointer;line-height:1}
+.coach-chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem}
+.coach-chip{margin:0}
+.coach-chip a{display:inline-block;padding:.2rem .55rem;border-radius:999px;font-size:.72rem;font-weight:650;text-decoration:none;color:#9aa8bc;border:1px solid #243044;background:#121a26}
+.coach-chip.active a,.coach-chip a:hover{border-color:rgba(167,139,250,.65);color:#e8dfff;background:#2a1f48}
+.coach-line{margin:.45rem 0 0;font-size:.78rem;line-height:1.35;color:#b8c4d6}
+.coach-hint{display:block;margin:.2rem 0 .35rem;font-size:.72rem;line-height:1.3;color:#8b9bb4}
+.coach-hint::before{content:"↳ ";color:#a78bfa}
+[data-coach].coach-target-flash{outline:2px solid rgba(167,139,250,.55);outline-offset:2px;border-radius:6px}
+
+/* --- morning digest --- */
+.morning-digest{margin:0 0 1rem;padding:.75rem 1rem;border:1px solid rgba(52,211,153,.35);background:#0f1a16}
+.morning-digest .md-head{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin-bottom:.4rem}
+.morning-digest h2{margin:0;font-size:.95rem;color:#6ee7b7}
+.md-top{margin:.25rem 0 0;padding-left:1.1rem;font-size:.8rem;line-height:1.4}
+.md-top li{margin:.22rem 0}
+.md-top .md-action{margin:0 .35rem;color:#cfe8dc}
+.md-top .md-money{font-variant-numeric:tabular-nums;color:#e8eef7;font-weight:650}
+.md-counts{display:flex;flex-wrap:wrap;gap:.65rem;margin:.5rem 0 0;font-size:.78rem}
+
+/* --- judge path button --- */
+.judge-path-btn{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .7rem;border-radius:8px;border:1px solid rgba(251,191,36,.45);background:#2a2210;color:#fde68a;font-size:.75rem;font-weight:700;cursor:pointer;text-decoration:none}
+.judge-path-btn:hover{border-color:#fbbf24;background:#3a2e14}
+.judge-path-banner{margin:0 0 1rem;padding:.75rem 1rem;border-radius:10px;border:1px solid rgba(251,191,36,.4);background:#1a160c}
+.judge-path-banner h2{margin:0 0 .35rem;font-size:.95rem;color:#fde68a}
+.judge-path-banner ol{margin:.35rem 0 0;padding-left:1.15rem;font-size:.78rem;line-height:1.4;color:#c9b896}
