@@ -54,6 +54,7 @@ footer{padding:1rem 1.5rem;color:var(--muted);font-size:.8rem}
 .todo-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
 .todo-chip{padding:.35rem .6rem;border-radius:6px;border:1px dashed var(--border);color:var(--muted);font-size:.75rem;background:#121a26}
 .fast-ab-box{margin-top:.75rem;padding:.6rem .7rem;border-radius:8px;border:1px solid #3a4060;background:#151c2c;font-size:.85rem}
+/* Ops board risk cards */
 .risk-board{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;margin-top:.35rem}
 .risk-card{border-radius:10px;padding:.85rem .9rem;border:1px solid var(--border);background:var(--panel2);position:relative;overflow:hidden}
 .risk-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
@@ -77,4 +78,9 @@ footer{padding:1rem 1.5rem;color:var(--muted);font-size:.8rem}
 .legend{display:flex;flex-wrap:wrap;gap:.75rem;margin:.25rem 0 .75rem;font-size:.75rem;color:var(--muted)}
 .legend i{display:inline-block;width:.65rem;height:.65rem;border-radius:2px;margin-right:.3rem;vertical-align:middle}
 .legend .r{background:var(--bad)}.legend .a{background:var(--amber)}.legend .g{background:var(--good)}
-.judge-strip{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.5rem}
+.judge-strip{display:flex;flex-wrap:wrap;gap:.35rem;margin:.35rem 0 .5rem}
+
+.pack-gloss{color:var(--muted);font-weight:400}
+.ticker-gloss{font-size:.72rem;color:#7d9a88;margin-top:.15rem}
+.metrics-gloss{font-size:.78rem;color:var(--muted);margin:0 0 .65rem;line-height:1.35}
+.risk-card .money-caption{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:.1rem}
