@@ -38,6 +38,14 @@ def _has_deep_markers(path: Path, name: str) -> bool:
         text = path.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return False
+    if name == "index.html":
+        # SaaS density shell may move body into partials_desk_main.html
+        partial = path.parent / "partials_desk_main.html"
+        if "partials_desk_main.html" in text and partial.is_file():
+            try:
+                text = text + "\n" + partial.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                pass
     return all(m in text for m in _MARKERS.get(name, ()))
 
 
