@@ -89,3 +89,25 @@
   .stream-controls{flex-direction:column;align-items:stretch}
   .stream-evt{max-width:100%;white-space:normal}
 }
+
+/* --- Explain-in-drawer (mock permutation bars) --- */
+.drawer-explain{margin:.15rem 1.15rem .85rem;padding:.75rem .85rem;border-radius:10px;border:1px solid var(--saas-border);background:rgba(15,22,35,.75)}
+.drawer-explain .explain-why{margin:.15rem 0 .45rem;font-size:.82rem;line-height:1.4;color:var(--saas-text)}
+.drawer-explain .explain-method{margin:0 0 .55rem;font-size:.68rem}
+.explain-bars{display:flex;flex-direction:column;gap:.35rem}
+.explain-bar-row{display:grid;grid-template-columns:minmax(5.5rem,38%) 1fr auto;gap:.4rem;align-items:center}
+.explain-bar-label{font-size:.72rem;color:var(--saas-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.explain-bar-track{height:.45rem;border-radius:4px;background:#1a2436;overflow:hidden}
+.explain-bar-fill{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.explain-bar-fill.kind-text{background:linear-gradient(90deg,#a78bfa,#c4b5fd)}
+.explain-bar-fill.kind-high_card{background:linear-gradient(90deg,#38bdf8,#7dd3fc)}
+.explain-bar-fill.kind-missing_derived{background:linear-gradient(90deg,#fbbf24,#fcd34d)}
+.explain-bar-fill.kind-money{background:linear-gradient(90deg,#34d399,#6ee7b7)}
+.explain-bar-kind{font-size:.62rem;color:var(--saas-muted);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.focus-fee-band{display:flex;flex-wrap:wrap;gap:.35rem;margin:.35rem 0 .2rem}
+
+/* --- Fee band on risk cards --- */
+.fee-band{margin:.25rem 0 0;font-size:.7rem;color:var(--saas-muted);display:flex;flex-wrap:wrap;gap:.25rem;align-items:center}
+.fee-band .fee-expected{color:#bfdbfe;font-weight:650}
+.fee-band .fee-p90{color:#fcd34d;font-weight:650}
+.fee-band .fee-sep{opacity:.5}
