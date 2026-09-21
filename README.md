@@ -3,7 +3,9 @@
 
 **Demo open:** **$1.27M** projected demurrage — then divert / rebook / expedite / authorize_fee / cancel_booking before free days burn.
 
-Messy vessel/BOL tables → TabPFN-3.5 Plus / Thinking / Fast → baseline vs HistGBM → MCP money moves. **Web ops board:** projected-$ ticker + risk cards; load Terminal49 / project44 / EDI-315 fixtures and triage in the browser.
+Messy vessel/BOL tables → TabPFN-3.5 Plus / Thinking / Fast → baseline vs HistGBM → MCP money moves.
+
+**Raw DataFrame in:** CSV / fixture adapters land as a pandas table via `load_table` — no custom featurizer. Text, high-cardinality IDs, and missings stay as columns; Thinking adds `group_col` / `group_time_col`. **Web ops board:** projected-$ ticker + risk cards; load Terminal49 / project44 / EDI-315 fixtures and triage in the browser.
 
 ```bash
 pip install -e ".[dev,desk]"

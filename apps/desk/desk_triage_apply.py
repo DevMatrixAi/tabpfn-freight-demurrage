@@ -23,6 +23,7 @@ def apply_triage(
     *,
     mode: str = "mock",
     fast_ab: str | None = None,
+    thinking_effort: str | None = None,
     pack_meta: Callable[[], dict[str, Any]],
     resolve_mode: Callable,
     metric_slice: Callable,
@@ -50,7 +51,13 @@ def apply_triage(
         state["sample_row_ids"] = sample_ids(combined, id_col=sess.domain.id_col or "container_id")
         test_size = 0.2
     t0 = time.perf_counter()
-    cmp_ = sess.compare_baseline(tid, mode=backend_mode, baseline="sklearn_hist_gbm", test_size=test_size)
+    effort = (thinking_effort or "medium").strip().lower()
+    if effort not in {"low", "medium", "high"}:
+        effort = "medium"
+    state["thinking_effort"] = effort
+    cmp_ = sess.compare_baseline(
+        tid, mode=backend_mode, baseline="sklearn_hist_gbm", test_size=test_size, thinking_effort=effort
+    )
     elapsed = time.perf_counter() - t0
     actions = sess.suggest_actions(tid, max_rows=50)
     warnings: list[str] = []
@@ -123,3 +130,5 @@ def apply_triage(
             sess.last_metrics, sess.last_backend, sess.last_mode, sess.last_warning, sess.last_baseline = snap
     else:
         state["fast_ab"] = None
+
+

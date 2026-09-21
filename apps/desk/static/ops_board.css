@@ -161,3 +161,11 @@ button:disabled{opacity:.6;cursor:wait}
 .missingness-bars .bar{display:block;height:.45rem;border-radius:4px;background:linear-gradient(90deg,#92400e,var(--pct,0%),#243044 var(--pct,0%));background-color:#243044;position:relative;overflow:hidden}
 .missingness-bars .bar::after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--pct,0%);background:#f59e0b;border-radius:4px}
 .missingness-bars .pct{text-align:right;color:#fbbf24;font-variant-numeric:tabular-nums}
+
+
+/* --- thinking_effort chip + mode glossary --- */
+.effort-chip{border-color:rgba(167,139,250,.55)!important;color:#e8dfff!important;background:#2a1f48!important}
+.effort-row select{background:#0b1220;color:#e8eef7;border:1px solid #243044;border-radius:6px;padding:.3rem .5rem}
+.mode-glossary-list{list-style:none;margin:.35rem 0 0;padding:0}
+.mode-glossary-list li{margin:.45rem 0;font-size:.82rem;line-height:1.35;color:var(--muted)}
+.mode-glossary-list .mode-chip{margin-right:.35rem}

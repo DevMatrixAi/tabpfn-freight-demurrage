@@ -109,12 +109,21 @@
 <input type="radio" name="mode" id="mode-mock" value="mock" {% if sel != 'plus' and sel != 'thinking' %}checked{% endif %} />
 <label for="mode-mock" data-mode="mock">Mock</label>
 </div>
-<p class="mode-hint">Thinking overrides:
+<p class="mode-hint thinking-overrides">Thinking overrides:
 <span class="badge">thinking_mode=True</span>
-<span class="badge">thinking_effort={{ state.thinking_effort or 'medium' }}</span>
+<span class="badge effort-chip" id="effort-chip">thinking_effort=<strong>{{ state.thinking_effort or 'medium' }}</strong></span>
 <span class="badge">group={{ state.group_col or 'vessel_id' }}</span>
 <span class="badge">time={{ state.group_time_col or 'event_ts' }}</span>
 </p>
+<div class="row effort-row" style="margin-bottom:.55rem">
+<label class="muted" for="thinking_effort">thinking_effort</label>
+<select name="thinking_effort" id="thinking_effort" aria-label="TabPFN thinking_effort">
+  {% set eff = state.thinking_effort or 'medium' %}
+  <option value="low" {% if eff == 'low' %}selected{% endif %}>low</option>
+  <option value="medium" {% if eff == 'medium' %}selected{% endif %}>medium</option>
+  <option value="high" {% if eff == 'high' %}selected{% endif %}>high</option>
+</select>
+</div>
 <div class="row" style="margin-bottom:.75rem">
 <label class="muted" style="display:flex;align-items:center;gap:.4rem">
 <input type="checkbox" name="fast_ab" value="1" />
