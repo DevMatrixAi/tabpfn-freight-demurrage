@@ -35,6 +35,7 @@ __all__ = [
     "register_eval_routes",
 ]
 
+
 def register_eval_routes(
     app: FastAPI,
     *,
@@ -110,6 +111,16 @@ def register_eval_routes(
         result = run_multi_mode_eval(
             sess, tid, resolve_mode=resolve_mode, metric_slice=metric_slice
         )
+        if not result.get("learning_curve"):
+            try:
+                from apps.desk.eval_lc import maybe_learning_curve
+            except ImportError:
+                from eval_lc import maybe_learning_curve  # type: ignore
+            warns = list(result.get("warnings") or [])
+            lc = maybe_learning_curve(sess, tid, warns)
+            result["warnings"] = warns
+            if lc is not None:
+                result["learning_curve"] = lc
         result["pack"] = pid
         result["pack_label"] = packs[pid]["label"]
         result["has_token"] = has_token()
