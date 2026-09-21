@@ -48,6 +48,11 @@ app = FastAPI(
     ),
 )
 templates = Jinja2Templates(directory=str(DESK_DIR / "templates"))
+try:
+    from apps.desk.risk_board import human_action as _human_action
+except ImportError:
+    from risk_board import human_action as _human_action  # type: ignore
+templates.env.filters["human_action"] = _human_action
 static_dir = DESK_DIR / "static"
 static_dir.mkdir(exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
@@ -61,7 +66,7 @@ _STATE: dict[str, Any] = {
     "group_col": None, "group_time_col": None, "fast_ab": None, "elapsed_s": None,
     "blank_metrics": None, "blank_backend": None, "blank_warning": None,
     "blank_label": "blank_sailing", "what_if": None, "sample_row_ids": [],
-    "risk_cards": [], "money_label": "Projected demurrage",
+    "risk_cards": [], "money_label": "Money at risk", "pack_gloss": PACKS[DEFAULT_PACK].get("gloss"),
 }
 
 
@@ -155,6 +160,7 @@ def _load_default_csv(session: PipelineSession | None = None) -> None:
     _STATE["sample_row_ids"] = sample_ids(df, id_col=sess.domain.id_col or "container_id")
     _STATE["blank_label"] = getattr(sess.domain, "secondary_label_col", None) or "blank_sailing"
     _STATE["money_label"] = meta.get("money_label") or "Exposure"
+    _STATE["pack_gloss"] = meta.get("gloss")
     _STATE["risk_cards"] = []
     _reset_triage_state()
     app.state.session = sess
@@ -167,6 +173,7 @@ def _startup() -> None:
     sess = _session(DEFAULT_PACK)
     _STATE["pack"] = DEFAULT_PACK
     _STATE["pack_label"] = PACKS[DEFAULT_PACK]["label"]
+    _STATE["pack_gloss"] = PACKS[DEFAULT_PACK].get("gloss")
     _STATE["group_col"] = sess.domain.group_col
     _STATE["group_time_col"] = sess.domain.time_col
     _STATE["blank_label"] = getattr(sess.domain, "secondary_label_col", None) or "blank_sailing"
@@ -182,7 +189,7 @@ async def home(request: Request) -> HTMLResponse:
     disclaimer = load_domain(meta["domain"]).disclaimer
     return templates.TemplateResponse(request, "index.html", {
         "adapters": list_adapters(), "state": _STATE,
-        "packs": [{"id": k, "label": v["label"], "spine": v["spine"]} for k, v in PACKS.items()],
+        "packs": [{"id": k, "label": v["label"], "spine": v["spine"], "gloss": v.get("gloss")} for k, v in PACKS.items()],
         "disclaimer": disclaimer,
         "has_token": _has_token(), "primary_modes": PRIMARY_MODES, "metric_keys": METRIC_KEYS,
         "is_spine": bool(meta.get("spine")),
@@ -225,6 +232,7 @@ async def switch_pack(pack: str = Form(...)) -> RedirectResponse:
     pid = pack if pack in PACKS else DEFAULT_PACK
     _STATE["pack"] = pid
     _STATE["pack_label"] = PACKS[pid]["label"]
+    _STATE["pack_gloss"] = PACKS[pid].get("gloss")
     sess = _session(pid)
     _load_default_csv(sess)
     return RedirectResponse(url="/", status_code=303)
