@@ -41,6 +41,15 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "money_label": "Projected delay cost",
             "id_hint": "awb_id",
         },
+        "stow-fit": {
+            "label": "Stow-fit equip/mode (coda)",
+            "domain": root / "domains" / "stow-fit" / "domain.yaml",
+            "csv": root / "domains" / "stow-fit" / "data" / "shipments.csv",
+            "spine": False,
+            "money_col": "cargo_value_usd",
+            "money_label": "Cargo value",
+            "id_hint": "shipment_id",
+        },
     }
 
 DEFAULT_PACK = "freight-demurrage"
