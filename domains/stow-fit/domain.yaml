@@ -1,0 +1,50 @@
+name: stow-fit
+label_col: fit_risk
+group_col: lane_id
+time_col: event_ts
+text_cols: [booking_note, ops_note]
+high_card_cols: [shipment_id, origin, dest, client_id, carrier]
+id_col: shipment_id
+data_path: domains/stow-fit/data/shipments.csv
+feature_exclude: [suggested_mode]
+action_thresholds:
+  high: 0.78
+  mid_high: 0.62
+  mid: 0.48
+  mid_low: 0.35
+actions:
+  high: reefer_hold
+  mid_high: upsell_40hc
+  mid: split_load
+  mid_low: air_expedite
+  low: monitor
+playbook:
+  - action: reefer_hold
+    min_proba: 0.55
+    when_col: reefer_hold
+    when_equals: "1"
+    reason: "Reefer hold — cold-chain / temp cargo needs RF path (synthetic suggest head)"
+  - action: upsell_40hc
+    min_proba: 0.50
+    when_col: upsell_40hc
+    when_equals: "1"
+    reason: "Upsell 40HC — cube/overheight vs dry GP (not a 3D packer)"
+  - action: split_load
+    min_proba: 0.45
+    when_col: split_load
+    when_equals: "1"
+    reason: "Split load — overweight / piece count exceeds single-box comfort (suggest head)"
+  - action: air_expedite
+    min_proba: 0.40
+    when_col: air_expedite
+    when_equals: "1"
+    reason: "Air expedite — high value + urgency + small dims → air-belly candidate"
+  - action: book_ltl
+    min_proba: 0.35
+    when_col: book_ltl
+    when_equals: "1"
+    reason: "Book LTL truck — domestic short / parcel-scale fit (fixture)"
+  - action: monitor
+    min_proba: 0.0
+    reason: "Monitor — log fit score; leave requested mode unchanged"
+disclaimer: "Synthetic stow-fit coda pack only. Tabular suggestion head for equipment/mode (dry20/dry40/hc40/reefer/air_belly/ltl_truck) — NOT a 3D bin packer, WMS, or live carrier booking system. Multi-client/carrier are fixture labels."
