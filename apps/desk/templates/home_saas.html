@@ -13,14 +13,18 @@
   <a class="mark" href="/"><div class="mark-orb"></div><span>Freight Money Desk</span></a>
   <div class="links">
     <a class="active" href="/">Desks</a>
-    <a href="/eval">Eval</a>
-    <a href="/docs" target="_blank" rel="noopener">Robot API</a>
+    <a href="/eval" data-coach="compare-eval">Eval</a>
+    <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn" data-judge-path="1">Judge path (mock)</button></form>
+    <a href="/docs" data-coach="robot-api" target="_blank" rel="noopener">Robot API</a>
   </div>
   <div class="spacer"></div>
   <span class="chip live">Demo · mock-ready</span>
   <form method="post" action="/logout" style="margin:0"><button class="ghost" type="submit">Sign out</button></form>
 </nav>
 
+{% set state = {"coach_active_beat": "ticker"} %}
+{% set coach_active_beat = "ticker" %}
+{% include "partials_coach_strip.html" %}
 <div class="saas-wrap">
   <div class="hero-row">
     <div>
@@ -29,7 +33,8 @@
     </div>
   </div>
 
-  <form class="client-bar" method="post" action="/select-client">
+  <form class="client-bar" method="post" action="/select-client" data-coach="client-switcher">
+    <span class="coach-hint" data-coach-hint="client-switcher">Same product, different customer books.</span>
     <strong style="font-size:.85rem">Client</strong>
     <select name="client_id" onchange="this.form.submit()">
       {% for c in clients %}
@@ -61,7 +66,7 @@
 
   <p class="section-label" style="margin-top:1.75rem">Compare</p>
   <div class="desk-grid">
-    <a class="desk-card spine" href="/eval" id="eval-link">
+    <a class="desk-card spine" href="/eval" id="eval-link" data-coach="compare-eval">
       <span class="pill">Judge card</span>
       <h2>Eval · Plus / Thinking / Fast vs HistGBM</h2>
       <p class="muted" style="margin:0;font-size:.85rem">Metrics + Δ + learning curve · mock offline · small-n live after API reset</p>
