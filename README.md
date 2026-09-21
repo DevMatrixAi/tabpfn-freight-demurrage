@@ -18,6 +18,20 @@ Synthetic / public-derived demo only. Fixture adapters only — not live carrier
 ---
 <!-- FREIGHT_FACE_END -->
 
+## How judges demo in 3 minutes
+
+**Fastest honest path = local full desk** (deep panels live here). The public Vercel URL is a **mock stub only**.
+
+| Min | Do this |
+| --- | --- |
+| 0:00 | `pip install -e ".[dev,desk]"` then `tabpfn-hack desk --host 127.0.0.1 --port 8765` |
+| 0:30 | Open http://127.0.0.1:8765 → login `demo` / `demurrage` → **Run triage** (Mock) → risk cards + HistGBM Δ |
+| 1:30 | Open **/eval** → **Run eval** → latency · Thinking · ablations · calibration panels |
+| 2:30 | Optional: `python scripts/mcp_cookbook_demo.py` (7 MCP tools) · `pytest` · `tabpfn-hack demo --mode mock` |
+
+**Stub URL honesty:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) shows login + sample ticker only — **not** Jinja `/eval` or robot triage. Full TabPFN desk stays local (or Docker/Fly/Railway). Repo stays **private**. Never commit `.env`.
+
+
 
 ## Robot / TMS consumer API
 
@@ -47,11 +61,14 @@ curl -s -X POST http://127.0.0.1:8765/api/v1/triage \
 
 # Engine: tabpfn-hack-core
 
-See full engine docs in repo history / local checkout. Quick mock demo:
+**Domain-agnostic TabPFN-3.5 MCP + CLI** — mock demo / pytest / MCP cookbook:
 
 ```bash
-tabpfn-hack demo --domain domains/stow-fit/domain.yaml --mode mock
+pip install -e ".[dev,desk]"
+tabpfn-hack demo --domain domains/freight-demurrage/domain.yaml --mode mock
 pytest
+python scripts/mcp_cookbook_demo.py
+tabpfn-hack desk --host 127.0.0.1 --port 8765
 ```
 
-Layout includes `domains/stow-fit/` (coda; suggest head, not 3D packer).
+Deep panels: [`docs/DEEP_SHOWCASE_v0.md`](docs/DEEP_SHOWCASE_v0.md). Preview honesty: [`docs/PREVIEW.md`](docs/PREVIEW.md).
