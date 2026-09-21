@@ -166,6 +166,18 @@ def register_triage_routes(
             _reg_aw(app, templates=_tpl)
     except Exception:
         pass
+    # Auto-wire /settings stub
+    try:
+        if not any(getattr(r, "path", None) == "/settings" for r in app.routes):
+            try:
+                from apps.desk.settings_stub import register_settings_routes as _reg_set
+            except ImportError:
+                from settings_stub import register_settings_routes as _reg_set  # type: ignore
+            _tpl = getattr(app.state, "templates", None)
+            _reg_set(app, templates=_tpl, state=state)
+    except Exception:
+        pass
+
     try:
         if not any(getattr(r, "path", None) == "/export-triage.csv" for r in app.routes):
             try:
