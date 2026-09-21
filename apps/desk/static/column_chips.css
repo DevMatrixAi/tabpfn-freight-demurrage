@@ -1,0 +1,39 @@
+/* --- column-type chips (text / high-card / missing / group×time) --- */
+.column-chips-panel{margin:0 0 1rem;padding:.85rem 1rem;border-radius:10px;border:1px solid rgba(56,189,248,.28);background:#0c1522;grid-column:1/-1}
+.column-chips-panel h3{margin:0 0 .25rem;font-size:.95rem;color:#7dd3fc}
+.column-chips-panel .gloss{margin:0 0 .55rem;font-size:.78rem;color:var(--muted)}
+.column-chips-legend{list-style:none;margin:0 0 .55rem;padding:0;display:flex;flex-wrap:wrap;gap:.4rem}
+.col-chip-legend{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;padding:.15rem .5rem;border-radius:999px;border:1px solid #243044;color:#9aa8bc;background:#121a26}
+.col-chip-dot{width:.45rem;height:.45rem;border-radius:50%;display:inline-block;background:#64748b}
+.col-chip-legend.kind-text .col-chip-dot,.col-type-chip.kind-text{border-color:rgba(167,139,250,.55)}
+.col-chip-legend.kind-text .col-chip-dot{background:#a78bfa}
+.col-type-chip.kind-text{background:#1f1833;color:#e8dfff}
+.col-chip-legend.kind-high_card .col-chip-dot,.col-type-chip.kind-high_card{border-color:rgba(56,189,248,.55)}
+.col-chip-legend.kind-high_card .col-chip-dot{background:#38bdf8}
+.col-type-chip.kind-high_card{background:#0c1e2e;color:#bae6fd}
+.col-chip-legend.kind-missing .col-chip-dot,.col-type-chip.kind-missing{border-color:rgba(251,191,36,.5)}
+.col-chip-legend.kind-missing .col-chip-dot{background:#fbbf24}
+.col-type-chip.kind-missing{background:#1a160c;color:#fde68a}
+.col-chip-legend.kind-group_time .col-chip-dot,.col-type-chip.kind-group_time{border-color:rgba(52,211,153,.5)}
+.col-chip-legend.kind-group_time .col-chip-dot{background:#34d399}
+.col-type-chip.kind-group_time{background:#0c1f1a;color:#a7f3d0}
+.column-chips-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.4rem}
+.col-type-chip{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .55rem;border-radius:999px;border:1px solid #243044;font-size:.72rem;background:#121a26}
+.col-type-chip .col-chip-kind{font-weight:650;opacity:.85;text-transform:lowercase}
+.col-type-chip code{font-size:.72rem;color:inherit}
+
+/* --- board filter (keyboard /) --- */
+.board-filter-row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.35rem 0 .65rem}
+.board-filter-row label{font-size:.75rem;color:var(--muted)}
+.board-filter-row input{background:#0b1220;color:#e8eef7;border:1px solid #243044;border-radius:6px;padding:.3rem .55rem;min-width:12rem}
+
+/* --- keyboard cheat sheet modal --- */
+.desk-keys-modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;background:rgba(5,10,18,.72);padding:1rem}
+.desk-keys-modal.open,.desk-keys-modal:not([hidden]){display:flex}
+.desk-keys-card{background:#121a26;border:1px solid #243044;border-radius:12px;padding:1rem 1.15rem;max-width:28rem;width:100%;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.desk-keys-card h3{margin:0 0 .35rem;font-size:1rem;color:#e8eef7}
+.desk-keys-card table{width:100%;border-collapse:collapse;margin:.5rem 0 .75rem;font-size:.82rem}
+.desk-keys-card th{text-align:left;padding:.3rem .4rem .3rem 0;width:3.2rem;color:#93c5fd}
+.desk-keys-card td{padding:.3rem 0;color:#9aa8bc}
+.desk-keys-card kbd{display:inline-block;padding:.1rem .4rem;border-radius:4px;border:1px solid #334155;background:#0b1220;font-size:.75rem;color:#e8eef7}
+.desk-keys-close{background:#1e293b;color:#e8eef7;border:1px solid #334155;border-radius:6px;padding:.35rem .7rem;cursor:pointer}
