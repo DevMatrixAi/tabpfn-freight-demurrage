@@ -90,6 +90,10 @@ class FitPredictResult(BaseModel):
     predictions_path: str | None = None
     preview: list[dict[str, Any]] = Field(default_factory=list)
     warning: str | None = None
+    thinking_effort: str | None = None
+    group_col: str | None = None
+    group_time_col: str | None = None
+    thinking_narrative: str | None = None
 
 
 class ExplainArgs(BaseModel):
@@ -131,6 +135,7 @@ class CompareBaselineResult(BaseModel):
     baseline_metrics: dict[str, float]
     delta: dict[str, float]
     narrative: str
+    judge_card: dict[str, Any] = Field(default_factory=dict)
 
 
 class SuggestActionsArgs(BaseModel):
