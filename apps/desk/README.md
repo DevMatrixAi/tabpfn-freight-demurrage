@@ -37,7 +37,7 @@ Open http://127.0.0.1:8765
 5. **What-if panel** — tweak `free_days_left` / `projected_demurrage_usd` / divert on a
    sample container; hold-out re-score shows before/after proba + suggested action
    (labeled synthetic simulation).
-6. **Backlog** — stream re-score remains a TODO chip.
+6. **Stream re-score** — desk button appends a synthetic Terminal49 / project44 / EDI fixture event, re-runs triage, and refreshes risk cards via fetch (no full reload). Optional 5s auto-poll. Endpoints: `POST /stream-rescore`, `GET /partials/live-board`.
 
 Missing or failing `TABPFN_TOKEN` falls back to mock with a visible warning banner.
 
