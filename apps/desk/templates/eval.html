@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Eval · Plus / Thinking / Fast vs HistGBM</title>
+<link rel="stylesheet" href="/static/ops_board.css"/>
+<style>
+.eval-wrap{max-width:1100px;margin:0 auto;padding:1rem 1rem 2.5rem}
+.crumb{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;padding:.5rem 0 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+.crumb a{color:#93c5fd;text-decoration:none}
+.eval-hero h1{margin:0 0 .35rem;font-size:1.25rem}
+.bar-row{display:flex;align-items:center;gap:.5rem;margin:.25rem 0}
+.bar-row .lbl{width:4.5rem;font-size:.72rem;color:var(--muted);flex-shrink:0}
+.bar-track{flex:1;background:#121a26;border:1px solid var(--border);border-radius:6px;height:1rem;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;min-width:2px}
+.bar-fill.plus{background:var(--plus)}
+.bar-fill.thinking{background:var(--thinking)}
+.bar-fill.fast{background:#34d399}
+.bar-fill.hist_gbm{background:var(--mock)}
+.bar-row .num{width:3.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:.8rem}
+.delta-pos{color:var(--good)}
+.delta-neg{color:var(--bad)}
+.delta-zero{color:var(--muted)}
+.mode-chip{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700}
+.mode-chip.plus{background:#1a3358;color:#cfe0ff}
+.mode-chip.thinking{background:#2a1f48;color:#e8dfff}
+.mode-chip.fast{background:#14352a;color:#b8f0d4}
+.mode-chip.hist_gbm{background:#243044;color:#d0d8e4}
+.live-pill{font-size:.65rem;padding:.1rem .35rem;border-radius:4px;background:#1e3328;color:var(--good);margin-left:.35rem}
+.mock-pill{font-size:.65rem;padding:.1rem .35rem;border-radius:4px;background:#3a2a10;color:var(--warn);margin-left:.35rem}
+.signout{background:transparent;border:1px solid #243044;color:#9aa8bc;border-radius:8px;padding:.35rem .65rem;cursor:pointer;margin-left:auto}
+.bars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-top:.5rem}
+</style>
+</head>
+<body>
+<div class="eval-wrap">
+  <div class="crumb">
+    <a href="{{ saas_home }}">← Desks</a>
+    <span class="muted" style="font-size:.85rem">Eval dashboard</span>
+    <form method="post" action="/logout" style="margin-left:auto"><button class="signout" type="submit">Sign out</button></form>
+  </div>
+
+  <div class="eval-hero card" style="margin-bottom:1rem">
+    <h1>Plus / Thinking / Fast vs HistGBM</h1>
+    <p class="muted" style="margin:0">
+      Multi-mode <code>compare_baseline</code> on a domain pack.
+      <span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">
+        {% if has_token %}TABPFN_TOKEN set · live modes{% else %}no TABPFN_TOKEN → mock fallback{% endif %}
+      </span>
+    </p>
+  </div>
+
+  <section class="card" style="margin-bottom:1rem">
+    <h2>Pack</h2>
+    <form class="row" method="post" action="/eval/run">
+      <label class="muted" for="pack">Spine + coda</label>
+      <select name="pack" id="pack">
+        {% for p in packs %}
+        <option value="{{ p.id }}" {% if p.id == active_pack %}selected{% endif %}>{{ p.label }}{% if p.spine %} ★{% endif %}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Run eval</button>
+    </form>
+    <p class="muted" style="margin:.55rem 0 0">
+      Active: <strong>{{ pack_label }}</strong>
+      {% if pack_gloss %} — {{ pack_gloss }}{% endif %}
+      · {{ n_rows }} rows
+      · modes: {% for m in eval_modes %}<span class="mode-chip {{ m }}">{{ m }}</span> {% endfor %}
+      vs <span class="mode-chip hist_gbm">hist_gbm</span>
+    </p>
+  </section>
+
+  {% if result %}
+  <section class="card full" style="margin-bottom:1rem" id="eval-results">
+    <h2>Metrics table <span class="badge">{{ result.elapsed_s }}s</span></h2>
+    <p class="muted" style="margin:0 0 .75rem">
+      Pack <strong>{{ result.pack_label or result.pack }}</strong>
+      · n={{ result.n_rows }} · test_size={{ result.test_size }}
+      {% if result.has_token %}<span class="live-pill">live token</span>{% else %}<span class="mock-pill">mock / offline</span>{% endif %}
+    </p>
+    {% if result.warnings %}
+    <div class="warn-banner" style="margin-bottom:.75rem">
+      {% for w in result.warnings %}<div>{{ w }}</div>{% endfor %}
+    </div>
+    {% endif %}
+    <div style="overflow-x:auto">
+    <table id="eval-table">
+      <thead>
+        <tr>
+          <th>Mode</th>
+          <th>Backend</th>
+          {% for k in result.metric_keys %}
+          <th>{{ result.metric_labels.get(k, k) }}</th>
+          <th>Δ {{ result.metric_labels.get(k, k) }}</th>
+          {% endfor %}
+          <th>s</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in result.display_rows %}
+        <tr>
+          <td><span class="mode-chip {{ r.mode }}">{{ r.mode }}</span>
+            {% if r.live %}<span class="live-pill">live</span>{% elif not r.is_baseline %}<span class="mock-pill">{{ r.effective_mode }}</span>{% endif %}
+          </td>
+          <td class="muted">{{ r.backend }}</td>
+          {% for k in result.metric_keys %}
+          <td style="font-variant-numeric:tabular-nums">{% if r.metrics.get(k) is not none %}{{ "%.4f"|format(r.metrics[k]) }}{% else %}—{% endif %}</td>
+          <td style="font-variant-numeric:tabular-nums" class="{% if r.is_baseline %}delta-zero{% elif (r.delta.get(k) or 0) > 0.00005 %}delta-pos{% elif (r.delta.get(k) or 0) < -0.00005 %}delta-neg{% else %}delta-zero{% endif %}">
+            {% if r.is_baseline %}—{% elif r.delta.get(k) is not none %}{{ "%+.4f"|format(r.delta[k]) }}{% else %}—{% endif %}
+          </td>
+          {% endfor %}
+          <td class="muted">{% if r.elapsed_s is not none %}{{ r.elapsed_s }}{% else %}—{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="card full" id="eval-bars">
+    <h2>Metric bars</h2>
+    <p class="muted" style="margin:0 0 .75rem">Bar length = metric / max across modes (incl. HistGBM).</p>
+    <div class="bars-grid">
+      {% for r in result.display_rows %}
+      <div class="card" style="background:var(--panel2)">
+        <h2 style="display:flex;align-items:center;gap:.4rem;margin-top:0">
+          <span class="mode-chip {{ r.mode }}">{{ r.mode }}</span>
+          {% if r.is_baseline %}<span class="badge">baseline</span>{% endif %}
+        </h2>
+        {% for k in result.metric_keys %}
+        <div class="bar-row">
+          <span class="lbl">{{ result.metric_labels.get(k, k) }}</span>
+          <div class="bar-track"><div class="bar-fill {{ r.mode }}" style="width:{{ r.bars.get(k, 0) }}%"></div></div>
+          <span class="num">{% if r.metrics.get(k) is not none %}{{ "%.3f"|format(r.metrics[k]) }}{% else %}—{% endif %}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% else %}
+  <section class="card">
+    <h2>No run yet</h2>
+    <p class="muted" style="margin:0">Pick a pack and hit <strong>Run eval</strong>. Mock works offline; set <code>TABPFN_TOKEN</code> for live Plus / Thinking / Fast.</p>
+  </section>
+  {% endif %}
+
+  <p class="muted" style="margin-top:1.5rem;font-size:.8rem">Demo only · same engine as the ops desk · Δ is vs HistGBM from <code>compare_baseline</code>.</p>
+</div>
+</body>
+</html>
