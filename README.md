@@ -34,6 +34,15 @@ One-pager: [`docs/JUDGE_3MIN.md`](docs/JUDGE_3MIN.md) · MCP smoke: [`docs/MCP_S
 | 2:30 | Optional: `TABPFN_TOKEN= python scripts/mcp_cookbook_demo.py` (7 MCP tools) · `TABPFN_TOKEN= pytest -q` · `tabpfn-hack demo --mode mock` |
 
 
+
+**First screens (mock UI frames):**
+
+| Login | Home | Desk | Eval |
+| --- | --- | --- | --- |
+| ![login](docs/images/judge/login.png) | ![home](docs/images/judge/home.png) | ![desk](docs/images/judge/desk.png) | ![eval](docs/images/judge/eval.png) |
+
+Synthetic dark-theme panels for the 3-minute crib (not live captures). Settings stub: `/settings`.
+
 **Live budget:** desk `sample_n` 40–80 (or `TABPFN_DEV_N=60`) for Plus/Thinking after API reset; full-table mock anytime.
 
 **Deterministic mock path:** keep the inline `TABPFN_TOKEN=` on the local desk command.

@@ -24,9 +24,16 @@
     <h1>Sign in to your desks</h1>
     <p class="lede">Same TabPFN engine judges will score — demo SaaS shell, not production IAM.</p>
     <div class="hint">Demo credentials: <code>demo</code> / <code>demurrage</code></div>
-    {% if error %}<p class="err">{{ error }}</p>{% endif %}
+    {% if error %}
+    <div class="saas-empty" data-empty="login-error" style="margin:0 0 .85rem;width:100%;box-sizing:border-box">
+      <p class="empty-kicker">Sign-in</p>
+      <p class="empty-title">Could not sign in</p>
+      <p class="err" style="margin:0">{{ error }}</p>
+      <p class="muted" style="margin:0;font-size:.82rem">Try demo / demurrage — demo auth stub, not IAM.</p>
+    </div>
+    {% endif %}
     <form method="post" action="/login" id="coach-login" data-coach="login">
-      <span class="coach-hint" data-coach-hint="login">You’re the shipper — stop late fees before the invoice.</span>
+      <span class="coach-hint" data-coach-hint="login">You're the shipper — stop late fees before the invoice.</span>
       <label for="username">Work email / user</label>
       <input id="username" name="username" autocomplete="username" placeholder="demo" required/>
       <label for="password">Password</label>
