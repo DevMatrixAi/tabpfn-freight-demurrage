@@ -1,0 +1,28 @@
+{% if state.morning_digest %}
+<section class="morning-digest card" id="morning-digest" data-morning-digest="1" aria-label="Morning digest">
+  <div class="md-head">
+    <h2>Morning digest</h2>
+    <span class="badge" data-md-money="1">${{ "{:,.0f}".format(state.morning_digest.money_at_risk|float) }} at risk</span>
+    <span class="badge muted" data-md-n="1">{{ state.morning_digest.n_cards }} cards</span>
+  </div>
+  {% if state.morning_digest.top_moves %}
+  <ol class="md-top" data-md-top="1">
+    {% for m in state.morning_digest.top_moves %}
+    <li data-md-row="{{ m.row_id }}">
+      <strong>{{ m.row_id }}</strong>
+      <span class="md-action">{{ m.action_label }}</span>
+      <span class="md-money">${{ "{:,.0f}".format(m.money|float) }}</span>
+      {% if m.tier %}<span class="badge">{{ m.tier }}</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+  {% endif %}
+  {% if state.morning_digest.action_counts %}
+  <p class="md-counts muted" data-md-counts="1">
+    {% for c in state.morning_digest.action_counts %}
+    <span data-md-action="{{ c.action }}"><strong>{{ c.label }}</strong>: {{ c.n }}</span>
+    {% endfor %}
+  </p>
+  {% endif %}
+</section>
+{% endif %}
