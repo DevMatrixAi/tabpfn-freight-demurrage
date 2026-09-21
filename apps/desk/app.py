@@ -41,9 +41,9 @@ PACKS = build_packs(ROOT)
 
 app = FastAPI(
     title="Freight Ops Board",
-    version="0.6.0",
+    version="0.7.0",
     description=(
-        "SaaS shell (demo auth + client switcher + multi-desk home) + ops board. "
+        "SaaS shell + UI polish (charts, Thinking timeline, action drawer) + ops board. "
         "Robot/TMS API under /api/v1 (decisions only). Demo auth, not production IAM."
     ),
 )
@@ -86,7 +86,8 @@ _STATE: dict[str, Any] = {
     "group_col": None, "group_time_col": None, "fast_ab": None, "elapsed_s": None,
     "blank_metrics": None, "blank_backend": None, "blank_warning": None,
     "blank_label": "blank_sailing", "what_if": None, "sample_row_ids": [],
-    "risk_cards": [], "money_label": "Money at risk", "pack_gloss": PACKS[DEFAULT_PACK].get("gloss"),
+    "risk_cards": [], "chart_stats": None, "thinking_timeline": [],
+    "money_label": "Money at risk", "pack_gloss": PACKS[DEFAULT_PACK].get("gloss"),
 }
 
 app.add_middleware(DemoAuthMiddleware)
@@ -130,9 +131,11 @@ def _reset_triage_state() -> None:
         "metrics", "baseline_metrics", "delta", "baseline_narrative", "actions",
         "action_counts", "backend", "mode", "requested_mode", "warning", "fast_ab",
         "elapsed_s", "blank_metrics", "blank_backend", "blank_warning", "what_if",
+        "chart_stats",
     ):
         _STATE[k] = None
     _STATE["risk_cards"] = []
+    _STATE["thinking_timeline"] = []
 
 
 def _metric_slice(metrics: dict[str, float] | None) -> dict[str, float]:
