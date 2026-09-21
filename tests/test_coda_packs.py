@@ -1,4 +1,4 @@
-"""Load + fit mock for equipment-size, inland-mode, and air-freight coda packs."""
+"""Load + fit mock for equipment-size, inland-mode, air-freight, and stow-fit coda packs."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -34,6 +34,13 @@ PACKS = [
         "miss_connection_risk",
         {"expedite_aog", "hold_for_connection", "rebook_belly", "monitor"},
     ),
+    (
+        "stow-fit",
+        ROOT / "domains" / "stow-fit" / "domain.yaml",
+        ROOT / "domains" / "stow-fit" / "data" / "shipments.csv",
+        "fit_risk",
+        {"reefer_hold", "upsell_40hc", "split_load", "air_expedite", "book_ltl", "monitor"},
+    ),
 ]
 
 
@@ -44,6 +51,7 @@ def _ensure_csv(name: str, csv_path: Path) -> None:
         gen_air_freight,
         gen_equipment_size,
         gen_inland_mode,
+        gen_stow_fit,
     )
 
     csv_path.parent.mkdir(parents=True, exist_ok=True)
@@ -51,8 +59,10 @@ def _ensure_csv(name: str, csv_path: Path) -> None:
         gen_equipment_size(n=250, seed=42).to_csv(csv_path, index=False)
     elif name == "inland-mode":
         gen_inland_mode(n=250, seed=43).to_csv(csv_path, index=False)
-    else:
+    elif name == "air-freight":
         gen_air_freight(n=250, seed=44).to_csv(csv_path, index=False)
+    else:
+        gen_stow_fit(n=250, seed=45).to_csv(csv_path, index=False)
 
 
 @pytest.mark.parametrize("name,domain_path,csv_path,label,actions", PACKS, ids=[p[0] for p in PACKS])
@@ -114,4 +124,13 @@ def test_desk_packs_include_air():
     assert packs["air-freight"]["csv"].name == "shipments.csv"
     assert packs["freight-demurrage"]["spine"] is True
     assert packs["air-freight"]["spine"] is False
-    assert set(packs) >= {"freight-demurrage", "equipment-size", "inland-mode", "air-freight"}
+    assert "stow-fit" in packs
+    assert packs["stow-fit"]["csv"].name == "shipments.csv"
+    assert packs["stow-fit"]["spine"] is False
+    assert set(packs) >= {
+        "freight-demurrage",
+        "equipment-size",
+        "inland-mode",
+        "air-freight",
+        "stow-fit",
+    }
