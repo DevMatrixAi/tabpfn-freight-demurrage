@@ -97,6 +97,8 @@ def register_eval_routes(
                 "metric_keys": list(METRIC_KEYS),
                 "metric_labels": METRIC_LABELS,
                 "saas_home": "/",
+                "judge_path": state.get("judge_path"),
+                "state": state,
             },
         )
 
