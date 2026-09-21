@@ -153,3 +153,25 @@ def register_triage_routes(
             )
     except Exception:
         pass  # stream optional if templates/adapters missing
+
+
+    # Auto-wire anti-wrapper checklist + triage CSV export
+    try:
+        if not any(getattr(r, "path", None) == "/anti-wrapper" for r in app.routes):
+            try:
+                from apps.desk.anti_wrapper import register_anti_wrapper_routes as _reg_aw
+            except ImportError:
+                from anti_wrapper import register_anti_wrapper_routes as _reg_aw  # type: ignore
+            _tpl = getattr(app.state, "templates", None)
+            _reg_aw(app, templates=_tpl)
+    except Exception:
+        pass
+    try:
+        if not any(getattr(r, "path", None) == "/export-triage.csv" for r in app.routes):
+            try:
+                from apps.desk.export_csv import register_export_csv_routes as _reg_csv
+            except ImportError:
+                from export_csv import register_export_csv_routes as _reg_csv  # type: ignore
+            _reg_csv(app, state=state)
+    except Exception:
+        pass
