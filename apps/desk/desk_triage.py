@@ -209,3 +209,42 @@ def register_triage_routes(
                 "row_id": row_id,
             }
         return RedirectResponse(url="/desk#what-if", status_code=303)
+
+    # Auto-wire stream re-score if not already mounted (e.g. older app.py)
+    try:
+        if not any(getattr(r, "path", None) == "/stream-rescore" for r in app.routes):
+            from pathlib import Path as _P
+            from fastapi.templating import Jinja2Templates as _T
+            try:
+                from apps.desk.stream_rescore import register_stream_routes as _reg_stream
+            except ImportError:
+                from stream_rescore import register_stream_routes as _reg_stream  # type: ignore
+            try:
+                from apps.desk.risk_board import human_action as _human_action
+            except ImportError:
+                from risk_board import human_action as _human_action  # type: ignore
+            _desk = _P(__file__).resolve().parent
+            _templates = getattr(app.state, "templates", None)
+            if _templates is None:
+                _templates = _T(directory=str(_desk / "templates"))
+                _templates.env.filters["human_action"] = _human_action
+                app.state.templates = _templates
+            state.setdefault("stream_cursor", 0)
+            state.setdefault("stream_log", [])
+            state.setdefault("stream_last", [])
+            _reg_stream(
+                app,
+                state=state,
+                templates=_templates,
+                pack_meta=pack_meta,
+                resolve_mode=resolve_mode,
+                metric_slice=metric_slice,
+                money_total=money_total,
+                build_risk_cards=build_risk_cards,
+                load_default_csv=load_default_csv,
+                sample_ids=sample_ids,
+                primary_modes=("plus", "thinking", "mock"),
+                metric_keys=("accuracy", "f1", "roc_auc", "avg_precision"),
+            )
+    except Exception:
+        pass  # stream optional if templates/adapters missing
