@@ -1,0 +1,17 @@
+{% set g = {
+  "plus": "Plus — TabPFN-3.5 on messy tables (text notes, high-card IDs, missings) without heavy feature engineering.",
+  "thinking": "Thinking — same weights with thinking_mode + group_col / group_time_col (vessel×time) and thinking_effort.",
+  "fast": "Fast — lower-latency TabPFN path; compare latency vs Plus on /eval.",
+  "hist_gbm": "HistGBM — sklearn baseline on the same split; Δ is TabPFN minus this.",
+  "mock": "Mock — offline HistGBM-style stand-in when TABPFN_TOKEN is empty (deterministic judge path)."
+} %}
+<section class="mode-glossary card" id="mode-glossary" aria-label="Mode glossary" style="margin-bottom:1rem">
+  <h2>Mode glossary</h2>
+  <ul class="mode-glossary-list">
+    <li><span class="mode-chip plus">plus</span> {{ g.plus }}</li>
+    <li><span class="mode-chip thinking">thinking</span> {{ g.thinking }}</li>
+    <li><span class="mode-chip fast">fast</span> {{ g.fast }}</li>
+    <li><span class="mode-chip hist_gbm">hist_gbm</span> {{ g.hist_gbm }}</li>
+    <li><span class="mode-chip hist_gbm">mock</span> {{ g.mock }}</li>
+  </ul>
+</section>
