@@ -11,14 +11,16 @@
 <div class="top">
 <div>
 <h1>Freight Ops Board</h1>
-<p class="tagline">Dollar-first triage · pack <strong>{{ state.pack_label or state.pack }}</strong>
+<p class="tagline">Money-first triage · pack <strong>{{ state.pack_label or state.pack }}</strong>
+{% if state.pack_gloss %}<span class="pack-gloss"> — {{ state.pack_gloss }}</span>{% endif %}
 <span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% else %}no TABPFN_TOKEN → mock fallback{% endif %}</span></p>
 </div>
 </div>
 <div class="ticker" role="status" aria-live="polite">
 <div>
-<div class="lbl">{{ state.money_label or ('Projected demurrage' if is_spine else 'Pack exposure') }}</div>
+<div class="lbl">{{ state.money_label or ('Money at risk' if is_spine else 'Pack exposure') }}</div>
 <div class="dollars">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
+{% if is_spine %}<div class="ticker-gloss">Projected late-container fees if nothing changes</div>{% endif %}
 </div>
 <div class="meta">
 <span class="badge">{{ state.source }}</span>
@@ -41,7 +43,12 @@
 </select>
 <button type="submit">Switch pack</button>
 </form>
-<p class="muted" style="margin:.5rem 0 0">Demurrage is the spine desk. Equipment-size, inland-mode, air-freight, and stow-fit are fixture coda packs (CLI also works). Stow-fit = suggest head, not a 3D packer.</p>
+<p class="muted" style="margin:.5rem 0 0">
+<strong>Freight demurrage</strong> (spine) = late-container fee risk.
+{% for p in packs if not p.spine %}
+ · <strong>{{ p.label }}</strong>{% if p.gloss %} — {{ p.gloss }}{% endif %}
+{% endfor %}
+</p>
 </section>
 
 <section class="card">
@@ -62,9 +69,9 @@
 
 <section class="card">
 <h2>Board snapshot</h2>
-<p class="muted" style="margin:0">Run triage to paint risk cards green / amber / red by score. Suggested next move sits on each card.</p>
+<p class="muted" style="margin:0">Run triage to paint <strong>Late fee risk</strong> cards Low / Med / High. Suggested next move sits on each card.</p>
 {% if state.action_counts %}
-<p class="counts muted" style="margin-top:.75rem">{% for k, v in state.action_counts.items() %}<span><strong>{{ k }}</strong>: {{ v }}</span>{% endfor %}</p>
+<p class="counts muted" style="margin-top:.75rem">{% for k, v in state.action_counts.items() %}<span><strong>{{ k|human_action }}</strong>: {{ v }}</span>{% endfor %}</p>
 {% else %}
 <p class="muted" style="margin-top:.75rem">No triage yet — pick Plus / Thinking / Mock below.</p>
 {% endif %}
@@ -103,8 +110,9 @@ Fast A/B stub (optional)
 <span class="badge">Δ vs HistGBM</span>
 {% if state.backend %}<span class="badge">{{ state.backend }}</span>{% endif %}
 </div>
-<p class="muted" style="margin:0 0 .5rem">Primary scores and lift over HistGBM on the same split.
+<p class="muted" style="margin:0 0 .35rem">Primary scores and lift over HistGBM on the same split.
 {% if state.baseline_narrative %}<br>{{ state.baseline_narrative }}{% endif %}</p>
+<p class="metrics-gloss">Plain English: how often we correctly flag late-fee risk, and how much better we are than a plain HistGBM baseline (Δ).</p>
 <div class="metrics-grid">
 {% for k in metric_keys %}
 <div class="metric-cell">
@@ -133,8 +141,8 @@ Fast A/B stub (optional)
 </div>
 {% endif %}
 {% if is_spine and state.blank_metrics %}
-<h2 style="margin-top:1rem">Blank-sailing head <span class="badge">{{ state.blank_label or 'blank_sailing' }}</span></h2>
-<p class="muted" style="margin:0 0 .5rem">Same table, second label — sail / hold risk. Primary judge card above stays demurrage + HistGBM Δ.
+<h2 style="margin-top:1rem">Cancelled sailing (blank) <span class="badge">{{ state.blank_label or 'blank_sailing' }}</span></h2>
+<p class="muted" style="margin:0 0 .5rem">Same table, second label — will this sailing be cancelled (blank)? Primary judge card above stays late-fee risk + HistGBM Δ.
 {% if state.blank_backend %} · {{ state.blank_backend }}{% endif %}</p>
 {% if state.blank_warning %}<div class="warn-banner">{{ state.blank_warning }}</div>{% endif %}
 <div class="metrics-grid">
@@ -146,7 +154,7 @@ Fast A/B stub (optional)
 {% endfor %}
 </div>
 {% elif is_spine and state.blank_warning %}
-<div class="warn-banner" style="margin-top:.75rem">Blank sailing head: {{ state.blank_warning }}</div>
+<div class="warn-banner" style="margin-top:.75rem">Cancelled sailing (blank): {{ state.blank_warning }}</div>
 {% endif %}
 <div class="todo-row" title="Backlog">
 <span class="todo-chip disabled-ctrl">TODO: stream re-score</span>
@@ -155,18 +163,19 @@ Fast A/B stub (optional)
 
 {% if state.risk_cards %}
 <section class="card full" id="risk-board">
-<h2>{% if is_spine %}Container risk board{% else %}Shipment risk board{% endif %}</h2>
-<div class="legend"><span><i class="r"></i>Hot (≥0.65)</span><span><i class="a"></i>Watch (0.40–0.65)</span><span><i class="g"></i>Calm (<0.40)</span></div>
+<h2>{% if is_spine %}Late fee risk board{% else %}Shipment risk board{% endif %}</h2>
+<div class="legend"><span><i class="r"></i>High (≥0.65)</span><span><i class="a"></i>Med (0.40–0.65)</span><span><i class="g"></i>Low (&lt;0.40)</span></div>
 <div class="risk-board">
 {% for c in state.risk_cards %}
-<article class="risk-card {{ c.tier }}">
+<article class="risk-card {{ c.tier }}" title="Late fee risk: {{ c.risk_label or c.tier }}">
 <div class="id">{{ c.row_id }}</div>
 <div class="sub">{{ c.subtitle or '—' }}</div>
 <div class="money">{% if c.money is not none %}${{ "{:,.0f}".format(c.money|float) }}{% else %}—{% endif %}</div>
+<div class="money-caption">{% if is_spine %}Money at risk{% else %}Exposure{% endif %}</div>
 <div class="foot">
-<span class="tier-pill">{{ c.tier }}</span>
-<span class="badge">score {{ "%.0f"|format((c.proba|float)*100) }}%</span>
-<span class="badge">{{ c.action }}</span>
+<span class="tier-pill" title="Late fee risk">{{ c.risk_label or c.tier }}</span>
+<span class="badge">Late fee risk {{ "%.0f"|format((c.proba|float)*100) }}%</span>
+<span class="badge" title="{{ c.action }}">{{ c.action_label or (c.action|human_action) }}</span>
 </div>
 {% if c.reason %}<p class="muted" style="margin:.45rem 0 0;font-size:.72rem;line-height:1.35">{{ c.reason }}</p>{% endif %}
 </article>
@@ -177,8 +186,8 @@ Fast A/B stub (optional)
 
 {% if is_spine %}
 <section class="card full" id="what-if">
-<h2>What-if <span class="badge">sandbox</span></h2>
-<p class="muted">Tweak free days / projected fee / divert on one container — re-score. Honest sandbox, not a live booking change.</p>
+<h2>What if we change grace days / fees? <span class="badge">sandbox</span></h2>
+<p class="muted">Tweak <strong>Grace days left</strong> / projected fee / “Move to another terminal” on one container — re-score. Honest sandbox, not a live booking change.</p>
 <form method="post" action="/what-if" class="row" style="align-items:flex-end;gap:.75rem;flex-wrap:wrap">
 <label class="muted">Container
 <select name="row_id" required>
@@ -187,14 +196,14 @@ Fast A/B stub (optional)
 {% endfor %}
 </select>
 </label>
-<label class="muted">Free days left
-<input type="number" step="0.1" name="free_days_left" placeholder="e.g. 8" style="width:6rem" />
+<label class="muted">Grace days left
+<input type="number" step="0.1" name="free_days_left" placeholder="e.g. 8" style="width:6rem" title="free_days_left" />
 </label>
 <label class="muted">Projected fee $
-<input type="number" step="1" name="projected_demurrage_usd" placeholder="fee $" style="width:7rem" />
+<input type="number" step="1" name="projected_demurrage_usd" placeholder="fee $" style="width:7rem" title="projected_demurrage_usd" />
 </label>
-<label class="muted" style="display:flex;align-items:center;gap:.35rem">
-<input type="checkbox" name="divert" value="1" /> divert (+3 free days)
+<label class="muted" style="display:flex;align-items:center;gap:.35rem" title="divert">
+<input type="checkbox" name="divert" value="1" /> Move to another terminal (+3 grace days)
 </label>
 <input type="hidden" name="mode" value="{{ state.requested_mode or 'mock' }}" />
 <button type="submit">Run what-if</button>
@@ -205,14 +214,14 @@ Fast A/B stub (optional)
 {% else %}
 <div class="metrics-grid" style="margin-top:.75rem">
 <div class="metric-cell">
-<div class="label">Score before</div>
+<div class="label">Late fee risk before</div>
 <div class="val">{{ "%.3f"|format(state.what_if.proba_before|float) }}</div>
-<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_before }}</div>
+<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_before|human_action }}</div>
 </div>
 <div class="metric-cell">
-<div class="label">Score after</div>
+<div class="label">Late fee risk after</div>
 <div class="val">{{ "%.3f"|format(state.what_if.proba_after|float) }}</div>
-<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_after }}</div>
+<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_after|human_action }}</div>
 </div>
 <div class="metric-cell">
 <div class="label">Δ score</div>
@@ -222,7 +231,7 @@ Fast A/B stub (optional)
 </div>
 <div class="metric-cell">
 <div class="label">Next move</div>
-<div class="val" style="font-size:1rem">{{ state.what_if.action_before }} → {{ state.what_if.action_after }}</div>
+<div class="val" style="font-size:1rem">{{ state.what_if.action_before|human_action }} → {{ state.what_if.action_after|human_action }}</div>
 </div>
 </div>
 {% if state.what_if.overrides_applied %}
@@ -246,7 +255,7 @@ Fast A/B stub (optional)
 <div style="overflow-x:auto">
 <table>
 {% if is_spine %}
-<thead><tr><th>container</th><th>vessel</th><th>pod</th><th>free days</th><th>projected $</th><th>risk</th></tr></thead>
+<thead><tr><th>container</th><th>vessel</th><th>pod</th><th>Grace days left</th><th>Money at risk</th><th>Late fee risk</th></tr></thead>
 <tbody>
 {% for r in state.preview_rows %}
 <tr>
@@ -302,10 +311,10 @@ Fast A/B stub (optional)
 <h2>Suggested moves (table)</h2>
 <div style="overflow-x:auto">
 <table>
-<thead><tr><th>row</th><th>score</th><th>move</th><th>reason</th></tr></thead>
+<thead><tr><th>row</th><th>Late fee risk</th><th>move</th><th>reason</th></tr></thead>
 <tbody>
 {% for a in state.actions %}
-<tr><td>{{ a.row_id }}</td><td>{{ a.proba }}</td><td><span class="badge">{{ a.action }}</span></td><td>{{ a.reason }}</td></tr>
+<tr><td>{{ a.row_id }}</td><td>{{ a.proba }}</td><td><span class="badge" title="{{ a.action }}">{{ a.action|human_action }}</span></td><td>{{ a.reason }}</td></tr>
 {% endfor %}
 </tbody>
 </table>
