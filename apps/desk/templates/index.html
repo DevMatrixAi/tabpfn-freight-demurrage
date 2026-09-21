@@ -26,6 +26,12 @@
   </div>
   <div class="spacer"></div>
   <span class="chip">{{ state.client_label or "All clients" }}</span>
+  {% if live_budget %}
+  <span class="chip live-budget-chip {% if live_budget.mode == 'mock' %}mock{% else %}live{% endif %}"
+        id="live-budget-chip"
+        data-live-budget-chip="1"
+        title="{{ live_budget.formula_note }}">{{ live_budget.short }}</span>
+  {% endif %}
   <form method="post" action="/select-client" data-coach="client-switcher" style="display:flex;gap:.4rem;align-items:center;margin:0">
     <select name="client_id" onchange="this.form.submit()" style="background:#0b1220;color:#e8eef7;border:1px solid #243044;border-radius:6px;padding:.25rem .4rem">
       {% for c in clients|default([]) %}

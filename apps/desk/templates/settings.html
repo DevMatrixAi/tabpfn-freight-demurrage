@@ -23,6 +23,12 @@
   </div>
   <div class="spacer"></div>
   <span class="chip {% if mode.id == 'live-small-n' %}live{% endif %}">{{ mode.label }}</span>
+  {% if live_budget %}
+  <span class="chip live-budget-chip {% if live_budget.mode == 'mock' %}mock{% else %}live{% endif %}"
+        id="live-budget-chip"
+        data-live-budget-chip="1"
+        title="{{ live_budget.formula_note }}">{{ live_budget.short }}</span>
+  {% endif %}
   <form method="post" action="/logout" style="margin:0"><button class="ghost" type="submit">Sign out</button></form>
 </nav>
 
@@ -62,6 +68,15 @@
       <span class="muted" style="margin-left:.4rem">{{ mode.gloss }}</span>
     </p>
   </section>
+
+  {% if live_budget %}
+  <section class="card settings-card" id="live-budget-card" data-live-budget-chip="1">
+    <p class="empty-kicker" style="margin:0 0 .35rem">Live budget</p>
+    <p style="margin:0"><strong>{{ live_budget.label }}</strong></p>
+    <p class="muted" style="margin:.35rem 0 0;font-size:.78rem">{{ live_budget.formula_note }}</p>
+    <p class="muted" style="margin:.35rem 0 0;font-size:.78rem">Receipt: <code>artifacts/freight-demurrage/judge_path_mock_receipt.md</code></p>
+  </section>
+  {% endif %}
 
   <section class="card settings-card">
     <p class="empty-kicker" style="margin:0 0 .35rem">Dev sample · Thinking effort</p>

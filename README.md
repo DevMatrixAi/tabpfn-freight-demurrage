@@ -1,3 +1,13 @@
+<!-- TIP_SHA_PIN_START -->
+**Tip (main):** `fd11d19` · live-budget chip · judge-path mock receipt · JUDGE shots
+
+**First-screen gallery (JUDGE_3MIN):**
+
+| Login | Home | Desk | Eval |
+| --- | --- | --- | --- |
+| ![login](docs/images/judge/login.svg) | ![home](docs/images/judge/home.svg) | ![desk](docs/images/judge/desk.svg) | ![eval](docs/images/judge/eval.svg) |
+<!-- TIP_SHA_PIN_END -->
+
 <!-- FREIGHT_FACE_START -->
 # Freight demurrage triage (TabPFN-3.5)
 

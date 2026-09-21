@@ -88,14 +88,20 @@
 </select>
 <label class="muted" for="sample_n" title="Live TabPFN budget: sample rows before fit">sample_n</label>
 <select name="sample_n" id="sample_n" data-coach="sample-n" aria-label="Dev sample size for live TabPFN">
-  {% set sn = (state.dev_sample.sample_n if state.dev_sample and state.dev_sample.sampled else none) %}
-  <option value="" {% if not sn %}selected{% endif %}>full table</option>
+  {% set sn = (state.dev_sample.sample_n if state.dev_sample and state.dev_sample.sampled else (default_sample_n if default_sample_n is defined else 60)) %}
+  <option value="" {% if sn is none or sn == '' %}selected{% endif %}>full table</option>
   <option value="40" {% if sn == 40 %}selected{% endif %}>40 (cheap live)</option>
   <option value="60" {% if sn == 60 %}selected{% endif %}>60 (default live)</option>
   <option value="80" {% if sn == 80 %}selected{% endif %}>80 (live)</option>
 </select>
 </div>
-<p class="muted" style="margin:0 0 .55rem;font-size:.78rem">Live budget: pick <strong>40–80</strong> for Plus/Thinking after API reset. Mock can stay on full table. Env default: <code>TABPFN_DEV_N</code>.</p>
+{% if live_budget %}
+<p class="live-budget-line muted" style="margin:0 0 .35rem;font-size:.78rem" data-live-budget-chip="1">
+  <strong>{{ live_budget.label }}</strong>
+  <span class="muted"> · {{ live_budget.formula_note }}</span>
+</p>
+{% endif %}
+<p class="muted" style="margin:0 0 .55rem;font-size:.78rem">Live budget: default <strong>n=60</strong> (<code>TABPFN_DEV_N</code> when unset). Pick 40–80 for Plus/Thinking after API reset. Mock · no live spend until token set. Full table = empty sample_n.</p>
 <div class="row" style="margin-bottom:.75rem">
 <label class="muted" style="display:flex;align-items:center;gap:.4rem">
 <input type="checkbox" name="fast_ab" value="1" />
