@@ -7,6 +7,19 @@
 <link rel="stylesheet" href="/static/ops_board.css" />
 </head>
 <body>
+<header class="saas-crumb" style="padding:.5rem 1rem;border-bottom:1px solid #243044;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+  <a href="/" style="color:#93c5fd;text-decoration:none">← Desks</a>
+  <span class="muted" style="font-size:.85rem">Client: <strong>{{ state.client_label or "All clients" }}</strong></span>
+  <form method="post" action="/select-client" style="display:flex;gap:.4rem;align-items:center;margin:0">
+    <select name="client_id" onchange="this.form.submit()" style="background:#0b1220;color:#e8eef7;border:1px solid #243044;border-radius:6px;padding:.25rem .4rem">
+      {% for c in clients|default([]) %}
+      <option value="{{ c.id }}" {% if c.id == state.client_id %}selected{% endif %}>{{ c.label }}</option>
+      {% endfor %}
+    </select>
+  </form>
+  <form method="post" action="/logout" style="margin-left:auto"><button type="submit" style="background:transparent;border:1px solid #243044;color:#9aa8bc;border-radius:6px;padding:.3rem .6rem;cursor:pointer">Sign out</button></form>
+</header>
+
 <header>
 <div class="top">
 <div>

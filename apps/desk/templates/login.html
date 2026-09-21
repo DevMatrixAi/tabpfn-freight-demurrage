@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Sign in · Freight Money Desk</title>
+<link rel="stylesheet" href="/static/ops_board.css"/>
+<style>
+body{display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;background:#0b1220;color:#e8eef7;font-family:system-ui,sans-serif}
+.card{width:min(420px,92vw);background:#121a26;border:1px solid #243044;border-radius:12px;padding:1.5rem}
+h1{margin:0 0 .35rem;font-size:1.25rem}
+.muted{color:#9aa8bc;font-size:.9rem;margin:0 0 1rem}
+label{display:block;margin:.6rem 0 .25rem;font-size:.85rem}
+input{width:100%;box-sizing:border-box;padding:.55rem .65rem;border-radius:8px;border:1px solid #243044;background:#0b1220;color:#e8eef7}
+button{margin-top:1rem;width:100%;padding:.65rem;border:0;border-radius:8px;background:#3b82f6;color:#fff;font-weight:600;cursor:pointer}
+.warn{background:#3a2a12;border:1px solid #8a6a2a;color:#f5d78a;padding:.6rem .75rem;border-radius:8px;margin-bottom:1rem;font-size:.85rem}
+.err{color:#fca5a5;font-size:.9rem;margin:.5rem 0 0}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Freight Money Desk</h1>
+  <p class="muted">Shipper late-fee ops · demo sign-in (not production IAM)</p>
+  <div class="warn">Demo auth stub. Default user <code>demo</code> / password <code>demurrage</code> (override with DESK_DEMO_USER / DESK_DEMO_PASSWORD).</div>
+  {% if error %}<p class="err">{{ error }}</p>{% endif %}
+  <form method="post" action="/login">
+    <label for="username">User</label>
+    <input id="username" name="username" autocomplete="username" required/>
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required/>
+    <button type="submit">Sign in</button>
+  </form>
+</div>
+</body>
+</html>

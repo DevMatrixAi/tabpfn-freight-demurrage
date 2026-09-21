@@ -41,10 +41,10 @@ PACKS = build_packs(ROOT)
 
 app = FastAPI(
     title="Freight Ops Board",
-    version="0.5.0",
+    version="0.6.0",
     description=(
-        "Human ops board for demurrage / coda packs. "
-        "Robot/TMS consumer API under /api/v1 (decisions only)."
+        "SaaS shell (demo auth + client switcher + multi-desk home) + ops board. "
+        "Robot/TMS API under /api/v1 (decisions only). Demo auth, not production IAM."
     ),
 )
 templates = Jinja2Templates(directory=str(DESK_DIR / "templates"))
@@ -57,7 +57,27 @@ static_dir = DESK_DIR / "static"
 static_dir.mkdir(exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
+try:
+    from apps.desk.auth import (
+        DemoAuthMiddleware,
+        SESSION_COOKIE,
+        check_password,
+        demo_credentials,
+        is_authenticated,
+    )
+    from apps.desk.clients import DEFAULT_CLIENT, client_meta, list_clients
+except ImportError:
+    from auth import (  # type: ignore
+        DemoAuthMiddleware,
+        SESSION_COOKIE,
+        check_password,
+        demo_credentials,
+        is_authenticated,
+    )
+    from clients import DEFAULT_CLIENT, client_meta, list_clients  # type: ignore
+
 _STATE: dict[str, Any] = {
+    "client_id": "ALL", "client_label": "All clients (demo)",
     "pack": DEFAULT_PACK, "pack_label": PACKS[DEFAULT_PACK]["label"],
     "source": "domain_csv", "adapter": None, "table_id": None, "n_rows": 0,
     "metrics": None, "baseline_metrics": None, "delta": None, "baseline_narrative": None,
@@ -68,6 +88,8 @@ _STATE: dict[str, Any] = {
     "blank_label": "blank_sailing", "what_if": None, "sample_row_ids": [],
     "risk_cards": [], "money_label": "Money at risk", "pack_gloss": PACKS[DEFAULT_PACK].get("gloss"),
 }
+
+app.add_middleware(DemoAuthMiddleware)
 
 
 def _has_token() -> bool:
@@ -153,6 +175,13 @@ def _load_default_csv(session: PipelineSession | None = None) -> None:
     _STATE["table_id"] = result.table_id
     _STATE["n_rows"] = result.n_rows
     df = sess.tables[result.table_id]
+    cid = _STATE.get("client_id") or DEFAULT_CLIENT
+    if cid != "ALL" and "client_id" in df.columns:
+        df = df[df["client_id"].astype(str) == cid].copy()
+        # write filtered view back for triage on this table id
+        sess.tables[result.table_id] = df
+        result.n_rows = len(df)
+    _STATE["n_rows"] = int(len(df))
     _STATE["demurrage_total"] = _money_total(df)
     _STATE["preview_rows"] = df.head(8).fillna("").to_dict(orient="records")
     _STATE["group_col"] = sess.domain.group_col
@@ -183,8 +212,71 @@ def _startup() -> None:
         app.state.session = sess
 
 
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request) -> HTMLResponse:
+    if is_authenticated(request):
+        return RedirectResponse(url="/", status_code=303)
+    return templates.TemplateResponse(request, "login.html", {"error": None})
+
+
+@app.post("/login", response_model=None)
+async def login_submit(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...),
+):
+    if check_password(username, password):
+        resp = RedirectResponse(url="/", status_code=303)
+        resp.set_cookie(SESSION_COOKIE, "1", httponly=True, samesite="lax")
+        return resp
+    return templates.TemplateResponse(
+        request, "login.html", {"error": "Invalid demo credentials."}, status_code=401
+    )
+
+
+@app.post("/logout")
+async def logout() -> RedirectResponse:
+    resp = RedirectResponse(url="/login", status_code=303)
+    resp.delete_cookie(SESSION_COOKIE)
+    return resp
+
+
+@app.post("/select-client")
+async def select_client(client_id: str = Form(...)) -> RedirectResponse:
+    _STATE["client_id"] = client_id if client_id in {c["id"] for c in list_clients()} else DEFAULT_CLIENT
+    _STATE["client_label"] = client_meta(_STATE["client_id"])["label"]
+    if getattr(app.state, "session", None) is not None:
+        _load_default_csv(app.state.session)
+        return RedirectResponse(url="/desk", status_code=303)
+    return RedirectResponse(url="/", status_code=303)
+
+
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request) -> HTMLResponse:
+async def saas_home(request: Request) -> HTMLResponse:
+    """Multi-desk home + client switcher."""
+    cid = _STATE.get("client_id") or DEFAULT_CLIENT
+    cmeta = client_meta(cid)
+    desks = [
+        {"id": k, "label": v["label"], "spine": v["spine"], "gloss": v.get("gloss")}
+        for k, v in PACKS.items()
+    ]
+    return templates.TemplateResponse(request, "home_saas.html", {
+        "clients": list_clients(),
+        "active_client": cid,
+        "active_client_gloss": cmeta.get("gloss", ""),
+        "desks": desks,
+    })
+
+
+@app.get("/desk", response_class=HTMLResponse)
+async def desk_board(request: Request, pack: str | None = None) -> HTMLResponse:
+    """Ops board for one desk/pack."""
+    if pack and pack in PACKS and pack != _pack_id():
+        _STATE["pack"] = pack
+        _STATE["pack_label"] = PACKS[pack]["label"]
+        _STATE["pack_gloss"] = PACKS[pack].get("gloss")
+        sess = _session(pack)
+        _load_default_csv(sess)
     meta = _pack_meta()
     disclaimer = load_domain(meta["domain"]).disclaimer
     return templates.TemplateResponse(request, "index.html", {
@@ -193,6 +285,8 @@ async def home(request: Request) -> HTMLResponse:
         "disclaimer": disclaimer,
         "has_token": _has_token(), "primary_modes": PRIMARY_MODES, "metric_keys": METRIC_KEYS,
         "is_spine": bool(meta.get("spine")),
+        "clients": list_clients(),
+        "saas_home": "/",
     })
 
 
@@ -217,13 +311,13 @@ async def load_adapter(adapter_name: str = Form(...)) -> RedirectResponse:
     _STATE["group_time_col"] = sess.domain.time_col
     _STATE["sample_row_ids"] = sample_ids(loaded, id_col=sess.domain.id_col or "container_id")
     _reset_triage_state()
-    return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/desk", status_code=303)
 
 
 @app.post("/load-domain-csv")
 async def load_domain_csv() -> RedirectResponse:
     _load_default_csv(app.state.session)
-    return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/desk", status_code=303)
 
 
 @app.post("/switch-pack")
@@ -235,7 +329,7 @@ async def switch_pack(pack: str = Form(...)) -> RedirectResponse:
     _STATE["pack_gloss"] = PACKS[pid].get("gloss")
     sess = _session(pid)
     _load_default_csv(sess)
-    return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/desk", status_code=303)
 
 try:
     from apps.desk.desk_triage import register_triage_routes

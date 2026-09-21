@@ -99,7 +99,7 @@ def register_triage_routes(
                 sess.last_metrics, sess.last_backend, sess.last_mode, sess.last_warning, sess.last_baseline = snap
         else:
             state["fast_ab"] = None
-        return RedirectResponse(url="/", status_code=303)
+        return RedirectResponse(url="/desk", status_code=303)
 
 
     @app.post("/what-if")
@@ -136,4 +136,4 @@ def register_triage_routes(
                 "error": str(exc),
                 "row_id": row_id,
             }
-        return RedirectResponse(url="/#what-if", status_code=303)
+        return RedirectResponse(url="/desk#what-if", status_code=303)

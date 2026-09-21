@@ -77,3 +77,11 @@ Same FastAPI process exposes **decisions** endpoints for robots/TMS:
 
 OpenAPI tag: **robot/TMS consumer API** (`/docs`). Docs: [`docs/ROBOT_API.md`](../../docs/ROBOT_API.md).
 Does not replace the ops board UI — both share `PipelineSession` + domain playbooks.
+
+## SaaS shell (demo)
+
+1. Open http://127.0.0.1:8765 → sign in with `demo` / `demurrage` (or `DESK_DEMO_USER` / `DESK_DEMO_PASSWORD`).
+2. Multi-desk home + client switcher → open a desk (spine = late-fee board).
+3. Robot/TMS API at `/api/v1` stays **without** login.
+
+Demo auth stub — not production IAM.
