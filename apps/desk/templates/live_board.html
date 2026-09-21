@@ -23,7 +23,8 @@
   {% include "polish_charts.html" %}
 
   {% if state.risk_cards %}
-  <section class="card full" id="risk-board">
+  <section class="card full" id="risk-board" data-coach="risk-drawer">
+  <span class="coach-hint" data-coach-hint="risk-drawer">Not a red flag — pick a money move.</span>
   <h2>{% if is_spine %}Late fee risk board{% else %}Shipment risk board{% endif %} <span class="badge">click card → moves</span>
   {% if state.stream_cursor %}<span class="badge">stream #{{ state.stream_cursor }}</span>{% endif %}
   </h2>
