@@ -148,7 +148,11 @@ def test_mcp_cookbook_script(tmp_path, monkeypatch):
 
 
 def test_stress_fixture_exists():
+    # Prefer checked-in CSV; unpack packed blob if missing (MCP size limits).
     path = ROOT / "fixtures" / "stress" / "missing_wide_demurrage.csv"
+    if not path.is_file():
+        import runpy
+        runpy.run_path(str(ROOT / "fixtures" / "stress" / "_unpack_missing_wide.py"))
     assert path.is_file()
     df = pd.read_csv(path)
     assert df.shape[1] >= 50
