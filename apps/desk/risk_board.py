@@ -47,6 +47,47 @@ def risk_label(tier: str) -> str:
     return TIER_RISK_LABELS.get(tier, tier)
 
 
+def fee_band(
+    *,
+    expected_usd: float | None,
+    daily_usd: float | None = None,
+    free_days_left: float | None = None,
+    dwell_days: float | None = None,
+    proba: float = 0.0,
+) -> dict[str, float | None]:
+    """Mock expected $ + p90 $ fee band (no live predictive distribution).
+
+    Expected = projected demurrage on the row. p90 stretches with late-fee
+    probability and remaining free-day burn using the daily rate — same
+    dollar story judges see when live TabPFN full-dist is available.
+    """
+    try:
+        expected = float(expected_usd) if expected_usd is not None else 0.0
+    except (TypeError, ValueError):
+        expected = 0.0
+    try:
+        daily = float(daily_usd) if daily_usd is not None else 0.0
+    except (TypeError, ValueError):
+        daily = 0.0
+    try:
+        free = float(free_days_left) if free_days_left is not None else 0.0
+    except (TypeError, ValueError):
+        free = 0.0
+    try:
+        dwell = float(dwell_days) if dwell_days is not None else 0.0
+    except (TypeError, ValueError):
+        dwell = 0.0
+    p = max(0.0, min(1.0, float(proba or 0.0)))
+    # Mock upper-tail dwell days past free window
+    burn = max(0.0, dwell + 2.0 + 6.0 * p - max(0.0, free))
+    tail = burn * daily if daily > 0 else expected * (0.25 + 0.55 * p)
+    p90 = max(expected, expected + tail * 0.35, expected * (1.0 + 0.45 * p))
+    return {
+        "expected_usd": round(expected, 2),
+        "p90_usd": round(float(p90), 2),
+    }
+
+
 def build_risk_cards(
     sess: PipelineSession,
     tid: str,
@@ -87,6 +128,34 @@ def build_risk_cards(
             subtitle = " · ".join(bits[:3])
         action_key = a.get("action") or "monitor"
         tier = risk_tier(proba)
+        daily = None
+        free = None
+        dwell = None
+        if row is not None:
+            for col, dest in (
+                ("daily_demurrage_usd", "daily"),
+                ("free_days_left", "free"),
+                ("dwell_days_so_far", "dwell"),
+            ):
+                if col in df.columns:
+                    try:
+                        val = row[col]
+                        fval = float(val) if val == val else None
+                    except (TypeError, ValueError):
+                        fval = None
+                    if dest == "daily":
+                        daily = fval
+                    elif dest == "free":
+                        free = fval
+                    else:
+                        dwell = fval
+        band = fee_band(
+            expected_usd=money if money is not None else 0.0,
+            daily_usd=daily,
+            free_days_left=free,
+            dwell_days=dwell,
+            proba=proba,
+        )
         cards.append({
             "row_id": rid,
             "proba": round(proba, 4),
@@ -96,6 +165,8 @@ def build_risk_cards(
             "tier": tier,
             "risk_label": risk_label(tier),  # High / Med / Low
             "money": money,
+            "expected_usd": band["expected_usd"],
+            "p90_usd": band["p90_usd"],
             "subtitle": subtitle,
         })
     order = {"red": 0, "amber": 1, "green": 2}
