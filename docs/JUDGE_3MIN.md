@@ -33,6 +33,10 @@ More depth: [`DEEP_SHOWCASE_v0.md`](DEEP_SHOWCASE_v0.md) · preview honesty: [`P
 Prefer **small-n live** Thinking/Plus: desk `sample_n` 40–80, or env `TABPFN_DEV_N=60`.
 Full-table mock anytime (`TABPFN_TOKEN=`). One full live Thinking pass near shoot/submit only.
 
+**Preflight:** `TABPFN_TOKEN= python scripts/preflight_live_budget.py --mock` (or `--live-check` after API reset) before small-n Thinking — blocks full-table live.
+
+**VO artifacts:** `artifacts/freight-demurrage/` (`mock_fulltable_metrics`, `judge_path_mock_receipt`, `mcp_mock_smoke_receipt`).
+
 
 ## First-screen screenshots (mock UI frames)
 

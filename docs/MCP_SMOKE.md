@@ -22,3 +22,5 @@ Expect: `OK — exercised 7 tools → artifacts/mcp_cookbook/cookbook_receipt.js
 Pytest: `tests/test_deep_showcase.py::test_mcp_cookbook_script` (also covered by `TABPFN_TOKEN= pytest -q`).
 
 MCP server entry: `tabpfn-hack mcp` (stdio). Cookbook script calls the same `PipelineSession` / `TOOL_SPECS` the server exposes.
+
+Frozen VO receipt: [`artifacts/freight-demurrage/mcp_mock_smoke_receipt.md`](../artifacts/freight-demurrage/mcp_mock_smoke_receipt.md) (`TABPFN_TOKEN= python scripts/freeze_mcp_mock_smoke_receipt.py`).
