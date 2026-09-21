@@ -13,6 +13,7 @@
     <p class="empty-kicker">No selection</p>
     <p class="empty-title">Pick a risk card</p>
     <p>Click a late-fee risk card on the board to focus one container — money at risk, late fee risk %, and suggested move land here.</p>
+    <a class="empty-cta" href="#triage-panel" onclick="closeActionDrawer()">Load freight fixture</a>
   </div>
   <p class="muted drawer-hint">Plain English: <strong>late fee risk</strong> · <strong>money at risk</strong> · <strong>suggested move</strong>.</p>
 
@@ -27,7 +28,7 @@
       <div class="explain-bar-row" data-kind="{{ b.kind }}">
         <span class="explain-bar-label" title="{{ b.feature }}">{{ b.label }}</span>
         <span class="explain-bar-track"><span class="explain-bar-fill kind-{{ b.kind }}" style="width:{{ b.pct }}%"></span></span>
-        <span class="explain-bar-kind">{{ b.kind_label }}</span>
+        <span class="explain.bar-kind">{{ b.kind_label }}</span>
       </div>
       {% endfor %}
     </div>
@@ -58,6 +59,7 @@
       <p class="empty-kicker">Empty queue</p>
       <p class="empty-title">No suggested moves yet</p>
       <p>Run triage (Mock works offline) to fill this drawer with playbook moves ranked by late fee risk.</p>
+      <a class="empty-cta" href="#triage-panel" onclick="closeActionDrawer()">Run triage</a>
     </div>
   {% endif %}
   </div>
