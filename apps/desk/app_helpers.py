@@ -26,7 +26,8 @@ try:
 except ImportError:
     from clients import DEFAULT_CLIENT, client_meta, list_clients  # type: ignore
 
-# Caller binds PACKS/ROOT/_STATE/app via bind() to avoid circular imports.
+# Packs resolved at import by caller binding; helpers expect module-level PACKS/ROOT/_STATE injected
+# via register_helpers() to avoid circular imports.
 
 PACKS: dict[str, Any] = {}
 ROOT: Path | None = None
@@ -35,13 +36,7 @@ _STATE: dict[str, Any] = {}
 app = None  # set by bind()
 
 
-def bind(*.
-    packs: dict[str, Any],
-    root: Path,
-    state: dict[str, Any],
-    fastapi_app: Any,
-    metric_keys: tuple[str, ...] | None = None,
-) -> None:
+def bind(*, packs: dict[str, Any], root: Path, state: dict[str, Any], fastapi_app: Any, metric_keys: tuple[str, ...] | None = None) -> None:
     global PACKS, ROOT, _STATE, app, METRIC_KEYS
     PACKS = packs
     ROOT = root
@@ -138,6 +133,7 @@ def _load_default_csv(session: PipelineSession | None = None) -> None:
     cid = _STATE.get("client_id") or DEFAULT_CLIENT
     if cid != "ALL" and "client_id" in df.columns:
         df = df[df["client_id"].astype(str) == cid].copy()
+        # write filtered view back for triage on this table id
         sess.tables[result.table_id] = df
         result.n_rows = len(df)
     _STATE["n_rows"] = int(len(df))
