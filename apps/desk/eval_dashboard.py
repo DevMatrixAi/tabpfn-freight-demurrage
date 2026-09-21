@@ -1,5 +1,117 @@
-"""Packed loader for eval_dashboard (deep showcase)."""
+"""Eval dashboard routes — readable; logic in eval_runner."""
 from __future__ import annotations
-import base64, zlib
-_BLOB = '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'
-exec(compile(zlib.decompress(base64.b64decode(_BLOB)), __file__, "exec"), globals())
+
+from typing import Any, Callable
+
+from fastapi import FastAPI, Form, Request
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
+
+from tabpfn_hack_core.core.pipeline import PipelineSession
+from tabpfn_hack_core.tools_api import BackendMode
+
+try:
+    from apps.desk.eval_runner import (
+        EVAL_MODES,
+        METRIC_KEYS,
+        METRIC_LABELS,
+        _slice,
+        run_multi_mode_eval,
+    )
+except ImportError:
+    from eval_runner import (  # type: ignore
+        EVAL_MODES,
+        METRIC_KEYS,
+        METRIC_LABELS,
+        _slice,
+        run_multi_mode_eval,
+    )
+
+__all__ = [
+    "EVAL_MODES",
+    "METRIC_KEYS",
+    "METRIC_LABELS",
+    "run_multi_mode_eval",
+    "register_eval_routes",
+]
+
+def register_eval_routes(
+    app: FastAPI,
+    *,
+    state: dict[str, Any],
+    templates: Jinja2Templates,
+    packs: dict[str, dict[str, Any]],
+    default_pack: str,
+    session_factory: Callable[[str | None], PipelineSession],
+    load_pack_csv: Callable[..., None],
+    resolve_mode: Callable[[str], tuple[BackendMode, str | None]],
+    metric_slice: Callable[[dict[str, float] | None], dict[str, float]],
+    has_token: Callable[[], bool],
+) -> None:
+    """Mount GET /eval and POST /eval/run (auth-gated like /desk)."""
+
+    def _ensure_pack(pack: str | None) -> tuple[str, PipelineSession]:
+        pid = pack if pack in packs else (state.get("pack") or default_pack)
+        if pid not in packs:
+            pid = default_pack
+        need_reload = (
+            pid != state.get("pack")
+            or not state.get("table_id")
+            or getattr(app.state, "session", None) is None
+        )
+        if need_reload:
+            state["pack"] = pid
+            state["pack_label"] = packs[pid]["label"]
+            state["pack_gloss"] = packs[pid].get("gloss")
+            sess = session_factory(pid)
+            load_pack_csv(sess)
+        return pid, app.state.session
+
+    @app.get("/eval", response_class=HTMLResponse)
+    async def eval_page(request: Request, pack: str | None = None) -> HTMLResponse:
+        pid, _sess = _ensure_pack(pack)
+        result = state.get("eval_result")
+        if result and result.get("pack") and result["pack"] != pid:
+            result = None
+        return templates.TemplateResponse(
+            request,
+            "eval.html",
+            {
+                "packs": [
+                    {
+                        "id": k,
+                        "label": v["label"],
+                        "spine": v["spine"],
+                        "gloss": v.get("gloss"),
+                    }
+                    for k, v in packs.items()
+                ],
+                "active_pack": pid,
+                "pack_label": packs[pid]["label"],
+                "pack_gloss": packs[pid].get("gloss"),
+                "n_rows": state.get("n_rows") or 0,
+                "has_token": has_token(),
+                "result": result,
+                "eval_modes": list(EVAL_MODES),
+                "metric_keys": list(METRIC_KEYS),
+                "metric_labels": METRIC_LABELS,
+                "saas_home": "/",
+            },
+        )
+
+    @app.post("/eval/run")
+    async def eval_run(pack: str = Form(default_pack)) -> RedirectResponse:
+        pid, sess = _ensure_pack(pack)
+        tid = state.get("table_id")
+        if not tid or tid not in sess.tables:
+            load_pack_csv(sess)
+            tid = state["table_id"]
+            sess = app.state.session
+        result = run_multi_mode_eval(
+            sess, tid, resolve_mode=resolve_mode, metric_slice=metric_slice
+        )
+        result["pack"] = pid
+        result["pack_label"] = packs[pid]["label"]
+        result["has_token"] = has_token()
+        state["eval_result"] = result
+        return RedirectResponse(url=f"/eval?pack={pid}", status_code=303)
