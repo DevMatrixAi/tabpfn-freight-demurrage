@@ -1,0 +1,57 @@
+{# Partial: charts + risk cards + stream status — swapped via fetch #}
+<div id="live-board" data-n-rows="{{ state.n_rows }}" data-demurrage="{{ state.demurrage_total }}" data-cursor="{{ state.stream_cursor or 0 }}">
+  <div class="stream-status" id="stream-status" aria-live="polite">
+    {% if state.stream_last %}
+    <span class="badge stream-badge">stream +{{ state.stream_last|length }}</span>
+    {% for a in state.stream_last %}
+    <span class="muted stream-evt">{{ a.source }} · <strong>{{ a.container_id }}</strong>{% if a.terminal_note %} — {{ a.terminal_note[:80] }}{% endif %}</span>
+    {% endfor %}
+    <span class="muted">· {{ state.n_rows }} rows · ${{ "{:,.0f}".format(state.demurrage_total|float) }}</span>
+    {% if state.elapsed_s is not none %}<span class="muted">· re-score {{ state.elapsed_s }}s</span>{% endif %}
+    {% else %}
+    <span class="muted">Stream idle — click <strong>Stream event + re-score</strong> to append a fixture adapter row and refresh cards.</span>
+    {% endif %}
+  </div>
+
+  {% include "polish_charts.html" %}
+
+  {% if state.risk_cards %}
+  <section class="card full" id="risk-board">
+  <h2>{% if is_spine %}Late fee risk board{% else %}Shipment risk board{% endif %} <span class="badge">click card → moves</span>
+  {% if state.stream_cursor %}<span class="badge">stream #{{ state.stream_cursor }}</span>{% endif %}
+  </h2>
+  <div class="legend"><span><i class="r"></i>High (≥0.65)</span><span><i class="a"></i>Med (0.40–0.65)</span><span><i class="g"></i>Low (<0.40)</span></div>
+  <div class="risk-board">
+  {% for c in state.risk_cards %}
+  <article class="risk-card {{ c.tier }} clickable" tabindex="0" role="button"
+    data-row-id="{{ c.row_id }}"
+    data-action="{{ c.action }}"
+    data-action-label="{{ c.action_label or (c.action|human_action) }}"
+    data-reason="{{ c.reason or '' }}"
+    data-proba="{{ c.proba }}"
+    data-tier="{{ c.risk_label or c.tier }}"
+    data-money="{% if c.money is not none %}{{ c.money }}{% endif %}"
+    data-subtitle="{{ c.subtitle or '' }}"
+    title="Open suggested move — Late fee risk: {{ c.risk_label or c.tier }}"
+    onclick="openActionDrawer(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openActionDrawer(this)}">
+  <div class="id">{{ c.row_id }}</div>
+  <div class="sub">{{ c.subtitle or '—' }}</div>
+  <div class="money">{% if c.money is not none %}${{ "{:,.0f}".format(c.money|float) }}{% else %}—{% endif %}</div>
+  <div class="money-caption">{% if is_spine %}Money at risk{% else %}Exposure{% endif %}</div>
+  <div class="foot">
+  <span class="tier-pill" title="Late fee risk">{{ c.risk_label or c.tier }}</span>
+  <span class="badge">Late fee risk {{ "%.0f"|format((c.proba|float)*100) }}%</span>
+  <span class="badge" title="{{ c.action }}">{{ c.action_label or (c.action|human_action) }}</span>
+  </div>
+  {% if c.reason %}<p class="muted" style="margin:.45rem 0 0;font-size:.72rem;line-height:1.35">{{ c.reason }}</p>{% endif %}
+  </article>
+  {% endfor %}
+  </div>
+  </section>
+  {% else %}
+  <section class="card full" id="risk-board">
+  <h2>Risk board</h2>
+  <p class="muted">No risk cards yet — run triage or stream an event.</p>
+  </section>
+  {% endif %}
+</div>
