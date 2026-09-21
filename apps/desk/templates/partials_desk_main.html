@@ -1,11 +1,13 @@
 <main>
 {% include "partials_plain_english.html" %}
+{% include "partials_morning_digest.html" %}
 <div class="grid">
 <section class="card full">
 <h2>Domain pack</h2>
+<span class="coach-hint" data-coach-hint="pack-selector">Same engine — equipment, inland, air, stow-fit.</span>
 <form class="row" method="post" action="/switch-pack">
 <label class="muted" for="pack">Spine + coda packs</label>
-<select name="pack" id="pack">
+<select name="pack" id="pack" data-coach="pack-selector">
 {% for p in packs %}
 <option value="{{ p.id }}" {% if state.pack == p.id %}selected{% endif %}>{{ p.label }}{% if p.spine %} ★{% endif %}</option>
 {% endfor %}
@@ -64,15 +66,15 @@
 <div class="mode-toggle" role="radiogroup" aria-label="TabPFN mode">
 {% set sel = state.requested_mode or 'mock' %}
 <input type="radio" name="mode" id="mode-plus" value="plus" {% if sel == 'plus' %}checked{% endif %} />
-<label for="mode-plus" data-mode="plus">Plus</label>
+<label for="mode-plus" data-mode="plus" data-coach="plus" title="Reads messy text — no NLP pipeline.">Plus</label>
 <input type="radio" name="mode" id="mode-thinking" value="thinking" {% if sel == 'thinking' %}checked{% endif %} />
-<label for="mode-thinking" data-mode="thinking">Thinking</label>
+<label for="mode-thinking" data-mode="thinking" data-coach="thinking" title="Follows each vessel over time.">Thinking</label>
 <input type="radio" name="mode" id="mode-mock" value="mock" {% if sel != 'plus' and sel != 'thinking' %}checked{% endif %} />
 <label for="mode-mock" data-mode="mock">Mock</label>
 </div>
 <p class="mode-hint thinking-overrides">Thinking overrides:
 <span class="badge">thinking_mode=True</span>
-<span class="badge effort-chip" id="effort-chip">thinking_effort=<strong>{{ state.thinking_effort or 'medium' }}</strong></span>
+<span class="badge effort-chip" id="effort-chip" data-coach="thinking">thinking_effort=<strong>{{ state.thinking_effort or 'medium' }}</strong></span>
 <span class="badge">group={{ state.group_col or 'vessel_id' }}</span>
 <span class="badge">time={{ state.group_time_col or 'event_ts' }}</span>
 </p>
@@ -85,7 +87,7 @@
   <option value="high" {% if eff == 'high' %}selected{% endif %}>high</option>
 </select>
 <label class="muted" for="sample_n" title="Live TabPFN budget: sample rows before fit">sample_n</label>
-<select name="sample_n" id="sample_n" aria-label="Dev sample size for live TabPFN">
+<select name="sample_n" id="sample_n" data-coach="sample-n" aria-label="Dev sample size for live TabPFN">
   {% set sn = (state.dev_sample.sample_n if state.dev_sample and state.dev_sample.sampled else none) %}
   <option value="" {% if not sn %}selected{% endif %}>full table</option>
   <option value="40" {% if sn == 40 %}selected{% endif %}>40 (cheap live)</option>
@@ -99,12 +101,27 @@
 <input type="checkbox" name="fast_ab" value="1" />
 Fast A/B stub (optional)
 </label>
-<button type="submit">Run triage + baseline Δ</button>
+<button type="submit" data-coach="run-triage" id="run-triage-btn">Run triage + baseline Δ</button>
+<span class="coach-hint" data-coach-hint="run-triage">Score late-fee risk on this messy table.</span>
 </div>
 </form>
+
+<div class="desk-skeleton triage-board" data-skeleton="triage-board" id="triage-board-skeleton" hidden aria-hidden="true" aria-busy="false">
+  <div class="sk-title"></div>
+  <div class="sk-cards" aria-label="Loading risk cards">
+    <div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div>
+  </div>
+  <div class="chart-skeleton" data-chart-state="loading" style="margin-top:.75rem">
+    <div class="sk-row"><span class="sk-lbl"></span><span class="sk-bar"></span><span class="sk-n"></span></div>
+    <div class="sk-row"><span class="sk-lbl"></span><span class="sk-bar"></span><span class="sk-n"></span></div>
+    <div class="sk-row"><span class="sk-lbl"></span><span class="sk-bar"></span><span class="sk-n"></span></div>
+  </div>
+</div>
+
 {% if state.warning %}<div class="warn-banner">{{ state.warning }}</div>{% endif %}
 {% if state.metrics %}
-<div class="judge-strip">
+<div class="judge-strip" data-coach="histgbm-delta" id="histgbm-delta">
+<span class="coach-hint" data-coach-hint="histgbm-delta">Lift vs a normal model on the same data.</span>
 <span class="badge">Scorecard</span>
 <span class="badge">Δ vs HistGBM</span>
 {% if state.backend %}<span class="badge">{{ state.backend }}</span>{% endif %}
@@ -170,7 +187,8 @@ Fast A/B stub (optional)
       <option value="plus" {% if sel == 'plus' %}selected{% endif %}>Plus</option>
       <option value="thinking" {% if sel == 'thinking' %}selected{% endif %}>Thinking</option>
     </select>
-    <button type="button" id="btn-stream-rescore" class="stream-btn">Stream event + re-score</button>
+    <button type="button" id="btn-stream-rescore" class="stream-btn" data-coach="stream-rescore">Stream event + re-score</button>
+    <span class="coach-hint" data-coach-hint="stream-rescore">New event — score and move can change.</span>
     <label class="muted stream-auto-label"><input type="checkbox" id="stream-auto" /> Auto-poll (5s)</label>
   </div>
   <p class="muted stream-hint">Appends a synthetic Terminal49 / project44 / EDI fixture row, then re-runs triage and refreshes risk cards — no full page reload.</p>

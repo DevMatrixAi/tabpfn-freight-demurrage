@@ -63,7 +63,12 @@
     </div>
   {% endif %}
   </div>
-  <div class="drawer-foot" id="drawer-foot">
+  
+  <div class="desk-skeleton drawer-apply" data-skeleton="drawer-apply" id="drawer-apply-skeleton" hidden aria-hidden="true">
+    <div class="sk-bar"></div>
+    <p class="muted" style="margin:.45rem 0 0;font-size:.75rem">Applying action…</p>
+  </div>
+<div class="drawer-foot" id="drawer-foot">
     <p class="foot-note">Shipper late-fee desk · fixtures only · not a live booking change.</p>
     <button type="button" class="ghost" onclick="closeActionDrawer()">Close</button>
   </div>

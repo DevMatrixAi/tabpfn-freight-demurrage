@@ -57,8 +57,22 @@
 
   {% include "partials_mode_glossary.html" %}
 
+  <div class="desk-skeleton eval-running" data-skeleton="eval-running" id="eval-running-skeleton" hidden aria-hidden="true">
+    <div class="sk-title"></div>
+    <div class="sk-table" aria-label="Eval running">
+      <div class="sk-tr" style="width:95%"></div>
+      <div class="sk-tr" style="width:80%"></div>
+      <div class="sk-tr" style="width:88%"></div>
+      <div class="sk-tr" style="width:70%"></div>
+      <div class="sk-tr" style="width:60%"></div>
+    </div>
+    <p class="muted" style="margin:.65rem 0 0;font-size:.78rem">Comparing Plus / Thinking / Fast vs HistGBM…</p>
+  </div>
+
+
   {% if result %}
   {% include "partials_eval_results.html" %}
+
   {% else %}
   <section class="card" id="eval-empty">
     <div class="saas-empty" data-empty="eval-prerun">
@@ -88,9 +102,14 @@
     btn.disabled = true;
     btn.classList.add('btn-busy');
     btn.textContent = 'Running eval…';
+    if (window.deskShowSkeleton) window.deskShowSkeleton('[data-skeleton="eval-running"]');
+    var empty = document.getElementById('eval-empty');
+    if (empty) empty.hidden = true;
   });
 })();
 </script>
+<div id="desk-toasts" class="desk-toasts" data-desk-toasts="1" aria-live="polite" aria-relevant="additions"></div>
+<script src="/static/desk_toasts.js" defer></script>
 <script src="/static/desk_keys.js" defer></script>
 </body>
 </html>

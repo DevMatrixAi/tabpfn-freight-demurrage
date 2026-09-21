@@ -1,0 +1,105 @@
+{
+  "frozen": true,
+  "mock": true,
+  "label": "mock full-table",
+  "source": "scripts/freeze_mock_fulltable_metrics.py (no live TabPFN)",
+  "repro": "TABPFN_TOKEN= python scripts/freeze_mock_fulltable_metrics.py",
+  "pack": "freight-demurrage",
+  "n_rows": 1200,
+  "n_kind": "full_fixture",
+  "has_token": false,
+  "metric_keys": [
+    "accuracy",
+    "f1",
+    "roc_auc",
+    "avg_precision"
+  ],
+  "modes": {
+    "plus": {
+      "backend": "mock",
+      "metrics": {
+        "accuracy": 0.9483,
+        "f1": 0.8412,
+        "roc_auc": 0.9912,
+        "avg_precision": 0.9561
+      },
+      "elapsed_s": 0.42,
+      "delta_vs_hist_gbm": {
+        "accuracy": 0.0067,
+        "f1": 0.0162,
+        "roc_auc": 0.0029,
+        "avg_precision": 0.0067
+      }
+    },
+    "thinking": {
+      "backend": "mock",
+      "metrics": {
+        "accuracy": 0.9517,
+        "f1": 0.8488,
+        "roc_auc": 0.9925,
+        "avg_precision": 0.9594
+      },
+      "elapsed_s": 0.51,
+      "delta_vs_hist_gbm": {
+        "accuracy": 0.01,
+        "f1": 0.0238,
+        "roc_auc": 0.0042,
+        "avg_precision": 0.01
+      }
+    },
+    "fast": {
+      "backend": "mock",
+      "metrics": {
+        "accuracy": 0.945,
+        "f1": 0.833,
+        "roc_auc": 0.9895,
+        "avg_precision": 0.952
+      },
+      "elapsed_s": 0.18,
+      "delta_vs_hist_gbm": {
+        "accuracy": 0.0033,
+        "f1": 0.008,
+        "roc_auc": 0.0012,
+        "avg_precision": 0.0026
+      }
+    },
+    "hist_gbm": {
+      "backend": "sklearn_hist_gbm",
+      "metrics": {
+        "accuracy": 0.9417,
+        "f1": 0.825,
+        "roc_auc": 0.9883,
+        "avg_precision": 0.9494
+      },
+      "elapsed_s": 0.09,
+      "delta_vs_hist_gbm": {
+        "accuracy": 0.0,
+        "f1": 0.0,
+        "roc_auc": 0.0,
+        "avg_precision": 0.0
+      }
+    }
+  },
+  "latency_panel": {
+    "plus_s": 0.42,
+    "thinking_s": 0.51,
+    "fast_s": 0.18,
+    "hist_gbm_s": 0.09,
+    "fast_vs_plus_speedup": 2.33,
+    "headline": "Fast 0.18s vs Plus 0.42s (2.33\u00d7) \u00b7 Thinking 0.51s"
+  },
+  "derived_from": {
+    "mock_eval_judge_card": "mock_eval_judge_card.json",
+    "demo_report": "demo_report.json",
+    "demo_accuracy": 0.9416666666666667,
+    "judge_n_rows": 200,
+    "judge_full_n_rows": 1200
+  },
+  "vo_lines": [
+    "Mock full-table baseline (n=full fixture) \u2014 empty TABPFN_TOKEN.",
+    "Plus / Thinking / Fast all beat HistGBM on accuracy & AUC in this freeze.",
+    "Thinking leads mock \u0394acc; Fast is cheapest wall-clock.",
+    "Small-n live Thinking still after ~4 PM PT; contrast against this full-table mock."
+  ],
+  "frozen_at": "2026-09-21T20:40:51Z"
+}
