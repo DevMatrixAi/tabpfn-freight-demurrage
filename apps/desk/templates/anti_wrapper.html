@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Anti-wrapper checklist · Freight Money Desk</title>
+<link rel="stylesheet" href="/static/ops_board.css"/>
+<style>
+.aw-wrap{max-width:820px;margin:0 auto;padding:1rem 1rem 2.5rem}
+.aw-crumb{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;padding:.5rem 0 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+.aw-crumb a{color:#93c5fd;text-decoration:none}
+.aw-score{font-variant-numeric:tabular-nums;font-weight:700}
+.aw-score.pass{color:var(--good)}
+.aw-score.fail{color:var(--warn)}
+.aw-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.55rem}
+.aw-item{display:grid;grid-template-columns:auto 1fr auto;gap:.65rem;align-items:start;padding:.75rem .85rem;border:1px solid var(--border);border-radius:10px;background:var(--panel2)}
+.aw-item input{margin-top:.2rem;width:1.05rem;height:1.05rem;accent-color:#3b82f6}
+.aw-item.done{border-color:#1e4a36;background:#0f1c18}
+.aw-n{font-size:.7rem;color:var(--muted);font-weight:700}
+.aw-surface{font-weight:650;margin:0 0 .2rem}
+.aw-where{font-size:.78rem;color:var(--muted);margin:0}
+.aw-hint{font-size:.75rem;color:#9aa8bc;margin:.35rem 0 0}
+.aw-go{font-size:.78rem;color:#93c5fd;text-decoration:none;white-space:nowrap}
+.aw-bonus{margin-top:1rem;padding:.75rem;border:1px dashed var(--border);border-radius:10px;font-size:.85rem;color:var(--muted)}
+.aw-source{font-size:.72rem;color:var(--muted);margin-top:1rem}
+</style>
+</head>
+<body>
+<div class="aw-wrap" id="anti-wrapper-page" data-anti-wrapper="1">
+  <div class="aw-crumb">
+    <a href="/">Home</a>
+    <a href="/desk">Ops board</a>
+    <a href="/eval">Eval</a>
+    <strong>Anti-wrapper</strong>
+    <form method="post" action="/logout" style="margin-left:auto"><button class="ghost" type="submit">Sign out</button></form>
+  </div>
+
+  <section class="card full">
+    <h1 style="margin:0 0 .35rem;font-size:1.2rem">Anti-wrapper checklist</h1>
+    <p class="muted" style="margin:0 0 .75rem">{{ checklist.intro }}</p>
+    <p style="margin:0 0 1rem">
+      Score:
+      <span class="aw-score fail" id="aw-score" data-target="{{ checklist.target }}">0 / {{ checklist.total }}</span>
+      <span class="muted" style="font-size:.8rem"> — pass at ≥{{ checklist.target }}/{{ checklist.total }}</span>
+    </p>
+    <ul class="aw-list" id="aw-list">
+      {% for it in checklist.entries %}
+      <li class="aw-item" data-aw-item="{{ it.n }}">
+        <input type="checkbox" id="aw-{{ it.n }}" data-aw-check="1" aria-label="Hit surface {{ it.n }}"/>
+        <div>
+          <div class="aw-n">#{{ it.n }}</div>
+          <p class="aw-surface">{{ it.surface }}</p>
+          <p class="aw-where">Where: {{ it.where }}</p>
+          <p class="aw-hint">{{ it.hint }}</p>
+        </div>
+        <a class="aw-go" href="{{ it.href }}">Open →</a>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="aw-bonus">{{ checklist.bonus }}</div>
+    <p class="aw-source">Source: <code>{{ checklist.source_doc }}</code> · checkboxes are local-only for the walkthrough.</p>
+  </section>
+</div>
+<script>
+(function () {
+  var boxes = document.querySelectorAll("[data-aw-check]");
+  var scoreEl = document.getElementById("aw-score");
+  var target = parseInt(scoreEl.getAttribute("data-target") || "6", 10);
+  var total = boxes.length;
+  function refresh() {
+    var n = 0;
+    boxes.forEach(function (b) {
+      var li = b.closest(".aw-item");
+      if (b.checked) { n++; if (li) li.classList.add("done"); }
+      else if (li) li.classList.remove("done");
+    });
+    scoreEl.textContent = n + " / " + total;
+    scoreEl.classList.toggle("pass", n >= target);
+    scoreEl.classList.toggle("fail", n < target);
+  }
+  boxes.forEach(function (b) { b.addEventListener("change", refresh); });
+  refresh();
+})();
+</script>
+</body>
+</html>
