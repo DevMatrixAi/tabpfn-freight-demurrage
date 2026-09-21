@@ -1,1 +1,125 @@
-SEE_FILE
+{
+  "source": "terminal49_fixture",
+  "shipments": [
+    {
+      "attributes": {
+        "container_number": "T49U1234567",
+        "event_timestamp": "2026-09-18T14:20:00Z",
+        "vessel_imo": "VSL-T49-01",
+        "bill_of_lading": "BOL-T49-88001",
+        "port_of_lading": "CNSHA",
+        "port_of_discharge": "USLAX",
+        "terminal_remarks": "Gate congestion; dual transactions stacked. YARD: 'appt no-show??' — clerk typo freeDays=1,5 (meant 1.5).",
+        "weather": "Fog thinning; ops normal.",
+        "free_days_remaining": 1.2,
+        "dwell_days": 8.5,
+        "teu": 1,
+        "cargo_value_usd": 48200,
+        "demurrage_rate_usd": 175,
+        "projected_demurrage_usd": 980,
+        "demurrage_risk": 1,
+        "risk_flags": {"blank_sailing": 0, "inland_can_beat_freedays": 1, "fee_inevitable": 0, "cargo_vs_fee_collapse": 0}
+      }
+    },
+    {
+      "attributes": {
+        "container_number": "T49U7654321",
+        "event_timestamp": "2026-09-18T18:05:00Z",
+        "vessel_imo": "VSL-T49-02",
+        "bill_of_lading": "BOL-T49-88002",
+        "port_of_lading": "KRPUS",
+        "port_of_discharge": "NLRTM",
+        "terminal_remarks": "On schedule; chassis available.",
+        "weather": "All clear.",
+        "free_days_remaining": 6.4,
+        "dwell_days": 2.1,
+        "teu": 2,
+        "cargo_value_usd": 91000,
+        "demurrage_rate_usd": 100,
+        "projected_demurrage_usd": 0,
+        "demurrage_risk": 0,
+        "risk_flags": {"blank_sailing": 0, "inland_can_beat_freedays": 0, "fee_inevitable": 0, "cargo_vs_fee_collapse": 0}
+      }
+    },
+    {
+      "attributes": {
+        "container_number": "T49U9988776",
+        "event_timestamp": "2026-09-19T09:40:00Z",
+        "vessel_imo": "VSL-T49-01",
+        "bill_of_lading": "BOL-T49-88003",
+        "port_of_lading": "SGSIN",
+        "port_of_discharge": "DEHAM",
+        "terminal_remarks": "Crane outage berth 2 — expect 22h delay. NOTES from ops chat: 'pls expedite!!! customs hold??? docs incomplete / see email thread #4412'.",
+        "weather": "Gale warning outer anchorage.",
+        "free_days_remaining": -0.5,
+        "dwell_days": 11.0,
+        "teu": 1,
+        "cargo_value_usd": 15500,
+        "demurrage_rate_usd": 200,
+        "projected_demurrage_usd": 2400,
+        "demurrage_risk": 1,
+        "risk_flags": {"blank_sailing": 1, "inland_can_beat_freedays": 0, "fee_inevitable": 1, "cargo_vs_fee_collapse": 1}
+      }
+    },
+    {
+      "attributes": {
+        "container_number": "T49U5544332",
+        "event_timestamp": "2026-09-19T15:10:00Z",
+        "vessel_imo": "VSL-T49-03",
+        "bill_of_lading": "BOL-T49-88004",
+        "port_of_lading": "CNNGB",
+        "port_of_discharge": "USNYC",
+        "terminal_remarks": "REEFER alarm @0200 — power drop 18min. Shipper note: 'do NOT break cold chain / claim pending'. Gate: dual txn + street-turn attempt FAILED.",
+        "weather": "Heat advisory; yard power constrained.",
+        "free_days_remaining": 0.3,
+        "dwell_days": 9.8,
+        "teu": 1,
+        "cargo_value_usd": 128000,
+        "demurrage_rate_usd": 250,
+        "projected_demurrage_usd": 1875,
+        "demurrage_risk": 1,
+        "risk_flags": {"blank_sailing": 0, "inland_can_beat_freedays": 1, "fee_inevitable": 0, "cargo_vs_fee_collapse": 0}
+      }
+    },
+    {
+      "attributes": {
+        "container_number": "T49U2211009",
+        "event_timestamp": "2026-09-20T07:25:00Z",
+        "vessel_imo": "VSL-T49-02",
+        "bill_of_lading": "BOL-T49-88005",
+        "port_of_lading": "TWKHH",
+        "port_of_discharge": "USLAX",
+        "terminal_remarks": "OK for pickup. (empty remark fields elsewhere — broker left 'n/a / TBD / see WMS').",
+        "weather": "",
+        "free_days_remaining": 4.0,
+        "dwell_days": 3.2,
+        "teu": 1,
+        "cargo_value_usd": 22000,
+        "demurrage_rate_usd": 120,
+        "projected_demurrage_usd": 0,
+        "demurrage_risk": 0,
+        "risk_flags": {"blank_sailing": 0, "inland_can_beat_freedays": 0, "fee_inevitable": 0, "cargo_vs_fee_collapse": 0}
+      }
+    },
+    {
+      "attributes": {
+        "container_number": "T49U8877665",
+        "event_timestamp": "2026-09-20T11:55:00Z",
+        "vessel_imo": "VSL-T49-03",
+        "bill_of_lading": "BOL-T49-88006",
+        "port_of_lading": "VNHPH",
+        "port_of_discharge": "USLGB",
+        "terminal_remarks": "??? LFD unclear — terminal EDI says LFD=2026-09-19 but PDF tariff says +1 calendar day after vessel COMPLETE. Ops Slack: 'who owns this box???",
+        "weather": "Marine layer; visibility 0.5nm AM.",
+        "free_days_remaining": -2.1,
+        "dwell_days": 12.4,
+        "teu": 2,
+        "cargo_value_usd": 6400,
+        "demurrage_rate_usd": 190,
+        "projected_demurrage_usd": 3420,
+        "demurrage_risk": 1,
+        "risk_flags": {"blank_sailing": 0, "inland_can_beat_freedays": 0, "fee_inevitable": 1, "cargo_vs_fee_collapse": 1}
+      }
+    }
+  ]
+}
