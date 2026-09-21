@@ -1,3 +1,10 @@
+<style>
+.empty-board{padding:.25rem 0 .15rem}
+.empty-panels{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.65rem;margin-top:.35rem}
+.empty-panel{border:1px dashed var(--border,#2a3548);border-radius:10px;padding:.75rem;background:#121a26}
+.empty-panel h3{margin:0;font-size:.78rem;color:var(--muted,#8b9bb4);font-weight:650;text-transform:uppercase;letter-spacing:.04em}
+.empty-panel .ph{height:.55rem;border-radius:4px;background:#1e2a3c;margin:.4rem 0;opacity:.75}
+</style>
 {# Partial: charts + risk cards + stream status — swapped via fetch #}
 <div id="live-board" data-n-rows="{{ state.n_rows }}" data-demurrage="{{ state.demurrage_total }}" data-cursor="{{ state.stream_cursor or 0 }}">
   <div class="stream-status" id="stream-status" aria-live="polite">
@@ -20,7 +27,7 @@
   <h2>{% if is_spine %}Late fee risk board{% else %}Shipment risk board{% endif %} <span class="badge">click card → moves</span>
   {% if state.stream_cursor %}<span class="badge">stream #{{ state.stream_cursor }}</span>{% endif %}
   </h2>
-  <div class="legend"><span><i class="r"></i>High (≥0.65)</span><span><i class="a"></i>Med (0.40–0.65)</span><span><i class="g"></i>Low (<0.40)</span></div>
+  <div class="legend"><span><i class="r"></i>High (≥0.65)</span><span><i class="a"></i>Med (0.40–0.65)</span><span><i class="g"></i>Low (&lt;0.40)</span></div>
   <div class="risk-board">
   {% for c in state.risk_cards %}
   <article class="risk-card {{ c.tier }} clickable" tabindex="0" role="button"
