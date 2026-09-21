@@ -54,8 +54,9 @@ Brain remains `tabpfn_hack_core` / MCP. This desk is presentation + ingest only.
 
 ## Coda packs
 
-Desk home includes a **pack selector** (spine demurrage + equipment-size + inland-mode + air-freight).
+Desk home includes a **pack selector** (spine demurrage + equipment-size + inland-mode + air-freight + stow-fit).
 Coda packs are fixtures only; blank-sailing second head and what-if stay demurrage-spine features.
+Stow-fit is a tabular equip/mode suggestion head — not a 3D bin packer.
 
 CLI:
 
@@ -63,6 +64,7 @@ CLI:
 tabpfn-hack demo --domain domains/equipment-size/domain.yaml
 tabpfn-hack demo --domain domains/inland-mode/domain.yaml
 tabpfn-hack demo --domain domains/air-freight/domain.yaml --mode mock
+tabpfn-hack demo --domain domains/stow-fit/domain.yaml --mode mock
 ```
 
 ## Robot / TMS consumer API
