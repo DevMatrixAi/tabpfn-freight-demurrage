@@ -15,12 +15,13 @@
   <div class="links">
     <a href="/">Desks</a>
     <a class="active" href="/desk">Ops board</a>
-    <a href="/eval">Eval</a>
-    <a href="/docs" target="_blank" rel="noopener">API</a>
+    <a href="/eval" id="eval-link" data-coach="compare-eval">Eval</a>
+    <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn" data-judge-path="1" title="Mock triage then open /eval (empty-token safe)">Judge path (mock)</button></form>
+    <a href="/docs" data-coach="robot-api" target="_blank" rel="noopener">API</a>
   </div>
   <div class="spacer"></div>
   <span class="chip">{{ state.client_label or "All clients" }}</span>
-  <form method="post" action="/select-client" style="display:flex;gap:.4rem;align-items:center;margin:0">
+  <form method="post" action="/select-client" data-coach="client-switcher" style="display:flex;gap:.4rem;align-items:center;margin:0">
     <select name="client_id" onchange="this.form.submit()" style="background:#0b1220;color:#e8eef7;border:1px solid #243044;border-radius:6px;padding:.25rem .4rem">
       {% for c in clients|default([]) %}
       <option value="{{ c.id }}" {% if c.id == state.client_id %}selected{% endif %}>{{ c.label }}</option>
@@ -30,7 +31,9 @@
   <form method="post" action="/logout" style="margin:0"><button class="ghost" type="submit">Sign out</button></form>
 </nav>
 
-<header>
+{% set coach_active_beat = state.coach_active_beat or ("drawer" if state.risk_cards else "triage") %}
+{% include "partials_coach_strip.html" %}
+<header data-coach="money-at-risk">
 <div class="top">
 <div>
 <h1>Freight Ops Board</h1>
@@ -39,7 +42,7 @@
 <span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% else %}no TABPFN_TOKEN → mock fallback{% endif %}</span></p>
 </div>
 </div>
-<div class="ticker" role="status" aria-live="polite">
+<div class="ticker" id="money-ticker" data-coach="money-at-risk" role="status" aria-live="polite">
 <div>
 <div class="lbl">{{ state.money_label or ('Money at risk' if is_spine else 'Pack exposure') }}</div>
 <div class="dollars" id="ticker-dollars">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
@@ -54,6 +57,7 @@
 </div>
 </header>
 <!-- deep-showcase markers (kept for ensure_deep_templates): thinking_effort judge-strip mode-thinking -->
+<!-- plain crib via partials_desk_main → partials_plain_english.html -->
 {% include "partials_desk_main.html" %}
 
 <footer>{{ disclaimer }}</footer>
