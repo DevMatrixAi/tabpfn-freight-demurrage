@@ -138,6 +138,12 @@ def apply_triage(
     state["chart_stats"] = chart_stats(
         state["risk_cards"], float(state.get("demurrage_total") or 0.0)
     )
+
+    try:
+        from apps.desk.triage_digest_hook import after_triage
+    except ImportError:
+        from triage_digest_hook import after_triage  # type: ignore
+    after_triage(state)
     df = sess.tables[tid]
     preview = df.head(24).fillna("").to_dict(orient="records")
     state["preview_rows"] = df.head(8).fillna("").to_dict(orient="records")
