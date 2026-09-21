@@ -51,6 +51,7 @@ function openActionDrawer(el) {
   if (!drawer) return;
   drawer.classList.add('open');
   drawer.setAttribute('aria-hidden', 'false');
+  if (backdrop) { backdrop.hidden = false; }
   if (focus && el) {
     focus.hidden = false;
     focus.removeAttribute('data-empty-focus');
