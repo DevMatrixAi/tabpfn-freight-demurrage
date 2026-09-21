@@ -30,9 +30,9 @@ Labeled **mock UI frames** for the 3-minute path (not live browser captures). Da
 
 | Screen | Image |
 | --- | --- |
-| Login | ![Login](images/judge/login.png) |
-| Home desks | ![Home](images/judge/home.png) |
-| Ops board | ![Desk](images/judge/desk.png) |
-| /eval pre-run | ![Eval](images/judge/eval.png) |
+| Login | ![Login](images/judge/login.svg) |
+| Home desks | ![Home](images/judge/home.svg) |
+| Ops board | ![Desk](images/judge/desk.svg) |
+| /eval pre-run | ![Eval](images/judge/eval.svg) |
 
 Also: Settings at `/settings` (demo prefs · mode badge · judge crib).

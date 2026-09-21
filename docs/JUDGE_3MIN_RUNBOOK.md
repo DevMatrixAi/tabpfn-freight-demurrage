@@ -24,9 +24,9 @@ Long form: `docs/DEMO_90S_AND_FORM_v2.md`.
 
 | Beat | Frame |
 | --- | --- |
-| Login | ![login](images/judge/login.png) |
-| Home desks | ![home](images/judge/home.png) |
-| Ops board | ![desk](images/judge/desk.png) |
-| /eval | ![eval](images/judge/eval.png) |
+| Login | ![login](images/judge/login.svg) |
+| Home desks | ![home](images/judge/home.svg) |
+| Ops board | ![desk](images/judge/desk.svg) |
+| /eval | ![eval](images/judge/eval.svg) |
 
 Frames are synthetic dark-theme panels committed for README / JUDGE_3MIN — label: mock UI frames.
