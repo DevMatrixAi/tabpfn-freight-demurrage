@@ -6,7 +6,7 @@ Public HTTPS preview of the freight demurrage ops desk for hackathon judges.
 
 | Field | Value |
 | --- | --- |
-| URL | _see status below_ |
+| URL | [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) |
 | Username | `demo` |
 | Password | `demurrage` |
 
@@ -20,8 +20,17 @@ Robot/TMS JSON API (`/api/v1/*`) and OpenAPI (`/docs`) stay open without login.
 | --- | --- |
 | GitHub repo | private `DevMatrixAi/tabpfn-freight-demurrage` (stays private) |
 | Vercel project | `tabpfn-freight-demurrage` (`prj_zdy4NLl4FHlAkqDQaZsFA2mnnyf0`) |
-| Preview URL | _pending first successful deployment_ |
+| Preview URL | **[https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app)** (stub, mock-first) |
 | Mode | mock-first (no `TABPFN_TOKEN` required) |
+
+
+## What judges get on the live URL
+
+Live Vercel production is a **lightweight preview stub** (`preview_stub.py`):
+
+- Login `demo` / `demurrage` → ops board ticker + sample risk cards
+- Open `/api/v1/health` without login
+- Full TabPFN desk (Jinja ops board, `/eval`, robot API triage) is **not** on this serverless URL — run locally or deploy `Dockerfile` / Fly / Railway (see below). Stub exists so judges have a public HTTPS link while the private repo stays private and Hobby Vercel cannot pull the private GitHub source.
 
 ## One-command local
 
@@ -39,45 +48,27 @@ tabpfn-hack desk --host 0.0.0.0 --port 8765
 | `app.py` + `vercel.json` + `requirements.txt` | Vercel (FastAPI) |
 | `Dockerfile` + `fly.toml` | Fly.io |
 | `Dockerfile` + `railway.toml` | Railway |
+| `preview_stub.py` | Live judge URL (lightweight serverless) |
 
 Do **not** commit `.env` or `TABPFN_TOKEN`. Set Plus/Thinking later via host env if desired.
 
-## Human steps (if agent deploy is blocked)
+## Human steps (full desk on Vercel / Fly)
 
-### Vercel (preferred — MCP already auth’d as `devmatrixai`)
+1. Link GitHub repo **without making it public**: Vercel Project Settings → Git → connect `DevMatrixAi/tabpfn-freight-demurrage` (needs GitHub App access to the private org repo).
+2. Or: `fly auth login && fly deploy` / `railway up` using in-repo `Dockerfile`.
+3. Keep Deployment Protection / Vercel Authentication **off** for judges.
 
-1. If team scope `christopher-perciballis-projects` needs re-auth: open [Vercel dashboard](https://vercel.com/dashboard) → re-authorize the Cursor/MCP integration for that team.
-2. Link GitHub repo **without making it public**: Project Settings → Git → connect `DevMatrixAi/tabpfn-freight-demurrage`.
-3. Ensure Deployment Protection / Vercel Authentication is **off** for Production (judges must open the URL anonymously). This project was created with `ssoProtection` disabled.
-4. Deploy production from `main`, then paste the `*.vercel.app` URL into this file and the README face block.
-
-CLI alternative (after `vercel login`):
+CLI:
 
 ```bash
 vercel link --project tabpfn-freight-demurrage
 vercel --prod
 ```
 
-### Fly.io
+## Smoke checks
 
 ```bash
-fly auth login
-fly apps create tabpfn-freight-desk   # if name taken, change fly.toml app=
-fly deploy
-```
-
-### Railway
-
-```bash
-railway login
-railway init
-railway up
-```
-
-## Smoke checks after URL is live
-
-```bash
+URL=https://tabpfn-freight-demurrage.vercel.app
 curl -sS "$URL/api/v1/health"
-# expect JSON with ok/token/packs
-# Browser: open $URL → login demo/demurrage → ops board /eval
+# Browser: open $URL → login demo/demurrage → board
 ```
