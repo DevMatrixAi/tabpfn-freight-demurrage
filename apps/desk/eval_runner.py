@@ -56,8 +56,13 @@ def run_multi_mode_eval(
     """
     slice_fn = metric_slice or _slice
     full_n = len(sess.tables[table_id])
-    # Cap rows for interactive dashboard latency (full pack still available on desk)
-    max_rows = 200
+    # Cap rows for interactive dashboard latency / live TabPFN budget
+    try:
+        from apps.desk.dev_sample import resolve_sample_n
+    except ImportError:
+        from dev_sample import resolve_sample_n  # type: ignore
+    _dev = resolve_sample_n(None)
+    max_rows = int(_dev) if _dev else 200
     if full_n > max_rows:
         # stratified-ish: shuffle with fixed seed then head
         sess.tables[table_id] = (
@@ -205,8 +210,15 @@ def run_multi_mode_eval(
             "live": think_row.get("live"),
         }
 
+    try:
+        from apps.desk.eval_lc import maybe_learning_curve
+    except ImportError:
+        from eval_lc import maybe_learning_curve  # type: ignore
+    learning_curve = maybe_learning_curve(sess, table_id, warnings)
+
     return {
         "rows": rows,
+        "learning_curve": learning_curve,
         "hist_gbm": hist_row,
         "display_rows": rows + [hist_row],
         "baseline_metrics": baseline_metrics or {},
@@ -224,3 +236,5 @@ def run_multi_mode_eval(
         "judge_card": judge_card,
         "thinking_showcase": thinking_showcase,
     }
+
+

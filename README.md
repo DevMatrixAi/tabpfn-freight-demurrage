@@ -34,6 +34,8 @@ One-pager: [`docs/JUDGE_3MIN.md`](docs/JUDGE_3MIN.md) · MCP smoke: [`docs/MCP_S
 | 2:30 | Optional: `TABPFN_TOKEN= python scripts/mcp_cookbook_demo.py` (7 MCP tools) · `TABPFN_TOKEN= pytest -q` · `tabpfn-hack demo --mode mock` |
 
 
+**Live budget:** desk `sample_n` 40–80 (or `TABPFN_DEV_N=60`) for Plus/Thinking after API reset; full-table mock anytime.
+
 **Deterministic mock path:** keep the inline `TABPFN_TOKEN=` on the local desk command.
 The app loads a repo `.env` for convenience; an explicitly empty variable prevents an
 unintended live request/rate limit and keeps the 3-minute walkthrough offline. Never

@@ -40,6 +40,7 @@ def register_triage_routes(
         mode: str = Form("mock"),
         fast_ab: str | None = Form(None),
         thinking_effort: str | None = Form(None),
+        sample_n: str | None = Form(None),
     ) -> RedirectResponse:
         """Run triage with judge-priority modes; always attach HistGBM baseline delta."""
         apply_triage(
@@ -48,6 +49,7 @@ def register_triage_routes(
             mode=mode,
             fast_ab=fast_ab,
             thinking_effort=thinking_effort,
+            sample_n=sample_n,
             pack_meta=pack_meta,
             resolve_mode=resolve_mode,
             metric_slice=metric_slice,

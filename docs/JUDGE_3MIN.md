@@ -16,3 +16,8 @@ Credentials: `demo` / `demurrage`. Never commit `.env`. Keep `TABPFN_TOKEN=` emp
 **Stress missingness (optional):** load `fixtures/stress/missing_wide_demurrage.csv` (or unpack via `fixtures/stress/_unpack_missing_wide.py`) — desk shows a missingness panel when NaNs are present.
 
 More depth: [`DEEP_SHOWCASE_v0.md`](DEEP_SHOWCASE_v0.md) · preview honesty: [`PREVIEW.md`](PREVIEW.md).
+
+## Live budget (after API reset)
+
+Prefer **small-n live** Thinking/Plus: desk `sample_n` 40–80, or env `TABPFN_DEV_N=60`.
+Full-table mock anytime (`TABPFN_TOKEN=`). One full live Thinking pass near shoot/submit only.
