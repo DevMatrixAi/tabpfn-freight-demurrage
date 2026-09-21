@@ -84,7 +84,7 @@ def _reset_triage_state() -> None:
         "metrics", "baseline_metrics", "delta", "baseline_narrative", "actions",
         "action_counts", "backend", "mode", "requested_mode", "warning", "fast_ab",
         "elapsed_s", "blank_metrics", "blank_backend", "blank_warning", "what_if",
-        "chart_stats",
+        "chart_stats", "explain",
     ):
         _STATE[k] = None
     _STATE["risk_cards"] = []
