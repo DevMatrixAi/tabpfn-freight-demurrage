@@ -49,9 +49,16 @@
   </div>
   </section>
   {% else %}
-  <section class="card full" id="risk-board">
+  <section class="card full" id="risk-board" data-empty="1">
   <h2>Risk board</h2>
-  <p class="muted">No risk cards yet — run triage or stream an event.</p>
+  <div class="empty-board">
+    <p class="muted" style="margin:0 0 .5rem">No risk cards yet — run triage (Mock works offline) or stream an event.</p>
+    <div class="empty-panels" aria-hidden="true">
+      <div class="empty-panel"><h3>High</h3><div class="ph" style="width:55%"></div><div class="ph" style="width:35%"></div></div>
+      <div class="empty-panel"><h3>Med</h3><div class="ph" style="width:45%"></div><div class="ph" style="width:60%"></div></div>
+      <div class="empty-panel"><h3>Low</h3><div class="ph" style="width:40%"></div><div class="ph" style="width:50%"></div></div>
+    </div>
+  </div>
   </section>
   {% endif %}
 </div>
