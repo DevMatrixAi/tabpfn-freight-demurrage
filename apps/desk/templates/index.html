@@ -41,7 +41,7 @@
 </select>
 <button type="submit">Switch pack</button>
 </form>
-<p class="muted" style="margin:.5rem 0 0">Demurrage is the spine desk. Equipment-size, inland-mode, and air-freight are fixture coda packs (CLI also works).</p>
+<p class="muted" style="margin:.5rem 0 0">Demurrage is the spine desk. Equipment-size, inland-mode, air-freight, and stow-fit are fixture coda packs (CLI also works). Stow-fit = suggest head, not a 3D packer.</p>
 </section>
 
 <section class="card">
@@ -267,16 +267,27 @@ Fast A/B stub (optional)
 </tr>
 {% endfor %}
 </tbody>
+{% elif state.pack == 'stow-fit' %}
+<thead><tr><th>shipment</th><th>lane</th><th>requested</th><th>suggested</th><th>value $</th><th>fit risk</th></tr></thead>
+<tbody>
+{% for r in state.preview_rows %}
+<tr>
+<td>{{ r.shipment_id }}</td><td>{{ r.lane_id }}</td>
+<td>{{ r.requested_mode }}</td><td>{{ r.suggested_mode }}</td><td>{{ r.cargo_value_usd }}</td>
+<td>{% if r.fit_risk == 1 or r.fit_risk == "1" %}<span class="badge risk">high</span>{% else %}<span class="badge ok">low</span>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
 {% else %}
 <thead><tr><th>id</th><th>col2</th><th>col3</th><th>note</th><th>label</th></tr></thead>
 <tbody>
 {% for r in state.preview_rows %}
 <tr>
-<td>{{ r.booking_id or r.move_id or r.container_id or "—" }}</td>
+<td>{{ r.booking_id or r.move_id or r.shipment_id or r.container_id or "—" }}</td>
 <td>{{ r.trade_lane or r.lane_id or r.vessel_id or "—" }}</td>
 <td>{{ r.current_equip or r.terminal or r.pod or "—" }}</td>
 <td style="max-width:18rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.booking_note or r.shipper_note or r.terminal_note or "" }}</td>
-<td>{% set lab = r.special_equip_fit if r.special_equip_fit is defined else r.prefer_rail %}{% if lab == 1 or lab == "1" %}<span class="badge risk">1</span>{% else %}<span class="badge ok">0</span>{% endif %}</td>
+<td>{% set lab = r.special_equip_fit if r.special_equip_fit is defined else (r.prefer_rail if r.prefer_rail is defined else r.fit_risk) %}{% if lab == 1 or lab == "1" %}<span class="badge risk">1</span>{% else %}<span class="badge ok">0</span>{% endif %}</td>
 </tr>
 {% endfor %}
 </tbody>
