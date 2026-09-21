@@ -27,7 +27,7 @@
   <h2>{% if is_spine %}Late fee risk board{% else %}Shipment risk board{% endif %} <span class="badge">click card → moves</span>
   {% if state.stream_cursor %}<span class="badge">stream #{{ state.stream_cursor }}</span>{% endif %}
   </h2>
-  <div class="legend"><span><i class="r"></i>High (≥0.65)</span><span><i class="a"></i>Med (0.40–0.65)</span><span><i class="g"></i>Low (&lt;0.40)</span></div>
+  <div class="legend"><span><i class="r"></i>High (≥0.65)</span><span><i class="a"></i>Med (0.40–0.65)</span><span><i class="g"></i>Low (<0.40)</span></div>
   <div class="risk-board">
   {% for c in state.risk_cards %}
   <article class="risk-card {{ c.tier }} clickable" tabindex="0" role="button"
@@ -38,6 +38,8 @@
     data-proba="{{ c.proba }}"
     data-tier="{{ c.risk_label or c.tier }}"
     data-money="{% if c.money is not none %}{{ c.money }}{% endif %}"
+    data-expected="{% if c.expected_usd is not none %}{{ c.expected_usd }}{% endif %}"
+    data-p90="{% if c.p90_usd is not none %}{{ c.p90_usd }}{% endif %}"
     data-subtitle="{{ c.subtitle or '' }}"
     title="Open suggested move — Late fee risk: {{ c.risk_label or c.tier }}"
     onclick="openActionDrawer(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openActionDrawer(this)}">
@@ -45,6 +47,13 @@
   <div class="sub">{{ c.subtitle or '—' }}</div>
   <div class="money">{% if c.money is not none %}${{ "{:,.0f}".format(c.money|float) }}{% else %}—{% endif %}</div>
   <div class="money-caption">{% if is_spine %}Money at risk{% else %}Exposure{% endif %}</div>
+  {% if c.expected_usd is not none or c.p90_usd is not none %}
+  <div class="fee-band" title="Mock expected $ vs p90 upper-tail fee">
+    <span class="fee-expected">Expected ${{ "{:,.0f}".format((c.expected_usd or 0)|float) }}</span>
+    <span class="fee-sep">·</span>
+    <span class="fee-p90">p90 ${{ "{:,.0f}".format((c.p90_usd or 0)|float) }}</span>
+  </div>
+  {% endif %}
   <div class="foot">
   <span class="tier-pill" title="Late fee risk">{{ c.risk_label or c.tier }}</span>
   <span class="badge">Late fee risk {{ "%.0f"|format((c.proba|float)*100) }}%</span>
