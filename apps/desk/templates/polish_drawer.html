@@ -1,4 +1,4 @@
-<!-- Action drawer: suggested moves -->
+<!-- Action drawer: suggested moves + Why this move (mock explain) -->
 <div id="drawer-backdrop" class="drawer-backdrop" hidden onclick="closeActionDrawer()"></div>
 <aside id="action-drawer" class="action-drawer" aria-hidden="true" aria-label="Suggested moves">
   <div class="drawer-head">
@@ -15,6 +15,30 @@
     <p>Click a late-fee risk card on the board to focus one container — money at risk, late fee risk %, and suggested move land here.</p>
   </div>
   <p class="muted drawer-hint">Plain English: <strong>late fee risk</strong> · <strong>money at risk</strong> · <strong>suggested move</strong>.</p>
+
+  {% if state.explain and state.explain.bars %}
+  <section class="drawer-explain" id="drawer-explain" aria-label="Why this move" data-top-labels="{% if state.explain.top_labels %}{{ state.explain.top_labels|join('|') }}{% endif %}">
+    <p class="item-kicker">Why this move</p>
+    <p class="explain-why" id="explain-why">{{ state.explain.why }}</p>
+    <p class="muted explain-method">Mock drivers · {{ state.explain.method }} · text / high-card / missing-derived</p>
+    <div class="explain-bars" id="explain-bars" role="img" aria-label="Top feature importances">
+      {% set vmax = namespace(v=0) %}
+      {% for b in state.explain.bars %}
+      <div class="explain-bar-row" data-kind="{{ b.kind }}">
+        <span class="explain-bar-label" title="{{ b.feature }}">{{ b.label }}</span>
+        <span class="explain-bar-track"><span class="explain-bar-fill kind-{{ b.kind }}" style="width:{{ b.pct }}%"></span></span>
+        <span class="explain-bar-kind">{{ b.kind_label }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% elif state.actions %}
+  <section class="drawer-explain" id="drawer-explain" aria-label="Why this move">
+    <p class="item-kicker">Why this move</p>
+    <p class="explain-why">Playbook reason on each card — run triage again if explain bars are empty.</p>
+  </section>
+  {% endif %}
+
   <div class="drawer-list" id="drawer-list">
   {% if state.actions %}
     {% for a in state.actions %}
@@ -57,17 +81,35 @@ function openActionDrawer(el) {
     focus.removeAttribute('data-empty-focus');
     if (noselect) noselect.hidden = true;
     var money = el.getAttribute('data-money');
+    var expected = el.getAttribute('data-expected');
+    var p90 = el.getAttribute('data-p90');
     var moneyHtml = money ? (' · $' + Number(money).toLocaleString() + ' money at risk') : '';
+    var bandHtml = '';
+    if (expected || p90) {
+      bandHtml = '<div class="focus-fee-band">' +
+        (expected ? ('<span class="badge">Expected $' + Number(expected).toLocaleString() + '</span> ') : '') +
+        (p90 ? ('<span class="badge">p90 $' + Number(p90).toLocaleString() + '</span>') : '') +
+        '</div>';
+    }
     focus.innerHTML =
       '<div class="focus-kicker">Focused container</div>' +
       '<div class="focus-id">' + (el.getAttribute('data-row-id') || '') + '</div>' +
       '<div class="focus-sub">' + (el.getAttribute('data-subtitle') || '') + moneyHtml + '</div>' +
+      bandHtml +
       '<div class="focus-kicker">Suggested move</div>' +
       '<div class="focus-action">' + (el.getAttribute('data-action-label') || '') + '</div>' +
       '<div class="focus-meta"><span class="badge">' + (el.getAttribute('data-tier') || '') +
       '</span> <span class="badge">Late fee risk ' +
       Math.round(100 * Number(el.getAttribute('data-proba') || 0)) + '%</span></div>' +
       '<p class="muted">' + (el.getAttribute('data-reason') || '') + '</p>';
+    var why = document.getElementById('explain-why');
+    var expl = document.getElementById('drawer-explain');
+    if (why && el.getAttribute('data-reason')) {
+      var topsAttr = expl ? (expl.getAttribute('data-top-labels') || '') : '';
+      var tops = topsAttr ? topsAttr.split('|').filter(Boolean) : [];
+      var tip = tops.length ? (' Top drivers: ' + tops.slice(0,3).join(', ') + '.') : '';
+      why.textContent = (el.getAttribute('data-reason') || '').replace(/\.$/, '') + '.' + tip;
+    }
     var rid = el.getAttribute('data-row-id');
     document.querySelectorAll('.drawer-item').forEach(function(n) {
       n.classList.toggle('active', n.getAttribute('data-row-id') === rid);
