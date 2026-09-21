@@ -1,0 +1,11 @@
+/* --- streaming re-score --- */
+.stream-panel{margin-top:.75rem;padding:.75rem .85rem;border-radius:10px;border:1px solid rgba(61,156,240,.35);background:#121a28}
+.stream-controls{display:flex;flex-wrap:wrap;gap:.5rem .75rem;align-items:center}
+.stream-btn{background:linear-gradient(135deg,#2a6fd6,#3d9cf0);color:#041018;font-weight:700;border:none;border-radius:8px;padding:.5rem .9rem;cursor:pointer}
+.stream-btn:disabled{opacity:.55;cursor:wait}
+.stream-auto-label{display:flex;align-items:center;gap:.35rem;font-size:.8rem}
+.stream-hint{margin:.45rem 0 0;font-size:.78rem}
+.stream-status{display:flex;flex-wrap:wrap;gap:.45rem .65rem;align-items:center;margin:0 0 .75rem;padding:.55rem .7rem;border-radius:8px;background:#0e1622;border:1px dashed #2a3548;font-size:.8rem}
+.stream-badge{background:#1a3358;color:#9ec5ff}
+.stream-evt{max-width:28rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#live-board{scroll-margin-top:1rem}
