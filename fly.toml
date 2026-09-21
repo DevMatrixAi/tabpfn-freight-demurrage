@@ -1,0 +1,23 @@
+# Best-effort Fly.io config for the FastAPI desk preview.
+# Human: fly auth login && fly apps create tabpfn-freight-desk && fly deploy
+app = "tabpfn-freight-desk"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  DESK_DEMO_USER = "demo"
+  DESK_DEMO_PASSWORD = "demurrage"
+
+[http_service]
+  internal_port = 8765
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
