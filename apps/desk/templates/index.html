@@ -6,11 +6,19 @@
 <title>Freight Ops Board</title>
 <link rel="stylesheet" href="/static/ops_board.css" />
 <link rel="stylesheet" href="/static/stream_board.css" />
+<link rel="stylesheet" href="/static/saas_shell.css" />
 </head>
-<body>
-<header class="saas-crumb" style="padding:.5rem 1rem;border-bottom:1px solid #243044;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
-  <a href="/" style="color:#93c5fd;text-decoration:none">← Desks</a>
-  <span class="muted" style="font-size:.85rem">Client: <strong>{{ state.client_label or "All clients" }}</strong></span>
+<body class="app-shell">
+<nav class="app-nav saas-crumb" aria-label="Primary">
+  <a class="mark" href="/"><div class="mark-orb"></div><span>Freight Money Desk</span></a>
+  <div class="links">
+    <a href="/">Desks</a>
+    <a class="active" href="/desk">Ops board</a>
+    <a href="/eval">Eval</a>
+    <a href="/docs" target="_blank" rel="noopener">API</a>
+  </div>
+  <div class="spacer"></div>
+  <span class="chip">{{ state.client_label or "All clients" }}</span>
   <form method="post" action="/select-client" style="display:flex;gap:.4rem;align-items:center;margin:0">
     <select name="client_id" onchange="this.form.submit()" style="background:#0b1220;color:#e8eef7;border:1px solid #243044;border-radius:6px;padding:.25rem .4rem">
       {% for c in clients|default([]) %}
@@ -18,8 +26,8 @@
       {% endfor %}
     </select>
   </form>
-  <form method="post" action="/logout" style="margin-left:auto"><button type="submit" style="background:transparent;border:1px solid #243044;color:#9aa8bc;border-radius:6px;padding:.3rem .6rem;cursor:pointer">Sign out</button></form>
-</header>
+  <form method="post" action="/logout" style="margin:0"><button class="ghost" type="submit">Sign out</button></form>
+</nav>
 
 <header>
 <div class="top">

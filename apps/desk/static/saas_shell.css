@@ -1,0 +1,61 @@
+/* Shared SaaS shell — login / home / desk chrome */
+:root{
+  --saas-bg:#070b12;
+  --saas-panel:#0f1623;
+  --saas-elev:#141d2c;
+  --saas-border:#243044;
+  --saas-text:#e8eef7;
+  --saas-muted:#8b9bb4;
+  --saas-accent:#3b82f6;
+  --saas-accent-2:#22d3ee;
+  --saas-radius:14px;
+}
+.app-shell{min-height:100vh;background:
+  radial-gradient(1200px 600px at 10% -10%,rgba(59,130,246,.18),transparent 55%),
+  radial-gradient(900px 500px at 90% 0%,rgba(34,211,238,.08),transparent 50%),
+  var(--saas-bg);color:var(--saas-text);font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+.app-nav{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1rem;padding:.7rem 1.25rem;border-bottom:1px solid var(--saas-border);background:rgba(15,22,35,.85);backdrop-filter:blur(10px);position:sticky;top:0;z-index:30}
+.app-nav .mark{display:flex;align-items:center;gap:.55rem;text-decoration:none;color:inherit;font-weight:700;letter-spacing:-.01em}
+.app-nav .mark-orb{width:1.55rem;height:1.55rem;border-radius:8px;background:linear-gradient(135deg,var(--saas-accent),var(--saas-accent-2));box-shadow:0 0 18px rgba(59,130,246,.45)}
+.app-nav .mark span{font-size:.95rem}
+.app-nav .links{display:flex;flex-wrap:wrap;gap:.35rem;margin-left:.25rem}
+.app-nav .links a{color:var(--saas-muted);text-decoration:none;font-size:.82rem;padding:.35rem .6rem;border-radius:8px}
+.app-nav .links a:hover,.app-nav .links a.active{color:var(--saas-text);background:rgba(59,130,246,.12)}
+.app-nav .spacer{flex:1}
+.app-nav .chip{font-size:.7rem;padding:.2rem .5rem;border-radius:999px;border:1px solid var(--saas-border);color:var(--saas-muted);background:var(--saas-panel)}
+.app-nav .chip.live{border-color:rgba(34,211,238,.35);color:#a5f3fc}
+.app-nav button.ghost,.app-nav .ghost{background:transparent;border:1px solid var(--saas-border);color:var(--saas-muted);border-radius:8px;padding:.35rem .7rem;cursor:pointer;font-size:.8rem}
+.app-nav button.ghost:hover{color:var(--saas-text);border-color:#3b4f6a}
+
+/* Login */
+.login-stage{min-height:100vh;display:grid;place-items:center;padding:1.5rem}
+.login-card{width:min(420px,94vw);background:linear-gradient(180deg,var(--saas-elev),var(--saas-panel));border:1px solid var(--saas-border);border-radius:var(--saas-radius);padding:1.6rem 1.5rem 1.4rem;box-shadow:0 24px 80px rgba(0,0,0,.45)}
+.login-card .eyebrow{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--saas-accent-2);margin:0 0 .45rem;font-weight:650}
+.login-card h1{margin:0;font-size:1.45rem;letter-spacing:-.02em}
+.login-card .lede{color:var(--saas-muted);font-size:.9rem;margin:.4rem 0 1.1rem;line-height:1.4}
+.login-card label{display:block;margin:.55rem 0 .25rem;font-size:.8rem;color:var(--saas-muted)}
+.login-card input{width:100%;box-sizing:border-box;padding:.6rem .7rem;border-radius:10px;border:1px solid var(--saas-border);background:#0b1220;color:var(--saas-text)}
+.login-card input:focus{outline:none;border-color:var(--saas-accent);box-shadow:0 0 0 3px rgba(59,130,246,.2)}
+.login-card button{margin-top:1.05rem;width:100%;padding:.7rem;border:0;border-radius:10px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;font-weight:700;cursor:pointer}
+.login-card .hint{margin-top:1rem;padding:.65rem .75rem;border-radius:10px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.28);color:#fde68a;font-size:.8rem}
+.login-card .err{color:#fca5a5;font-size:.88rem;margin:.5rem 0 0}
+
+/* Home desks */
+.saas-wrap{max-width:1120px;margin:0 auto;padding:1.25rem 1.15rem 2.75rem}
+.hero-row{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;justify-content:space-between;margin:1rem 0 1.25rem}
+.hero-row h1{margin:0;font-size:1.55rem;letter-spacing:-.03em}
+.hero-row .sub{margin:.35rem 0 0;color:var(--saas-muted);font-size:.9rem;max-width:36rem}
+.client-bar{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;background:var(--saas-panel);border:1px solid var(--saas-border);border-radius:12px;padding:.8rem 1rem;margin-bottom:1.35rem}
+.client-bar select{background:#0b1220;color:var(--saas-text);border:1px solid var(--saas-border);border-radius:8px;padding:.4rem .55rem}
+.section-label{margin:0 0 .65rem;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--saas-muted);font-weight:650}
+.desk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.desk-card{display:block;text-decoration:none;color:inherit;background:linear-gradient(165deg,var(--saas-elev),var(--saas-panel));border:1px solid var(--saas-border);border-radius:var(--saas-radius);padding:1.05rem 1.15rem;transition:border-color .15s,transform .15s,box-shadow .15s}
+.desk-card:hover{border-color:rgba(59,130,246,.65);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.desk-card.spine{border-color:rgba(59,130,246,.45)}
+.desk-card h2{margin:0 0 .4rem;font-size:1.05rem;letter-spacing:-.01em}
+.pill{display:inline-block;font-size:.68rem;padding:.18rem .5rem;border-radius:999px;background:rgba(59,130,246,.15);color:#bfdbfe;margin-bottom:.55rem;font-weight:650}
+.pill.coda{background:rgba(148,163,184,.12);color:#cbd5e1}
+.foot-note{margin-top:1.75rem;color:var(--saas-muted);font-size:.8rem}
+
+/* Desk crumb upgrade */
+.saas-crumb{padding:.55rem 1.25rem!important;border-bottom:1px solid var(--saas-border)!important;background:rgba(15,22,35,.9)!important;backdrop-filter:blur(8px)}

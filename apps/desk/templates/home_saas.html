@@ -5,63 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Desks · Freight Money Desk</title>
 <link rel="stylesheet" href="/static/ops_board.css"/>
-<style>
-.saas-wrap{max-width:1100px;margin:0 auto;padding:1.25rem 1rem 2.5rem}
-.topbar{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
-.brand h1{margin:0;font-size:1.35rem}
-.brand .muted{margin:.2rem 0 0}
-.client-bar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;background:#121a26;border:1px solid #243044;border-radius:10px;padding:.75rem 1rem;margin-bottom:1.25rem}
-.client-bar select{background:#0b1220;color:#e8eef7;border:1px solid #243044;border-radius:8px;padding:.4rem .55rem}
-.desk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
-.desk-card{display:block;text-decoration:none;color:inherit;background:#121a26;border:1px solid #243044;border-radius:12px;padding:1rem 1.1rem;transition:border-color .15s,box-shadow .15s}
-.desk-card:hover{border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,.25)}
-.desk-card.spine{border-color:#5b8def}
-.desk-card h2{margin:0 0 .35rem;font-size:1.05rem}
-.pill{display:inline-block;font-size:.7rem;padding:.15rem .45rem;border-radius:999px;background:#1a3358;color:#cfe0ff;margin-bottom:.5rem}
-.signout{background:transparent;border:1px solid #243044;color:#9aa8bc;border-radius:8px;padding:.4rem .7rem;cursor:pointer}
-</style>
+<link rel="stylesheet" href="/static/saas_shell.css"/>
 </head>
-<body>
+<body class="app-shell">
+<nav class="app-nav" aria-label="Primary">
+  <a class="mark" href="/"><div class="mark-orb"></div><span>Freight Money Desk</span></a>
+  <div class="links">
+    <a class="active" href="/">Desks</a>
+    <a href="/eval">Eval</a>
+    <a href="/docs" target="_blank" rel="noopener">Robot API</a>
+  </div>
+  <div class="spacer"></div>
+  <span class="chip live">Demo · mock-ready</span>
+  <form method="post" action="/logout" style="margin:0"><button class="ghost" type="submit">Sign out</button></form>
+</nav>
+
 <div class="saas-wrap">
-  <div class="topbar">
-    <div class="brand">
-      <h1>Freight Money Desk</h1>
-      <p class="muted">Shipper late-fee + coda desks · same TabPFN engine · demo SaaS shell</p>
+  <div class="hero-row">
+    <div>
+      <h1>Your desks</h1>
+      <p class="sub">Pick a domain pack. Spine is the judge story (late-container fees). Coda packs reuse the same TabPFN engine on fixtures only.</p>
     </div>
-    <form method="post" action="/logout"><button class="signout" type="submit">Sign out</button></form>
   </div>
 
   <form class="client-bar" method="post" action="/select-client">
-    <strong>Client</strong>
+    <strong style="font-size:.85rem">Client</strong>
     <select name="client_id" onchange="this.form.submit()">
       {% for c in clients %}
       <option value="{{ c.id }}" {% if c.id == active_client %}selected{% endif %}>{{ c.label }}</option>
       {% endfor %}
     </select>
-    <span class="muted">{{ active_client_gloss }}</span>
+    <span class="muted" style="font-size:.82rem">{{ active_client_gloss }}</span>
     <noscript><button type="submit">Switch</button></noscript>
   </form>
 
-  <h2 style="margin:0 0 .75rem;font-size:1.1rem">Desks</h2>
+  <p class="section-label">Ops desks</p>
   <div class="desk-grid">
     {% for d in desks %}
     <a class="desk-card {% if d.spine %}spine{% endif %}" href="/desk?pack={{ d.id }}">
-      {% if d.spine %}<span class="pill">Spine · judges</span>{% else %}<span class="pill">Coda</span>{% endif %}
+      {% if d.spine %}<span class="pill">Spine · judges</span>{% else %}<span class="pill coda">Coda</span>{% endif %}
       <h2>{{ d.label }}</h2>
-      <p class="muted" style="margin:0">{{ d.gloss }}</p>
+      <p class="muted" style="margin:0;font-size:.85rem">{{ d.gloss }}</p>
     </a>
     {% endfor %}
   </div>
 
-  <h2 style="margin:1.5rem 0 .75rem;font-size:1.1rem">Compare</h2>
+  <p class="section-label" style="margin-top:1.75rem">Compare</p>
   <div class="desk-grid">
     <a class="desk-card spine" href="/eval" id="eval-link">
       <span class="pill">Judge card</span>
       <h2>Eval · Plus / Thinking / Fast vs HistGBM</h2>
-      <p class="muted" style="margin:0">Accuracy / F1 / ROC-AUC / AP table + bars · Δ vs HistGBM · mock offline, live with TABPFN_TOKEN</p>
+      <p class="muted" style="margin:0;font-size:.85rem">Metrics + Δ + learning curve · mock offline · small-n live after API reset</p>
     </a>
   </div>
-  <p class="muted" style="margin-top:1.5rem">Demo auth stub · robot/TMS API still at <code>/api/v1</code> (no login). Not production IAM.</p>
+
+  <p class="foot-note">Demo auth stub · robot/TMS at <code>/api/v1</code> (no login) · not production IAM.</p>
 </div>
 </body>
 </html>
