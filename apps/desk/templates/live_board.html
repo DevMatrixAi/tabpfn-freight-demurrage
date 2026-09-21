@@ -58,9 +58,12 @@
   {% else %}
   <section class="card full" id="risk-board" data-empty="1">
   <h2>Risk board</h2>
-  <div class="empty-board">
-    <p class="muted" style="margin:0 0 .5rem">No risk cards yet — run triage (Mock works offline) or stream an event.</p>
-    <div class="empty-panels" aria-hidden="true">
+  <div class="empty-board saas-empty" data-empty="risk-board">
+    <p class="empty-kicker">Empty board</p>
+    <p class="empty-title">No late fee risk cards yet</p>
+    <p>Run triage (Mock works fully offline) to paint Low / Med / High cards with money at risk and a suggested move. Or stream a fixture event below.</p>
+    <a class="empty-cta" href="#triage-panel">Run triage</a>
+    <div class="empty-panels" aria-hidden="true" style="width:100%;margin-top:.5rem">
       <div class="empty-panel"><h3>High</h3><div class="ph" style="width:55%"></div><div class="ph" style="width:35%"></div></div>
       <div class="empty-panel"><h3>Med</h3><div class="ph" style="width:45%"></div><div class="ph" style="width:60%"></div></div>
       <div class="empty-panel"><h3>Low</h3><div class="ph" style="width:40%"></div><div class="ph" style="width:50%"></div></div>

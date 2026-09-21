@@ -2,26 +2,44 @@
 <div id="drawer-backdrop" class="drawer-backdrop" hidden onclick="closeActionDrawer()"></div>
 <aside id="action-drawer" class="action-drawer" aria-hidden="true" aria-label="Suggested moves">
   <div class="drawer-head">
-    <h2>Suggested moves</h2>
+    <div>
+      <p class="drawer-eyebrow">Ops action</p>
+      <h2>Suggested moves</h2>
+    </div>
     <button type="button" class="drawer-close" onclick="closeActionDrawer()" aria-label="Close">✕</button>
   </div>
-  <div id="drawer-focus" class="drawer-focus" hidden></div>
-  <p class="muted drawer-hint">Click a risk card to focus one move. Full list below.</p>
+  <div id="drawer-focus" class="drawer-focus no-selection" hidden data-empty-focus="1"></div>
+  <div id="drawer-noselect" class="saas-empty no-selection drawer-empty" data-empty="no-selection">
+    <p class="empty-kicker">No selection</p>
+    <p class="empty-title">Pick a risk card</p>
+    <p>Click a late-fee risk card on the board to focus one container — money at risk, late fee risk %, and suggested move land here.</p>
+  </div>
+  <p class="muted drawer-hint">Plain English: <strong>late fee risk</strong> · <strong>money at risk</strong> · <strong>suggested move</strong>.</p>
   <div class="drawer-list" id="drawer-list">
   {% if state.actions %}
     {% for a in state.actions %}
     <div class="drawer-item" data-row-id="{{ a.row_id }}" id="drawer-item-{{ a.row_id }}">
+      <p class="item-kicker">Container</p>
       <div class="drawer-item-top">
         <strong>{{ a.row_id }}</strong>
-        <span class="badge">{{ "%.0f"|format((a.proba|float)*100) }}%</span>
+        <span class="badge" title="Late fee risk">Late fee risk {{ "%.0f"|format((a.proba|float)*100) }}%</span>
       </div>
+      <p class="item-kicker">Suggested move</p>
       <div class="drawer-action">{{ a.action|human_action }}</div>
       <p class="muted drawer-reason">{{ a.reason }}</p>
     </div>
     {% endfor %}
   {% else %}
-    <p class="muted">Run triage to populate suggested moves.</p>
+    <div class="saas-empty" data-empty="drawer-actions" id="drawer-actions-empty">
+      <p class="empty-kicker">Empty queue</p>
+      <p class="empty-title">No suggested moves yet</p>
+      <p>Run triage (Mock works offline) to fill this drawer with playbook moves ranked by late fee risk.</p>
+    </div>
   {% endif %}
+  </div>
+  <div class="drawer-foot" id="drawer-foot">
+    <p class="foot-note">Shipper late-fee desk · fixtures only · not a live booking change.</p>
+    <button type="button" class="ghost" onclick="closeActionDrawer()">Close</button>
   </div>
 </aside>
 <script>
@@ -29,17 +47,21 @@ function openActionDrawer(el) {
   var drawer = document.getElementById('action-drawer');
   var backdrop = document.getElementById('drawer-backdrop');
   var focus = document.getElementById('drawer-focus');
+  var noselect = document.getElementById('drawer-noselect');
   if (!drawer) return;
   drawer.classList.add('open');
   drawer.setAttribute('aria-hidden', 'false');
-  if (backdrop) { backdrop.hidden = false; }
   if (focus && el) {
     focus.hidden = false;
+    focus.removeAttribute('data-empty-focus');
+    if (noselect) noselect.hidden = true;
     var money = el.getAttribute('data-money');
-    var moneyHtml = money ? (' · $' + Number(money).toLocaleString()) : '';
+    var moneyHtml = money ? (' · $' + Number(money).toLocaleString() + ' money at risk') : '';
     focus.innerHTML =
+      '<div class="focus-kicker">Focused container</div>' +
       '<div class="focus-id">' + (el.getAttribute('data-row-id') || '') + '</div>' +
       '<div class="focus-sub">' + (el.getAttribute('data-subtitle') || '') + moneyHtml + '</div>' +
+      '<div class="focus-kicker">Suggested move</div>' +
       '<div class="focus-action">' + (el.getAttribute('data-action-label') || '') + '</div>' +
       '<div class="focus-meta"><span class="badge">' + (el.getAttribute('data-tier') || '') +
       '</span> <span class="badge">Late fee risk ' +
@@ -51,6 +73,9 @@ function openActionDrawer(el) {
     });
     var hit = document.getElementById('drawer-item-' + rid);
     if (hit) hit.scrollIntoView({block: 'nearest'});
+  } else if (noselect) {
+    noselect.hidden = false;
+    if (focus) { focus.hidden = true; }
   }
 }
 function closeActionDrawer() {
