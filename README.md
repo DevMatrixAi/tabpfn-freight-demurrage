@@ -1,5 +1,5 @@
 <!-- TIP_SHA_PIN_START -->
-**Tip (main):** `fd11d19` · live-budget chip · judge-path mock receipt · JUDGE shots
+**Tip (main):** `53e7b7d` · live-budget chip · judge-path mock receipt · JUDGE shots
 
 **First-screen gallery (JUDGE_3MIN):**
 
