@@ -11,8 +11,10 @@ from tabpfn_hack_core.core.pipeline import PipelineSession
 
 try:
     from apps.desk.wow import run_blank_head, run_what_if
+    from apps.desk.risk_board import build_thinking_timeline, chart_stats
 except ImportError:
     from wow import run_blank_head, run_what_if  # type: ignore
+    from risk_board import build_thinking_timeline, chart_stats  # type: ignore
 
 
 def register_triage_routes(
@@ -75,6 +77,23 @@ def register_triage_routes(
         ]
         state["action_counts"] = dict(actions.counts)
         state["risk_cards"] = build_risk_cards(sess, tid, state["actions"])
+        state["chart_stats"] = chart_stats(
+            state["risk_cards"], float(state.get("demurrage_total") or 0.0)
+        )
+        # Thinking timeline: group × time path from table (or preview) when Thinking selected
+        df = sess.tables[tid]
+        preview = state.get("preview_rows") or []
+        if not preview:
+            preview = df.head(24).fillna("").to_dict(orient="records")
+        else:
+            # Prefer a slightly wider slice for the strip when Thinking
+            preview = df.head(24).fillna("").to_dict(orient="records")
+        gcol = state.get("group_col") or sess.domain.group_col or "vessel_id"
+        tcol = state.get("group_time_col") or sess.domain.time_col or "event_ts"
+        icol = sess.domain.id_col or pack_meta().get("id_hint") or "container_id"
+        state["thinking_timeline"] = build_thinking_timeline(
+            preview, group_col=gcol, time_col=tcol, id_col=icol, limit=24
+        )
         state["money_label"] = pack_meta().get("money_label") or "Exposure"
         state["what_if"] = None
         if pack_meta().get("spine"):
