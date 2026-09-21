@@ -40,6 +40,7 @@
   </form>
 
   <p class="section-label">Ops desks</p>
+  {% if desks %}
   <div class="desk-grid">
     {% for d in desks %}
     <a class="desk-card {% if d.spine %}spine{% endif %}" href="/desk?pack={{ d.id }}">
@@ -49,6 +50,13 @@
     </a>
     {% endfor %}
   </div>
+  {% else %}
+  <div class="saas-empty" data-empty="home-desks">
+    <p class="empty-kicker">No desks</p>
+    <p class="empty-title">No domain packs loaded</p>
+    <p>Packs come from fixtures under domains/. Reload the app or check domain.yaml wiring.</p>
+  </div>
+  {% endif %}
 
   <p class="section-label" style="margin-top:1.75rem">Compare</p>
   <div class="desk-grid">
