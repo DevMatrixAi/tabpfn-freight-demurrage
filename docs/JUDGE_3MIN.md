@@ -1,5 +1,5 @@
 <!-- TIP_SHA_PIN_START -->
-**Tip (main):** `53e7b7d` · [judge_path_mock_receipt.md](../artifacts/freight-demurrage/judge_path_mock_receipt.md)
+**Tip (main):** `718dcef` · [judge_path_mock_receipt.md](../artifacts/freight-demurrage/judge_path_mock_receipt.md)
 
 **First-screen gallery:**
 
