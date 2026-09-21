@@ -28,7 +28,11 @@
   <h2>{% if is_spine %}Late fee risk board{% else %}Shipment risk board{% endif %} <span class="badge">click card → moves</span>
   {% if state.stream_cursor %}<span class="badge">stream #{{ state.stream_cursor }}</span>{% endif %}
   </h2>
-  <div class="legend"><span><i class="r"></i>High (≥0.65)</span><span><i class="a"></i>Med (0.40–0.65)</span><span><i class="g"></i>Low (<0.40)</span></div>
+  <div class="legend"><span><i class="r"></i>High (≥0.65)</span><span><i class="a"></i>Med (0.40–0.65)</span><span><i class="g"></i>Low (&lt;0.40)</span></div>
+  <div class="board-filter-row">
+    <label for="board-filter">Filter cards <kbd>/</kbd></label>
+    <input type="search" id="board-filter" name="board_filter" data-desk-filter="1" placeholder="container / action / tier…" autocomplete="off" />
+  </div>
   <div class="risk-board">
   {% for c in state.risk_cards %}
   <article class="risk-card {{ c.tier }} clickable" tabindex="0" role="button"
