@@ -1,0 +1,57 @@
+<section class="card full">
+<h2>Feed preview</h2>
+{% if state.preview_rows %}
+<div style="overflow-x:auto">
+<table>
+{% if is_spine %}
+<thead><tr><th>container</th><th>vessel</th><th>pod</th><th>Grace days left</th><th>Money at risk</th><th>Late fee risk</th></tr></thead>
+<tbody>
+{% for r in state.preview_rows %}
+<tr>
+<td>{{ r.container_id }}</td><td>{{ r.vessel_id }}</td><td>{{ r.pod }}</td>
+<td>{{ r.free_days_left }}</td><td>{{ r.projected_demurrage_usd }}</td>
+<td>{% if r.demurrage_risk == 1 or r.demurrage_risk == "1" %}<span class="badge risk">high</span>{% else %}<span class="badge ok">low</span>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+{% elif state.pack == 'air-freight' %}
+<thead><tr><th>AWB</th><th>flight</th><th>lane</th><th>carrier</th><th>client</th><th>delay $</th><th>risk</th></tr></thead>
+<tbody>
+{% for r in state.preview_rows %}
+<tr>
+<td>{{ r.awb_id }}</td><td>{{ r.flight_id }}</td><td>{{ r.route_id }}</td>
+<td>{{ r.carrier }}</td><td>{{ r.client_id }}</td><td>{{ r.projected_delay_cost_usd }}</td>
+<td>{% if r.miss_connection_risk == 1 or r.miss_connection_risk == "1" %}<span class="badge risk">high</span>{% else %}<span class="badge ok">low</span>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+{% elif state.pack == 'stow-fit' %}
+<thead><tr><th>shipment</th><th>lane</th><th>requested</th><th>suggested</th><th>value $</th><th>fit risk</th></tr></thead>
+<tbody>
+{% for r in state.preview_rows %}
+<tr>
+<td>{{ r.shipment_id }}</td><td>{{ r.lane_id }}</td>
+<td>{{ r.requested_mode }}</td><td>{{ r.suggested_mode }}</td><td>{{ r.cargo_value_usd }}</td>
+<td>{% if r.fit_risk == 1 or r.fit_risk == "1" %}<span class="badge risk">high</span>{% else %}<span class="badge ok">low</span>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+{% else %}
+<thead><tr><th>id</th><th>col2</th><th>col3</th><th>note</th><th>label</th></tr></thead>
+<tbody>
+{% for r in state.preview_rows %}
+<tr>
+<td>{{ r.booking_id or r.move_id or r.shipment_id or r.container_id or "—" }}</td>
+<td>{{ r.trade_lane or r.lane_id or r.vessel_id or "—" }}</td>
+<td>{{ r.current_equip or r.terminal or r.pod or "—" }}</td>
+<td style="max-width:18rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.booking_note or r.shipper_note or r.terminal_note or "" }}</td>
+<td>{% set lab = r.special_equip_fit if r.special_equip_fit is defined else (r.prefer_rail if r.prefer_rail is defined else r.fit_risk) %}{% if lab == 1 or lab == "1" %}<span class="badge risk">1</span>{% else %}<span class="badge ok">0</span>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+{% endif %}
+</table>
+</div>
+{% else %}<p class="muted">No rows loaded.</p>{% endif %}
+</section>
+
