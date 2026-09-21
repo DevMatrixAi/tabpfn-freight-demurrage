@@ -37,3 +37,9 @@ Judge one-liner: “We use TabPFN-3.5 the way BeyondArena says real tables look:
 ## Shipped overnight (DEEP)
 
 See [`docs/DEEP_SHOWCASE_v0.md`](DEEP_SHOWCASE_v0.md): Thinking effort + group/time narrative, `/eval` ablations + Fast/Plus latency + denser judge card, calibration bins, MCP 7-tool cookbook, stress missing/wide fixture.
+
+## Overnight smoke note (2026-09-21 PT)
+
+- `/eval` smoked locally through login → Run eval; the deep panels and small-n learning curve render.
+- Deep-template fallback now preserves the learning-curve include when a clean checkout unpacks the zlib blob.
+- Judge docs use `TABPFN_TOKEN=` for a deterministic mock path; repo remains private and `.env` stays untracked.
