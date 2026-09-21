@@ -26,7 +26,7 @@ _DIR = Path(__file__).resolve().parent / "templates"
 _BLOBS = {"eval.html": EVAL_HTML_BLOB, "index.html": INDEX_HTML_BLOB}
 # Markers that prove the deep showcase panels are present (judge path).
 _MARKERS = {
-    "eval.html": ("id=\"eval-latency\"", "id=\"eval-thinking\"", "id=\"eval-ablations\""),
+    "eval.html": ("id=\"eval-latency\"", "id=\"eval-thinking\"", "id=\"eval-ablations\"", "settings-link", "eval-prerun"),
     "index.html": ("thinking_effort", "judge-strip", "mode-thinking"),
 }
 
@@ -42,6 +42,14 @@ def _has_deep_markers(path: Path, name: str) -> bool:
         # SaaS density shell may move body into partials_desk_main.html
         partial = path.parent / "partials_desk_main.html"
         if "partials_desk_main.html" in text and partial.is_file():
+            try:
+                text = text + "\n" + partial.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                pass
+    # Slim eval may park deep panels in partials_eval_results.html
+    if name == "eval.html":
+        partial = path.parent / "partials_eval_results.html"
+        if "partials_eval_results.html" in text and partial.is_file():
             try:
                 text = text + "\n" + partial.read_text(encoding="utf-8", errors="replace")
             except OSError:
