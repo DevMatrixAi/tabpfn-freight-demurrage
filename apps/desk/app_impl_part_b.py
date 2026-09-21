@@ -86,6 +86,8 @@ async def desk_board(request: Request, pack: str | None = None) -> HTMLResponse:
         _load_default_csv(sess)
     meta = _pack_meta()
     disclaimer = load_domain(meta["domain"]).disclaimer
+    if not _STATE.get("coach_active_beat"):
+        _STATE["coach_active_beat"] = "drawer" if _STATE.get("risk_cards") else "triage"
     return templates.TemplateResponse(request, "index.html", {
         "adapters": list_adapters(), "state": _STATE,
         "packs": [{"id": k, "label": v["label"], "spine": v["spine"], "gloss": v.get("gloss")} for k, v in PACKS.items()],
@@ -122,6 +124,11 @@ async def load_adapter(adapter_name: str = Form(...)) -> RedirectResponse:
     except ImportError:
         from missingness import missingness_summary as _miss  # type: ignore
     _STATE["missingness"] = _miss(loaded)
+    try:
+        from apps.desk.column_chips import apply_column_chips as _chips
+    except ImportError:
+        from column_chips import apply_column_chips as _chips  # type: ignore
+    _chips(_STATE, sess.domain, loaded)
     _reset_triage_state()
     return RedirectResponse(url="/desk", status_code=303)
 
@@ -157,6 +164,11 @@ async def load_stress_missing() -> RedirectResponse:
     except ImportError:
         from missingness import missingness_summary as _miss  # type: ignore
     _STATE["missingness"] = _miss(loaded)
+    try:
+        from apps.desk.column_chips import apply_column_chips as _chips
+    except ImportError:
+        from column_chips import apply_column_chips as _chips  # type: ignore
+    _chips(_STATE, sess.domain, loaded)
     _reset_triage_state()
     return RedirectResponse(url="/desk", status_code=303)
 
@@ -177,6 +189,23 @@ except ImportError:
     from desk_triage import register_triage_routes  # type: ignore
 
 register_triage_routes(
+    app,
+    state=_STATE,
+    pack_meta=_pack_meta,
+    resolve_mode=_resolve_mode,
+    metric_slice=_metric_slice,
+    money_total=_money_total,
+    build_risk_cards=_build_risk_cards,
+    load_default_csv=_load_default_csv,
+    sample_ids=sample_ids,
+)
+
+try:
+    from apps.desk.judge_path import register_judge_path_routes
+except ImportError:
+    from judge_path import register_judge_path_routes  # type: ignore
+
+register_judge_path_routes(
     app,
     state=_STATE,
     pack_meta=_pack_meta,
