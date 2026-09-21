@@ -84,11 +84,12 @@ def _reset_triage_state() -> None:
         "metrics", "baseline_metrics", "delta", "baseline_narrative", "actions",
         "action_counts", "backend", "mode", "requested_mode", "warning", "fast_ab",
         "elapsed_s", "blank_metrics", "blank_backend", "blank_warning", "what_if",
-        "chart_stats", "explain",
+        "chart_stats", "explain", "morning_digest", "judge_path",
     ):
         _STATE[k] = None
     _STATE["risk_cards"] = []
     _STATE["thinking_timeline"] = []
+    _STATE["coach_active_beat"] = "triage"
 
 
 def _metric_slice(metrics: dict[str, float] | None) -> dict[str, float]:
