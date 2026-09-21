@@ -1,0 +1,65 @@
+<!-- Action drawer: suggested moves -->
+<div id="drawer-backdrop" class="drawer-backdrop" hidden onclick="closeActionDrawer()"></div>
+<aside id="action-drawer" class="action-drawer" aria-hidden="true" aria-label="Suggested moves">
+  <div class="drawer-head">
+    <h2>Suggested moves</h2>
+    <button type="button" class="drawer-close" onclick="closeActionDrawer()" aria-label="Close">✕</button>
+  </div>
+  <div id="drawer-focus" class="drawer-focus" hidden></div>
+  <p class="muted drawer-hint">Click a risk card to focus one move. Full list below.</p>
+  <div class="drawer-list" id="drawer-list">
+  {% if state.actions %}
+    {% for a in state.actions %}
+    <div class="drawer-item" data-row-id="{{ a.row_id }}" id="drawer-item-{{ a.row_id }}">
+      <div class="drawer-item-top">
+        <strong>{{ a.row_id }}</strong>
+        <span class="badge">{{ "%.0f"|format((a.proba|float)*100) }}%</span>
+      </div>
+      <div class="drawer-action">{{ a.action|human_action }}</div>
+      <p class="muted drawer-reason">{{ a.reason }}</p>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="muted">Run triage to populate suggested moves.</p>
+  {% endif %}
+  </div>
+</aside>
+<script>
+function openActionDrawer(el) {
+  var drawer = document.getElementById('action-drawer');
+  var backdrop = document.getElementById('drawer-backdrop');
+  var focus = document.getElementById('drawer-focus');
+  if (!drawer) return;
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+  if (backdrop) { backdrop.hidden = false; }
+  if (focus && el) {
+    focus.hidden = false;
+    var money = el.getAttribute('data-money');
+    var moneyHtml = money ? (' · $' + Number(money).toLocaleString()) : '';
+    focus.innerHTML =
+      '<div class="focus-id">' + (el.getAttribute('data-row-id') || '') + '</div>' +
+      '<div class="focus-sub">' + (el.getAttribute('data-subtitle') || '') + moneyHtml + '</div>' +
+      '<div class="focus-action">' + (el.getAttribute('data-action-label') || '') + '</div>' +
+      '<div class="focus-meta"><span class="badge">' + (el.getAttribute('data-tier') || '') +
+      '</span> <span class="badge">Late fee risk ' +
+      Math.round(100 * Number(el.getAttribute('data-proba') || 0)) + '%</span></div>' +
+      '<p class="muted">' + (el.getAttribute('data-reason') || '') + '</p>';
+    var rid = el.getAttribute('data-row-id');
+    document.querySelectorAll('.drawer-item').forEach(function(n) {
+      n.classList.toggle('active', n.getAttribute('data-row-id') === rid);
+    });
+    var hit = document.getElementById('drawer-item-' + rid);
+    if (hit) hit.scrollIntoView({block: 'nearest'});
+  }
+}
+function closeActionDrawer() {
+  var drawer = document.getElementById('action-drawer');
+  var backdrop = document.getElementById('drawer-backdrop');
+  if (drawer) { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden', 'true'); }
+  if (backdrop) backdrop.hidden = true;
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeActionDrawer();
+});
+</script>

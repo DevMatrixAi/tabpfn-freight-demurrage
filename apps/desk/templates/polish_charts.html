@@ -1,0 +1,87 @@
+{% if state.chart_stats and state.risk_cards %}
+<section class="card full" id="ops-charts">
+<h2>Board charts <span class="badge">after triage</span></h2>
+<p class="muted" style="margin:0 0 .65rem">Risk mix, score bars, and money at risk on the cards below.</p>
+<div class="charts-grid">
+  <div class="chart-panel">
+    <div class="chart-title">Late fee risk mix</div>
+    <div class="dist-bars" role="img" aria-label="Risk distribution">
+      {% set cs = state.chart_stats %}
+      <div class="dist-row">
+        <span class="dist-lbl high">High</span>
+        <div class="dist-track"><div class="dist-fill high" style="width:{{ cs.pct.high }}%"></div></div>
+        <span class="dist-n">{{ cs.counts.high }} <span class="muted">({{ cs.pct.high }}%)</span></span>
+      </div>
+      <div class="dist-row">
+        <span class="dist-lbl med">Med</span>
+        <div class="dist-track"><div class="dist-fill med" style="width:{{ cs.pct.med }}%"></div></div>
+        <span class="dist-n">{{ cs.counts.med }} <span class="muted">({{ cs.pct.med }}%)</span></span>
+      </div>
+      <div class="dist-row">
+        <span class="dist-lbl low">Low</span>
+        <div class="dist-track"><div class="dist-fill low" style="width:{{ cs.pct.low }}%"></div></div>
+        <span class="dist-n">{{ cs.counts.low }} <span class="muted">({{ cs.pct.low }}%)</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="chart-panel">
+    <div class="chart-title">Money at risk (on cards)</div>
+    <div class="money-bars">
+      {% set denom = cs.money_max if cs.money_max > 0 else 1 %}
+      <div class="dist-row">
+        <span class="dist-lbl high">High</span>
+        <div class="dist-track"><div class="dist-fill high" style="width:{{ (100 * cs.money.high / denom)|round(1) }}%"></div></div>
+        <span class="dist-n">${{ "{:,.0f}".format(cs.money.high) }}</span>
+      </div>
+      <div class="dist-row">
+        <span class="dist-lbl med">Med</span>
+        <div class="dist-track"><div class="dist-fill med" style="width:{{ (100 * cs.money.med / denom)|round(1) }}%"></div></div>
+        <span class="dist-n">${{ "{:,.0f}".format(cs.money.med) }}</span>
+      </div>
+      <div class="dist-row">
+        <span class="dist-lbl low">Low</span>
+        <div class="dist-track"><div class="dist-fill low" style="width:{{ (100 * cs.money.low / denom)|round(1) }}%"></div></div>
+        <span class="dist-n">${{ "{:,.0f}".format(cs.money.low) }}</span>
+      </div>
+    </div>
+    <p class="muted" style="margin:.55rem 0 0;font-size:.75rem">Board total exposure: <strong>${{ "{:,.0f}".format(state.demurrage_total|float) }}</strong></p>
+  </div>
+  {% if state.metrics %}
+  <div class="chart-panel">
+    <div class="chart-title">Scorecard bars</div>
+    <div class="metric-bars">
+      {% for k in metric_keys %}
+      {% set v = state.metrics.get(k) %}
+      <div class="dist-row">
+        <span class="dist-lbl metric">{{ k }}{% if k == 'avg_precision' %} (AP){% endif %}</span>
+        <div class="dist-track"><div class="dist-fill metric" style="width:{% if v is number %}{{ (100 * (v|float))|round(1) }}{% else %}0{% endif %}%"></div></div>
+        <span class="dist-n">{% if v is number %}{{ "%.3f"|format(v|float) }}{% else %}—{% endif %}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+</section>
+{% endif %}
+
+{% if (state.requested_mode == 'thinking' or state.mode == 'thinking') and state.thinking_timeline %}
+<section class="card full" id="thinking-timeline">
+<h2>Thinking timeline <span class="badge">group={{ state.group_col or 'vessel_id' }}</span> <span class="badge">time={{ state.group_time_col or 'event_ts' }}</span></h2>
+<p class="muted" style="margin:0 0 .65rem">Vessel / flight path over time — what Thinking mode groups on. Sample events from the loaded feed.</p>
+<div class="timeline-strip" role="list">
+{% for ev in state.thinking_timeline %}
+  <div class="tl-event" role="listitem" data-group="{{ ev.group }}">
+    <div class="tl-group">{{ ev.group }}</div>
+    <div class="tl-dot" aria-hidden="true"></div>
+    <div class="tl-body">
+      <div class="tl-time">{{ ev.ts_label }}</div>
+      <div class="tl-id">{{ ev.row_id }}{% if ev.pod %} · {{ ev.pod }}{% endif %}</div>
+      {% if ev.money is not none %}<div class="tl-money">${{ "{:,.0f}".format(ev.money|float) }}</div>{% endif %}
+    </div>
+  </div>
+{% endfor %}
+</div>
+</section>
+{% endif %}
+
