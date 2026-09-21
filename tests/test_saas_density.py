@@ -7,7 +7,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_saas_shell_has_empty_and_mobile():
-    css = (ROOT / "apps/desk/static/saas_shell.css").read_text()
+    css = (ROOT / "apps/desk/static/saas_density.css").read_text()
+    shell = (ROOT / "apps/desk/static/saas_shell.css").read_text()
+    assert "app-nav" in shell
     assert ".saas-empty" in css
     assert "data-empty" not in css  # attribute lives in HTML; class is enough
     assert ".drawer-foot" in css
@@ -54,3 +56,13 @@ def test_index_triage_panel_and_snapshot_empty():
     assert 'id="triage-panel"' in text
     assert 'data-empty="board-snapshot"' in text
     assert 'data-empty="what-if-noselect"' in text
+
+
+def test_templates_link_saas_density():
+    for rel in (
+        "apps/desk/templates/login.html",
+        "apps/desk/templates/home_saas.html",
+        "apps/desk/templates/index.html",
+    ):
+        text = (ROOT / rel).read_text()
+        assert "saas_density.css" in text
