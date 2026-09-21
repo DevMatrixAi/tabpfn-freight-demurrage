@@ -1,0 +1,30 @@
+.eval-wrap{max-width:1100px;margin:0 auto;padding:1rem 1rem 2.5rem}
+.crumb{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;padding:.5rem 0 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+.crumb a{color:#93c5fd;text-decoration:none}
+.eval-hero h1{margin:0 0 .35rem;font-size:1.25rem}
+.bar-row{display:flex;align-items:center;gap:.5rem;margin:.25rem 0}
+.bar-row .lbl{width:4.5rem;font-size:.72rem;color:var(--muted);flex-shrink:0}
+.bar-track{flex:1;background:#121a26;border:1px solid var(--border);border-radius:6px;height:1rem;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;min-width:2px}
+.bar-fill.plus{background:var(--plus)}
+.bar-fill.thinking{background:var(--thinking)}
+.bar-fill.fast{background:#34d399}
+.bar-fill.hist_gbm{background:var(--mock)}
+.bar-row .num{width:3.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:.8rem}
+.delta-pos{color:var(--good)}
+.delta-neg{color:var(--bad)}
+.delta-zero{color:var(--muted)}
+.mode-chip{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700}
+.mode-chip.plus{background:#1a3358;color:#cfe0ff}
+.mode-chip.thinking{background:#2a1f48;color:#e8dfff}
+.mode-chip.fast{background:#14352a;color:#b8f0d4}
+.mode-chip.hist_gbm{background:#243044;color:#d0d8e4}
+.live-pill{font-size:.65rem;padding:.1rem .35rem;border-radius:4px;background:#1e3328;color:var(--good);margin-left:.35rem}
+.mock-pill{font-size:.65rem;padding:.1rem .35rem;border-radius:4px;background:#3a2a10;color:var(--warn);margin-left:.35rem}
+.signout{background:transparent;border:1px solid #243044;color:#9aa8bc;border-radius:8px;padding:.35rem .65rem;cursor:pointer;margin-left:auto}
+.bars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-top:.5rem}
+.btn-busy{opacity:.7;cursor:wait}
+.empty-panels{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin-top:.85rem}
+.empty-panel{border:1px dashed var(--border);border-radius:10px;padding:.85rem;background:#121a26}
+.empty-panel .ph{height:.65rem;border-radius:4px;background:#1e2a3c;margin:.35rem 0;opacity:.7}
+.empty-panel h3{margin:0;font-size:.82rem;color:var(--muted);font-weight:650}
