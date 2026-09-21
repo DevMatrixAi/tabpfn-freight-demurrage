@@ -1,0 +1,93 @@
+
+{% if is_spine %}
+<section class="card full" id="what-if">
+<h2>What if we change grace days / fees? <span class="badge">sandbox</span></h2>
+<p class="muted">Tweak <strong>Grace days left</strong> / projected fee / “Move to another terminal” on one container — re-score. Honest sandbox, not a live booking change.</p>
+<form method="post" action="/what-if" class="row" style="align-items:flex-end;gap:.75rem;flex-wrap:wrap">
+{% if state.sample_row_ids %}
+<label class="muted">Container
+<select name="row_id" required>
+{% for rid in state.sample_row_ids %}
+<option value="{{ rid }}" {% if state.what_if and state.what_if.row_id == rid %}selected{% endif %}>{{ rid }}</option>
+{% endfor %}
+</select>
+</label>
+{% else %}
+<div class="saas-empty no-selection" data-empty="what-if-noselect" style="width:100%">
+  <p class="empty-kicker">No selection</p>
+  <p class="empty-title">No containers loaded</p>
+  <p>Reload the pack CSV or load a fixture adapter first — then what-if can target a row.</p>
+</div>
+{% endif %}
+<label class="muted">Grace days left
+<input type="number" step="0.1" name="free_days_left" placeholder="e.g. 8" style="width:6rem" title="free_days_left" />
+</label>
+<label class="muted">Projected fee $
+<input type="number" step="1" name="projected_demurrage_usd" placeholder="fee $" style="width:7rem" title="projected_demurrage_usd" />
+</label>
+<label class="muted" style="display:flex;align-items:center;gap:.35rem" title="divert">
+<input type="checkbox" name="divert" value="1" /> Move to another terminal (+3 grace days)
+</label>
+<input type="hidden" name="mode" value="{{ state.requested_mode or 'mock' }}" />
+<button type="submit">Run what-if</button>
+</form>
+{% if state.what_if %}
+{% if state.what_if.error %}
+<div class="warn-banner" style="margin-top:.75rem">{{ state.what_if.error }}</div>
+{% else %}
+<div class="metrics-grid" style="margin-top:.75rem">
+<div class="metric-cell">
+<div class="label">Late fee risk before</div>
+<div class="val">{{ "%.3f"|format(state.what_if.proba_before|float) }}</div>
+<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_before|human_action }}</div>
+</div>
+<div class="metric-cell">
+<div class="label">Late fee risk after</div>
+<div class="val">{{ "%.3f"|format(state.what_if.proba_after|float) }}</div>
+<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.action_after|human_action }}</div>
+</div>
+<div class="metric-cell">
+<div class="label">Δ score</div>
+{% set dp = state.what_if.delta_proba|float %}
+<div class="val">{{ "%+.3f"|format(dp) }}</div>
+<div class="muted" style="font-size:.75rem;margin-top:.2rem">{{ state.what_if.label }}</div>
+</div>
+<div class="metric-cell">
+<div class="label">Next move</div>
+<div class="val" style="font-size:1rem">{{ state.what_if.action_before|human_action }} → {{ state.what_if.action_after|human_action }}</div>
+</div>
+</div>
+{% if state.what_if.overrides_applied %}
+<p class="muted" style="margin-top:.5rem">Overrides:
+{% for col, pair in state.what_if.overrides_applied.items() %}
+<span class="badge">{{ col }}: {{ pair.before }} → {{ pair.after }}</span>
+{% endfor %}
+</p>
+{% endif %}
+{% if state.what_if.reason_after %}
+<p class="muted">After: {{ state.what_if.reason_after }}</p>
+{% endif %}
+{% endif %}
+{% endif %}
+</section>
+{% endif %}
+
+{% include "partials_feed_preview.html" %}
+
+{% if state.actions %}
+<section class="card full">
+<h2>Suggested moves (table)</h2>
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>row</th><th>Late fee risk</th><th>move</th><th>reason</th></tr></thead>
+<tbody>
+{% for a in state.actions %}
+<tr><td>{{ a.row_id }}</td><td>{{ a.proba }}</td><td><span class="badge" title="{{ a.action }}">{{ a.action|human_action }}</span></td><td>{{ a.reason }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</section>
+{% endif %}
+</div>
+</main>

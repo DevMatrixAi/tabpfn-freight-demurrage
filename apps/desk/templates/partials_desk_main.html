@@ -1,0 +1,180 @@
+<main>
+{% include "partials_plain_english.html" %}
+<div class="grid">
+<section class="card full">
+<h2>Domain pack</h2>
+<form class="row" method="post" action="/switch-pack">
+<label class="muted" for="pack">Spine + coda packs</label>
+<select name="pack" id="pack">
+{% for p in packs %}
+<option value="{{ p.id }}" {% if state.pack == p.id %}selected{% endif %}>{{ p.label }}{% if p.spine %} ★{% endif %}</option>
+{% endfor %}
+</select>
+<button type="submit">Switch pack</button>
+</form>
+<p class="muted" style="margin:.5rem 0 0">
+<strong>Freight demurrage</strong> (spine) = late-container fee risk.
+{% for p in packs if not p.spine %}
+ · <strong>{{ p.label }}</strong>{% if p.gloss %} — {{ p.gloss }}{% endif %}
+{% endfor %}
+</p>
+</section>
+
+{% include "partials_missingness.html" %}
+
+<section class="card">
+<h2>Load feed</h2>
+<form class="row" method="post" action="/load-adapter">
+<label class="muted" for="adapter_name">Fixture adapter</label>
+<select name="adapter_name" id="adapter_name">
+{% for a in adapters %}
+<option value="{{ a }}" {% if state.adapter == a %}selected{% endif %}>{{ a }}</option>
+{% endfor %}
+</select>
+<button type="submit">Load adapter</button>
+</form>
+<form class="row" method="post" action="/load-domain-csv" style="margin-top:.75rem">
+<button class="secondary" type="submit">Reload pack CSV</button>
+</form>
+<form class="row" method="post" action="/load-stress-missing" style="margin-top:.75rem">
+<button class="secondary" type="submit" title="fixtures/stress/missing_wide_demurrage.csv">Load stress missing/wide</button>
+</form>
+</section>
+
+<section class="card">
+<h2>Board snapshot</h2>
+<p class="muted" style="margin:0">Run triage to paint <strong>Late fee risk</strong> cards Low / Med / High. Suggested next move sits on each card.</p>
+{% if state.action_counts %}
+<p class="counts muted" style="margin-top:.75rem">{% for k, v in state.action_counts.items() %}<span><strong>{{ k|human_action }}</strong>: {{ v }}</span>{% endfor %}</p>
+{% else %}
+<div class="saas-empty" data-empty="board-snapshot" style="margin-top:.65rem">
+  <p class="empty-kicker">Waiting</p>
+  <p class="empty-title">No triage yet</p>
+  <p>Pick Plus / Thinking / Mock below and run triage. Mock works offline — cards, charts, and suggested moves fill in after one click.</p>
+  <a class="empty-cta" href="#triage-panel">Go to triage</a>
+</div>
+{% endif %}
+</section>
+
+<section class="card priority full" id="triage-panel">
+<h2>Run triage <span class="req">judge card · Plus | Thinking | Mock + HistGBM Δ</span></h2>
+<form method="post" action="/run-triage">
+<p class="mode-hint">Modes: <strong>Plus</strong> (messy notes) · <strong>Thinking</strong> (vessel / flight over time) · <strong>Mock</strong> (offline). Every run shows lift vs HistGBM.</p>
+<div class="mode-toggle" role="radiogroup" aria-label="TabPFN mode">
+{% set sel = state.requested_mode or 'mock' %}
+<input type="radio" name="mode" id="mode-plus" value="plus" {% if sel == 'plus' %}checked{% endif %} />
+<label for="mode-plus" data-mode="plus">Plus</label>
+<input type="radio" name="mode" id="mode-thinking" value="thinking" {% if sel == 'thinking' %}checked{% endif %} />
+<label for="mode-thinking" data-mode="thinking">Thinking</label>
+<input type="radio" name="mode" id="mode-mock" value="mock" {% if sel != 'plus' and sel != 'thinking' %}checked{% endif %} />
+<label for="mode-mock" data-mode="mock">Mock</label>
+</div>
+<p class="mode-hint thinking-overrides">Thinking overrides:
+<span class="badge">thinking_mode=True</span>
+<span class="badge effort-chip" id="effort-chip">thinking_effort=<strong>{{ state.thinking_effort or 'medium' }}</strong></span>
+<span class="badge">group={{ state.group_col or 'vessel_id' }}</span>
+<span class="badge">time={{ state.group_time_col or 'event_ts' }}</span>
+</p>
+<div class="row effort-row" style="margin-bottom:.55rem">
+<label class="muted" for="thinking_effort">thinking_effort</label>
+<select name="thinking_effort" id="thinking_effort" aria-label="TabPFN thinking_effort">
+  {% set eff = state.thinking_effort or 'medium' %}
+  <option value="low" {% if eff == 'low' %}selected{% endif %}>low</option>
+  <option value="medium" {% if eff == 'medium' %}selected{% endif %}>medium</option>
+  <option value="high" {% if eff == 'high' %}selected{% endif %}>high</option>
+</select>
+<label class="muted" for="sample_n" title="Live TabPFN budget: sample rows before fit">sample_n</label>
+<select name="sample_n" id="sample_n" aria-label="Dev sample size for live TabPFN">
+  {% set sn = (state.dev_sample.sample_n if state.dev_sample and state.dev_sample.sampled else none) %}
+  <option value="" {% if not sn %}selected{% endif %}>full table</option>
+  <option value="40" {% if sn == 40 %}selected{% endif %}>40 (cheap live)</option>
+  <option value="60" {% if sn == 60 %}selected{% endif %}>60 (default live)</option>
+  <option value="80" {% if sn == 80 %}selected{% endif %}>80 (live)</option>
+</select>
+</div>
+<p class="muted" style="margin:0 0 .55rem;font-size:.78rem">Live budget: pick <strong>40–80</strong> for Plus/Thinking after API reset. Mock can stay on full table. Env default: <code>TABPFN_DEV_N</code>.</p>
+<div class="row" style="margin-bottom:.75rem">
+<label class="muted" style="display:flex;align-items:center;gap:.4rem">
+<input type="checkbox" name="fast_ab" value="1" />
+Fast A/B stub (optional)
+</label>
+<button type="submit">Run triage + baseline Δ</button>
+</div>
+</form>
+{% if state.warning %}<div class="warn-banner">{{ state.warning }}</div>{% endif %}
+{% if state.metrics %}
+<div class="judge-strip">
+<span class="badge">Scorecard</span>
+<span class="badge">Δ vs HistGBM</span>
+{% if state.backend %}<span class="badge">{{ state.backend }}</span>{% endif %}
+{% if state.judge_card and state.judge_card.headline %}<span class="badge">{{ state.judge_card.headline }}</span>{% endif %}
+{% if state.thinking_effort %}<span class="badge">effort={{ state.thinking_effort }}</span>{% endif %}
+</div>
+<p class="muted" style="margin:0 0 .35rem">Primary scores and lift over HistGBM on the same split.
+{% if state.baseline_narrative %}<br>{{ state.baseline_narrative }}{% endif %}
+{% if state.thinking_narrative %}<br><em>{{ state.thinking_narrative }}</em>{% endif %}</p>
+{% if state.calibration and state.calibration.n %}
+<p class="muted" style="margin:0 0 .5rem;font-size:.8rem">Calibration · Brier={{ state.calibration.brier }} · ECE={{ state.calibration.ece }} · mean p={{ state.calibration.mean_proba }} (n={{ state.calibration.n }})</p>
+{% endif %}
+<p class="metrics-gloss">Plain English: how often we correctly flag late-fee risk, and how much better we are than a plain HistGBM baseline (Δ).</p>
+<div class="metrics-grid">
+{% for k in metric_keys %}
+<div class="metric-cell">
+<div class="label">{{ k }}{% if k == 'avg_precision' %} (AP){% endif %}</div>
+<div class="val">{% if state.metrics.get(k) is number %}{{ "%.3f"|format(state.metrics[k]|float) }}{% else %}—{% endif %}</div>
+<div class="delta">
+{% set d = state.delta.get(k) if state.delta else none %}
+{% if d is number %}
+{% set cls = 'delta-pos' if d > 0.0005 else ('delta-neg' if d < -0.0005 else 'delta-zero') %}
+<span class="badge {{ cls }}">Δ {{ "%+.3f"|format(d|float) }} vs HistGBM</span>
+{% else %}<span class="badge">Δ —</span>{% endif %}
+</div>
+{% if state.baseline_metrics and state.baseline_metrics.get(k) is number %}
+<div class="muted" style="font-size:.7rem;margin-top:.2rem">HistGBM {{ "%.3f"|format(state.baseline_metrics[k]|float) }}</div>
+{% endif %}
+</div>
+{% endfor %}
+</div>
+{% endif %}
+{% if state.fast_ab %}
+<div class="fast-ab-box">
+<strong>Fast A/B stub</strong> · {{ state.fast_ab.backend }} · {{ state.fast_ab.elapsed_s }}s
+<span class="muted"> — {{ state.fast_ab.note }}</span>
+<div style="margin-top:.35rem">{% for k, v in state.fast_ab.metrics.items() %}<span class="badge">{{ k }}={{ "%.3f"|format(v|float) }}</span>{% endfor %}</div>
+{% if state.fast_ab.warning %}<div class="warn-banner" style="margin-top:.5rem">{{ state.fast_ab.warning }}</div>{% endif %}
+</div>
+{% endif %}
+{% if is_spine and state.blank_metrics %}
+<h2 style="margin-top:1rem">Cancelled sailing (blank) <span class="badge">{{ state.blank_label or 'blank_sailing' }}</span></h2>
+<p class="muted" style="margin:0 0 .5rem">Same table, second label — will this sailing be cancelled (blank)? Primary judge card above stays late-fee risk + HistGBM Δ.
+{% if state.blank_backend %} · {{ state.blank_backend }}{% endif %}</p>
+{% if state.blank_warning %}<div class="warn-banner">{{ state.blank_warning }}</div>{% endif %}
+<div class="metrics-grid">
+{% for k in metric_keys %}
+<div class="metric-cell">
+<div class="label">{{ k }}{% if k == 'avg_precision' %} (AP){% endif %}</div>
+<div class="val">{% if state.blank_metrics.get(k) is number %}{{ "%.3f"|format(state.blank_metrics[k]|float) }}{% else %}—{% endif %}</div>
+</div>
+{% endfor %}
+</div>
+{% elif is_spine and state.blank_warning %}
+<div class="warn-banner" style="margin-top:.75rem">Cancelled sailing (blank): {{ state.blank_warning }}</div>
+{% endif %}
+<div class="stream-panel" id="stream-panel">
+  <div class="stream-controls">
+    <label class="muted" for="stream-mode">Stream mode</label>
+    <select id="stream-mode" name="stream-mode">
+      {% set sel = state.requested_mode or 'mock' %}
+      <option value="mock" {% if sel == 'mock' %}selected{% endif %}>Mock</option>
+      <option value="plus" {% if sel == 'plus' %}selected{% endif %}>Plus</option>
+      <option value="thinking" {% if sel == 'thinking' %}selected{% endif %}>Thinking</option>
+    </select>
+    <button type="button" id="btn-stream-rescore" class="stream-btn">Stream event + re-score</button>
+    <label class="muted stream-auto-label"><input type="checkbox" id="stream-auto" /> Auto-poll (5s)</label>
+  </div>
+  <p class="muted stream-hint">Appends a synthetic Terminal49 / project44 / EDI fixture row, then re-runs triage and refreshes risk cards — no full page reload.</p>
+</div>
+</section>
+
+{% include "live_board.html" %}
+{% include "partials_desk_tail.html" %}

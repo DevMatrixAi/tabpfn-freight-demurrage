@@ -55,9 +55,12 @@ def test_index_triage_panel_and_snapshot_empty():
     index = (ROOT / "apps/desk/templates/index.html").read_text()
     assert 'partials_desk_main.html' in index
     main = (ROOT / "apps/desk/templates/partials_desk_main.html").read_text()
-    assert 'id="triage-panel"' in main
-    assert 'data-empty="board-snapshot"' in main
-    assert 'data-empty="what-if-noselect"' in main
+    tail = (ROOT / "apps/desk/templates/partials_desk_tail.html").read_text()
+    body = main + "\n" + tail
+    assert 'id="triage-panel"' in body
+    assert 'data-empty="board-snapshot"' in body
+    assert 'data-empty="what-if-noselect"' in body
+    assert 'partials_desk_tail.html' in main
 
 
 def test_templates_link_saas_density():
