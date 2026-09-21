@@ -36,13 +36,18 @@ def register_triage_routes(
     """Attach /run-triage and /what-if."""
 
     @app.post("/run-triage")
-    async def run_triage(mode: str = Form("mock"), fast_ab: str | None = Form(None)) -> RedirectResponse:
+    async def run_triage(
+        mode: str = Form("mock"),
+        fast_ab: str | None = Form(None),
+        thinking_effort: str | None = Form(None),
+    ) -> RedirectResponse:
         """Run triage with judge-priority modes; always attach HistGBM baseline delta."""
         apply_triage(
             app,
             state,
             mode=mode,
             fast_ab=fast_ab,
+            thinking_effort=thinking_effort,
             pack_meta=pack_meta,
             resolve_mode=resolve_mode,
             metric_slice=metric_slice,
