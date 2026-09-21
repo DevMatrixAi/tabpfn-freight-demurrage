@@ -1,0 +1,28 @@
+{# Column-type chips \u2014 text / high-card / missing / group\u00d7time (mock-safe schema) #}
+{% if state.column_chips %}
+<section class="column-chips-panel" id="column-chips-panel" data-column-chips="1" aria-label="Column type chips">
+  <div class="column-chips-head">
+    <h3>Column types <span class="badge">raw DF</span></h3>
+    <p class="gloss">{{ state.column_chips.gloss }}</p>
+  </div>
+  <ul class="column-chips-legend" data-column-chips-legend="1">
+    {% for L in state.column_chips.legend %}
+    <li class="col-chip-legend kind-{{ L.kind }}" data-chip-kind="{{ L.kind }}" title="{{ L.title }}">
+      <span class="col-chip-dot" aria-hidden="true"></span>
+      {{ L.label }}{% if L.count %} \u00b7 {{ L.count }}{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  <ul class="column-chips-list" data-column-chips-list="1">
+    {% for c in state.column_chips.chips %}
+    <li class="col-type-chip kind-{{ c.kind }}" data-chip-kind="{{ c.kind }}" data-chip-col="{{ c.col }}" title="{{ c.title }}">
+      <span class="col-chip-kind">{{ c.label }}</span>
+      <code>{{ c.col }}</code>
+    </li>
+    {% endfor %}
+  </ul>
+  {% if not state.column_chips.chips %}
+  <p class="muted" style="margin:.35rem 0 0;font-size:.78rem">Load a pack CSV or stress fixture to paint column chips.</p>
+  {% endif %}
+</section>
+{% endif %}
