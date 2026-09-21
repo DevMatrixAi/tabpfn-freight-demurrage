@@ -1,0 +1,12 @@
+/* /settings stub — light polish on saas_shell */
+.settings-wrap{max-width:720px}
+.settings-card{margin-bottom:.85rem;padding:1rem 1.1rem}
+.settings-mode-badge{display:inline-flex;align-items:center;padding:.2rem .55rem;border-radius:999px;font-size:.75rem;font-weight:700;border:1px solid var(--saas-border,#243044)}
+.settings-mode-badge.mode-mock{background:rgba(59,130,246,.12);color:#93c5fd;border-color:rgba(59,130,246,.35)}
+.settings-mode-badge.mode-live-small-n{background:rgba(34,211,238,.1);color:#a5f3fc;border-color:rgba(34,211,238,.35)}
+.settings-prefs label{display:block;font-size:.78rem;color:var(--saas-muted,#9aa8bc);margin:.15rem 0 .3rem}
+.settings-prefs select{background:#0b1220;color:#e8eef7;border:1px solid #243044;border-radius:8px;padding:.4rem .55rem;min-width:12rem;margin-bottom:.15rem}
+.settings-links{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem .85rem}
+.settings-links a,.settings-links .linkish{color:#93c5fd;text-decoration:none;font-size:.88rem;background:transparent;border:0;padding:0;cursor:pointer;font:inherit}
+.settings-links a:hover,.settings-links .linkish:hover{text-decoration:underline}
+.settings-crib{border-left:3px solid #3b82f6}
