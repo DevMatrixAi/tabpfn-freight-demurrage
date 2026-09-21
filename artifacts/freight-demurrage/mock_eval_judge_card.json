@@ -1,0 +1,57 @@
+{
+  "frozen": true,
+  "mock": true,
+  "source": "POST /eval/run with empty TABPFN_TOKEN",
+  "repro": "TABPFN_TOKEN= pytest -q tests/test_column_chips_shortcuts_artifact.py",
+  "pack": "freight-demurrage",
+  "pack_label": "Freight demurrage (spine)",
+  "has_token": false,
+  "n_rows": 200,
+  "full_n_rows": 1200,
+  "test_size": 0.25,
+  "metric_keys": [
+    "accuracy",
+    "f1",
+    "roc_auc",
+    "avg_precision"
+  ],
+  "judge_card": {
+    "mode": "fast",
+    "backend": "mock",
+    "baseline": "sklearn_hist_gbm",
+    "headline": "fast \u0394acc=+0.000 \u0394auc=+0.000 vs HistGBM",
+    "text_cols": [
+      "terminal_note",
+      "weather_alert"
+    ],
+    "high_card_cols": [
+      "bol_id",
+      "container_id",
+      "pol",
+      "pod"
+    ],
+    "group_col": "vessel_id",
+    "group_time_col": "event_ts",
+    "delta": {
+      "roc_auc": 0.0,
+      "avg_precision": 0.0,
+      "accuracy": 0.0,
+      "f1": 0.0
+    },
+    "wins": []
+  },
+  "latency_panel": {
+    "plus_s": 0.14,
+    "fast_s": 0.11,
+    "thinking_s": 0.13,
+    "fast_vs_plus_speedup": 1.27,
+    "headline": "Fast 0.11s vs Plus 0.14s (1.27\u00d7) \u00b7 Thinking 0.13s",
+    "note": "Wall-clock on this desk (mock). Frozen fixture for VO."
+  },
+  "vo_lines": [
+    "Frozen mock /eval judge card \u2014 empty TABPFN_TOKEN.",
+    "fast \u0394acc=+0.000 \u0394auc=+0.000 vs HistGBM",
+    "Fast 0.11s vs Plus 0.14s (1.27\u00d7) \u00b7 Thinking 0.13s",
+    "Text / high-card ablations + calibration bins for BeyondArena story."
+  ]
+}
