@@ -9,6 +9,7 @@ Credentials: `demo` / `demurrage`. Never commit `.env`. Keep `TABPFN_TOKEN=` emp
 | 0:00 | `pip install -e ".[dev,desk]"` then `TABPFN_TOKEN= tabpfn-hack desk --host 127.0.0.1 --port 8765` |
 | 0:30 | http://127.0.0.1:8765 → login → **Run triage** (Mock) → money-at-risk cards + HistGBM Δ |
 | 1:30 | Open **/eval** → **Run eval** → Plus/Thinking/Fast vs HistGBM, latency, ablations, calibration, **small-n learning curve** |
+| 2:20 | Optional: `TABPFN_TOKEN= python scripts/robot_api_smoke.py` (robot/TMS health+triage) |
 | 2:30 | Optional: `TABPFN_TOKEN= python scripts/mcp_cookbook_demo.py` (7 tools) · see [`MCP_SMOKE.md`](MCP_SMOKE.md) · `TABPFN_TOKEN= pytest -q` |
 
 **What to point at (50% showcase):** text / high-card / missings on vessel tables · Thinking group/time narrative · Plus Δacc vs HistGBM · playbook money moves · robot API same actions.

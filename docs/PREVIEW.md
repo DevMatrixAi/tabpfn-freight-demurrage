@@ -31,6 +31,10 @@ The app loads a repo `.env` for convenience; an explicitly empty variable preven
 unintended live request/rate limit and keeps the 3-minute walkthrough offline. Never
 commit `.env`.
 
+**Robot smoke (local):** `TABPFN_TOKEN= python scripts/robot_api_smoke.py` — health + mock triage without login.
+
+**Live budget after reset:** desk `sample_n` 40–80 (or `TABPFN_DEV_N=60`); practice stays mock/full.
+
 **Stub URL honesty:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) shows login + sample ticker only — **not** Jinja `/eval` or robot triage. Full TabPFN desk stays local (or Docker/Fly/Railway). Repo stays **private**. Never commit `.env`.
 
 
