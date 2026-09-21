@@ -9,3 +9,7 @@
 .stream-badge{background:#1a3358;color:#9ec5ff}
 .stream-evt{max-width:28rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #live-board{scroll-margin-top:1rem}
+
+/* stream live — hide backlog TODO chip */
+.todo-chip.disabled-ctrl{display:none!important}
+.todo-row:not(:has(#stream-panel)){display:none}
