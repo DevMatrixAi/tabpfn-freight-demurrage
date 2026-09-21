@@ -3,6 +3,13 @@ from __future__ import annotations
 import base64, zlib
 from pathlib import Path
 
+# One-shot repair if a prior MCP push corrupted the index blob mid-string.
+_idx = Path(__file__).resolve().parent / "deep_template_blobs_index.py"
+if _idx.exists():
+    _t = _idx.read_text()
+    if "UeiHerd26vmKN" in _t:
+        _idx.write_text(_t.replace("UeiHerd26vmKN", "UeiHer26vmKN"))
+
 try:
     from deep_template_blobs import EVAL_HTML_BLOB, INDEX_HTML_BLOB
 except ImportError:
