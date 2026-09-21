@@ -11,7 +11,7 @@ tabpfn-hack demo --domain domains/freight-demurrage/domain.yaml --data domains/f
 tabpfn-hack desk --host 127.0.0.1 --port 8765   # http://127.0.0.1:8765
 ```
 
-**Judge preview:** see [`docs/PREVIEW.md`](docs/PREVIEW.md) (login `demo` / `demurrage`; mock-first). Deploy configs: `app.py` + `vercel.json`, `Dockerfile` + `fly.toml` / `railway.toml`.
+**Judge preview:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) — login `demo` / `demurrage` (mock stub). Full desk: [`docs/PREVIEW.md`](docs/PREVIEW.md). Deploy configs: `app.py` + `vercel.json`, `Dockerfile` + `fly.toml` / `railway.toml`.
 
 Synthetic / public-derived demo only. Fixture adapters only — not live carrier APIs. Pack: [`domains/freight-demurrage/`](domains/freight-demurrage/). Pitch: [`docs/FREIGHT_DEMURRAGE_PITCH_v0.md`](docs/FREIGHT_DEMURRAGE_PITCH_v0.md). 90s: [`docs/DEMO_90S_AND_FORM_v1.md`](docs/DEMO_90S_AND_FORM_v1.md).
 
