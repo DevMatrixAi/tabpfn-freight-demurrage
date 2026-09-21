@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/static/column_chips.css"/>
 <link rel="stylesheet" href="/static/coach_strip.css"/>
 <link rel="stylesheet" href="/static/eval_board.css"/>
+<link rel="stylesheet" href="/static/saas_density.css"/>
 </head>
 <body>
 <div class="eval-wrap">
@@ -16,6 +17,7 @@
     <a href="{{ saas_home }}">← Desks</a>
     <span class="muted" style="font-size:.85rem">Eval dashboard</span>
     <a href="/anti-wrapper">Anti-wrapper</a>
+    <a href="/settings" id="settings-link">Settings</a>
     <form method="post" action="/logout" style="margin-left:auto"><button class="signout" type="submit">Sign out</button></form>
   </div>
 
@@ -56,206 +58,16 @@
   {% include "partials_mode_glossary.html" %}
 
   {% if result %}
-  <section class="card full" style="margin-bottom:1rem" id="eval-results">
-    <h2>Metrics table <span class="badge">{{ result.elapsed_s }}s</span></h2>
-    <p class="muted" style="margin:0 0 .75rem">
-      Pack <strong>{{ result.pack_label or result.pack }}</strong>
-      · n={{ result.n_rows }} · test_size={{ result.test_size }}
-      {% if result.has_token %}<span class="live-pill">live</span>{% else %}<span class="mock-pill">mock / offline</span>{% endif %}
-    </p>
-    {% if result.warnings %}
-    <div class="warn-banner" style="margin-bottom:.75rem">
-      {% for w in result.warnings %}<div>{{ w }}</div>{% endfor %}
-    </div>
-    {% endif %}
-    <div style="overflow-x:auto">
-    <table id="eval-table">
-      <thead>
-        <tr>
-          <th>Mode</th>
-          <th>Backend</th>
-          {% for k in result.metric_keys %}
-          <th>{{ result.metric_labels.get(k, k) }}</th>
-          <th>Δ {{ result.metric_labels.get(k, k) }}</th>
-          {% endfor %}
-          <th>s</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in result.display_rows %}
-        <tr>
-          <td><span class="mode-chip {{ r.mode }}">{{ r.mode }}</span>
-            {% if r.live %}<span class="live-pill">live</span>{% elif not r.is_baseline %}<span class="mock-pill">{{ r.effective_mode }}</span>{% endif %}
-          </td>
-          <td class="muted">{{ r.backend }}</td>
-          {% for k in result.metric_keys %}
-          <td style="font-variant-numeric:tabular-nums">{% if r.metrics.get(k) is not none %}{{ "%.4f"|format(r.metrics[k]) }}{% else %}—{% endif %}</td>
-          <td style="font-variant-numeric:tabular-nums" class="{% if r.is_baseline %}delta-zero{% elif (r.delta.get(k) or 0) > 0.00005 %}delta-pos{% elif (r.delta.get(k) or 0) < -0.00005 %}delta-neg{% else %}delta-zero{% endif %}">
-            {% if r.is_baseline %}—{% elif r.delta.get(k) is not none %}{{ "%+.4f"|format(r.delta[k]) }}{% else %}—{% endif %}
-          </td>
-          {% endfor %}
-          <td class="muted">{% if r.elapsed_s is not none %}{{ r.elapsed_s }}{% else %}—{% endif %}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    </div>
-  </section>
-
-  <section class="card full" id="eval-bars">
-    <h2>Metric bars</h2>
-    <p class="muted" style="margin:0 0 .75rem">Bar length = metric / max across modes (incl. HistGBM).</p>
-    <div class="bars-grid">
-      {% for r in result.display_rows %}
-      <div class="card" style="background:var(--panel2)">
-        <h2 style="display:flex;align-items:center;gap:.4rem;margin-top:0">
-          <span class="mode-chip {{ r.mode }}">{{ r.mode }}</span>
-          {% if r.is_baseline %}<span class="badge">baseline</span>{% endif %}
-        </h2>
-        {% for k in result.metric_keys %}
-        <div class="bar-row">
-          <span class="lbl">{{ result.metric_labels.get(k, k) }}</span>
-          <div class="bar-track"><div class="bar-fill {{ r.mode }}" style="width:{{ r.bars.get(k, 0) }}%"></div></div>
-          <span class="num">{% if r.metrics.get(k) is not none %}{{ "%.3f"|format(r.metrics[k]) }}{% else %}—{% endif %}</span>
-        </div>
-        {% endfor %}
-      </div>
-      {% endfor %}
-    </div>
-  </section>
-
-  {% if result.latency_panel %}
-  <section class="card full" id="eval-latency" style="margin-top:1rem">
-    <h2>Fast vs Plus latency</h2>
-    <p class="muted" style="margin:0 0 .5rem">{{ result.latency_panel.headline }}</p>
-    <p class="muted" style="margin:0 0 .75rem;font-size:.8rem">{{ result.latency_panel.note }}</p>
-    <div class="metrics-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem">
-      <div class="metric-cell card" style="background:var(--panel2);padding:.75rem">
-        <div class="label muted" style="font-size:.72rem">Plus</div>
-        <div class="val" style="font-size:1.2rem">{% if result.latency_panel.plus_s is not none %}{{ result.latency_panel.plus_s }}s{% else %}—{% endif %}</div>
-      </div>
-      <div class="metric-cell card" style="background:var(--panel2);padding:.75rem">
-        <div class="label muted" style="font-size:.72rem">Fast</div>
-        <div class="val" style="font-size:1.2rem">{% if result.latency_panel.fast_s is not none %}{{ result.latency_panel.fast_s }}s{% else %}—{% endif %}</div>
-      </div>
-      <div class="metric-cell card" style="background:var(--panel2);padding:.75rem">
-        <div class="label muted" style="font-size:.72rem">Thinking</div>
-        <div class="val" style="font-size:1.2rem">{% if result.latency_panel.thinking_s is not none %}{{ result.latency_panel.thinking_s }}s{% else %}—{% endif %}</div>
-      </div>
-      <div class="metric-cell card" style="background:var(--panel2);padding:.75rem">
-        <div class="label muted" style="font-size:.72rem">Fast÷Plus</div>
-        <div class="val" style="font-size:1.2rem">{% if result.latency_panel.fast_vs_plus_speedup %}{{ result.latency_panel.fast_vs_plus_speedup }}×{% else %}—{% endif %}</div>
-      </div>
-    </div>
-  </section>
-  {% endif %}
-
-  {% if result.thinking_showcase %}
-  <section class="card full" id="eval-thinking" style="margin-top:1rem">
-    <h2>Thinking showcase <span class="mode-chip thinking">thinking</span></h2>
-    <p class="muted" style="margin:0 0 .5rem">
-      Group/time visible to TabPFN-3.5-Thinking:
-      <span class="badge">group={{ result.thinking_showcase.group_col or '—' }}</span>
-      <span class="badge">time={{ result.thinking_showcase.group_time_col or '—' }}</span>
-      <span class="badge">effort={{ result.thinking_showcase.thinking_effort or 'medium' }}</span>
-      {% if result.thinking_showcase.live %}<span class="live-pill">live</span>{% else %}<span class="mock-pill">mock fallback</span>{% endif %}
-    </p>
-    {% if result.thinking_showcase.narrative %}
-    <p style="margin:0;font-size:.9rem">{{ result.thinking_showcase.narrative }}</p>
-    {% endif %}
-  </section>
-  {% endif %}
-
-  {% if result.judge_card %}
-  <section class="card full" id="eval-judge" style="margin-top:1rem">
-    <h2>Denser HistGBM judge card</h2>
-    <p class="muted" style="margin:0 0 .35rem">{% if result.judge_card.headline %}{{ result.judge_card.headline }}{% endif %}</p>
-    <p style="margin:0;font-size:.88rem">{% if result.judge_card.narrative %}{{ result.judge_card.narrative }}{% elif result.display_rows %}{{ result.display_rows[0].narrative }}{% endif %}</p>
-    {% if result.judge_card.wins %}
-    <p class="muted" style="margin:.5rem 0 0">Leads on: {% for w in result.judge_card.wins %}<span class="badge">{{ w }}</span> {% endfor %}</p>
-    {% endif %}
-  </section>
-  {% endif %}
-
-  {% if result.learning_curve %}
-  {% include "partials_learning_curve.html" %}
-{% endif %}
-
-  {% if result.ablations %}
-  <section class="card full" id="eval-ablations" style="margin-top:1rem">
-    <h2>Text / high-cardinality ablations</h2>
-    <p class="muted" style="margin:0 0 .5rem">{{ result.ablations.headline }}</p>
-    <p class="muted" style="margin:0 0 .75rem;font-size:.8rem">
-      text: {% for c in result.ablations.text_cols %}<code>{{ c }}</code> {% else %}—{% endfor %}
-      · high-card: {% for c in result.ablations.high_card_cols %}<code>{{ c }}</code> {% else %}—{% endfor %}
-    </p>
-    <div style="overflow-x:auto">
-    <table id="ablation-table">
-      <thead>
-        <tr>
-          <th>Variant</th>
-          <th>#feat</th>
-          <th>Accuracy</th>
-          <th>Δ vs full</th>
-          <th>ROC-AUC</th>
-          <th>Dropped</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in result.ablations.rows %}
-        <tr>
-          <td><code>{{ r.variant }}</code></td>
-          <td>{{ r.n_features }}</td>
-          <td style="font-variant-numeric:tabular-nums">{% if r.metrics.get('accuracy') is not none %}{{ "%.4f"|format(r.metrics.accuracy) }}{% else %}—{% endif %}</td>
-          <td style="font-variant-numeric:tabular-nums" class="{% if (r.delta_vs_full.get('accuracy') or 0) < -0.0005 %}delta-neg{% elif (r.delta_vs_full.get('accuracy') or 0) > 0.0005 %}delta-pos{% else %}delta-zero{% endif %}">
-            {% if r.variant == 'full' %}—{% elif r.delta_vs_full.get('accuracy') is not none %}{{ "%+.4f"|format(r.delta_vs_full.accuracy) }}{% else %}—{% endif %}
-          </td>
-          <td style="font-variant-numeric:tabular-nums">{% if r.metrics.get('roc_auc') is not none %}{{ "%.4f"|format(r.metrics.roc_auc) }}{% else %}—{% endif %}</td>
-          <td class="muted" style="font-size:.75rem">{% if r.dropped %}{{ r.dropped|join(', ') }}{% else %}—{% endif %}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    </div>
-  </section>
-  {% endif %}
-
-  {% if result.calibration and result.calibration.n %}
-  <section class="card full" id="eval-calibration" style="margin-top:1rem">
-    <h2>Uncertainty / calibration</h2>
-    <p class="muted" style="margin:0 0 .5rem">{{ result.calibration.note }}</p>
-    <div class="metrics-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.75rem;margin-bottom:.75rem">
-      <div class="card" style="background:var(--panel2);padding:.65rem"><div class="muted" style="font-size:.7rem">Brier</div><div style="font-size:1.1rem">{% if result.calibration.brier is not none %}{{ "%.4f"|format(result.calibration.brier) }}{% else %}—{% endif %}</div></div>
-      <div class="card" style="background:var(--panel2);padding:.65rem"><div class="muted" style="font-size:.7rem">ECE</div><div style="font-size:1.1rem">{% if result.calibration.ece is not none %}{{ "%.4f"|format(result.calibration.ece) }}{% else %}—{% endif %}</div></div>
-      <div class="card" style="background:var(--panel2);padding:.65rem"><div class="muted" style="font-size:.7rem">mean p</div><div style="font-size:1.1rem">{% if result.calibration.mean_proba is not none %}{{ "%.3f"|format(result.calibration.mean_proba) }}{% else %}—{% endif %}</div></div>
-      <div class="card" style="background:var(--panel2);padding:.65rem"><div class="muted" style="font-size:.7rem">n</div><div style="font-size:1.1rem">{{ result.calibration.n }}</div></div>
-    </div>
-    {% include "partials_reliability_chart.html" %}
-    <div style="overflow-x:auto">
-    <table>
-      <thead><tr><th>Bin</th><th>n</th><th>mean p</th><th>mean y</th><th>|gap|</th></tr></thead>
-      <tbody>
-      {% for b in result.calibration.bins %}
-        {% if b.n %}
-        <tr>
-          <td class="muted">[{{ "%.2f"|format(b.lo) }}, {{ "%.2f"|format(b.hi) }}]</td>
-          <td>{{ b.n }}</td>
-          <td>{{ b.mean_proba }}</td>
-          <td>{{ b.mean_label }}</td>
-          <td>{{ b.gap }}</td>
-        </tr>
-        {% endif %}
-      {% endfor %}
-      </tbody>
-    </table>
-    </div>
-  </section>
-  {% endif %}
-
+  {% include "partials_eval_results.html" %}
   {% else %}
   <section class="card" id="eval-empty">
-    <h2>No run yet</h2>
-    <p class="muted" style="margin:0">Pick a pack and hit <strong>Run eval</strong>. Mock works offline; set <code>TABPFN_TOKEN</code> for live Plus / Thinking / Fast.</p>
+    <div class="saas-empty" data-empty="eval-prerun">
+      <p class="empty-kicker">Pre-run</p>
+      <p class="empty-title">No eval yet</p>
+      <p>Pick a pack above and hit <strong>Run eval</strong>. Mock works offline; set <code>TABPFN_TOKEN</code> for live Plus / Thinking / Fast.</p>
+      <button type="button" class="empty-cta" id="eval-empty-cta" onclick="var b=document.getElementById('eval-run-btn'); if(b) b.click();">Run eval</button>
+      <a class="empty-cta secondary" href="/desk">Load freight fixture on desk</a>
+    </div>
     <div class="empty-panels" aria-hidden="true">
       <div class="empty-panel"><h3>Latency</h3><div class="ph" style="width:70%"></div><div class="ph" style="width:45%"></div></div>
       <div class="empty-panel"><h3>Thinking</h3><div class="ph" style="width:80%"></div><div class="ph" style="width:55%"></div></div>
