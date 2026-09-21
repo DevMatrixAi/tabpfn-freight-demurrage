@@ -1,9 +1,37 @@
-"""Ops-board risk card helpers (dollar-first triage cards)."""
+"""Ops-board risk card helpers (dollar-first triage cards).
+
+Display labels are plain-English for the desk UI only; robot API field names
+stay technical (divert / rebook / …).
+"""
 from __future__ import annotations
 
 from typing import Any
 
 from tabpfn_hack_core.core.pipeline import PipelineSession
+
+# Desk UI copy — keep API / playbook keys unchanged.
+ACTION_LABELS: dict[str, str] = {
+    "divert": "Move to another terminal",
+    "rebook": "Change booking",
+    "authorize_fee": "Pay the known fee",
+    "cancel_booking": "Cancel booking",
+    "cancel": "Cancel booking",
+    "monitor": "Watch only",
+    "expedite": "Speed up inland move",
+}
+
+# Late fee risk cards: Low / Med / High (tier colors stay red/amber/green).
+TIER_RISK_LABELS: dict[str, str] = {
+    "red": "High",
+    "amber": "Med",
+    "green": "Low",
+}
+
+
+def human_action(action: str | None) -> str:
+    """Map playbook action key → desk phrase (fallback: raw key)."""
+    key = (action or "monitor").strip()
+    return ACTION_LABELS.get(key, key.replace("_", " "))
 
 
 def risk_tier(proba: float) -> str:
@@ -12,6 +40,11 @@ def risk_tier(proba: float) -> str:
     if proba >= 0.40:
         return "amber"
     return "green"
+
+
+def risk_label(tier: str) -> str:
+    """Late fee risk band for cards (High / Med / Low)."""
+    return TIER_RISK_LABELS.get(tier, tier)
 
 
 def build_risk_cards(
@@ -52,12 +85,16 @@ def build_risk_cards(
                 if col in df.columns and str(row.get(col, "") or ""):
                     bits.append(f"{col.split('_')[0]} {row[col]}")
             subtitle = " · ".join(bits[:3])
+        action_key = a.get("action") or "monitor"
+        tier = risk_tier(proba)
         cards.append({
             "row_id": rid,
             "proba": round(proba, 4),
-            "action": a.get("action") or "monitor",
+            "action": action_key,  # technical key (API / debug)
+            "action_label": human_action(action_key),
             "reason": a.get("reason") or "",
-            "tier": risk_tier(proba),
+            "tier": tier,
+            "risk_label": risk_label(tier),  # High / Med / Low
             "money": money,
             "subtitle": subtitle,
         })
