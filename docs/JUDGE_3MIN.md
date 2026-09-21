@@ -1,3 +1,13 @@
+<!-- TIP_SHA_PIN_START -->
+**Tip (main):** `b0ce904` · [judge_path_mock_receipt.md](../artifacts/freight-demurrage/judge_path_mock_receipt.md)
+
+**First-screen gallery:**
+
+| Login | Home | Desk | Eval |
+| --- | --- | --- | --- |
+| ![login](images/judge/login.svg) | ![home](images/judge/home.svg) | ![desk](images/judge/desk.svg) | ![eval](images/judge/eval.svg) |
+<!-- TIP_SHA_PIN_END -->
+
 # Judge path — 3 minutes (offline mock)
 
 **Honest path = local full desk.** The Vercel URL is a login + sample-ticker stub only.
