@@ -10,6 +10,11 @@ from fastapi.responses import RedirectResponse
 from tabpfn_hack_core.core.pipeline import PipelineSession
 
 try:
+    from apps.desk.dev_sample import resolve_sample_n, sample_frame
+except ImportError:
+    from dev_sample import resolve_sample_n, sample_frame  # type: ignore
+
+try:
     from apps.desk.wow import run_blank_head, run_what_if
     from apps.desk.risk_board import build_thinking_timeline, chart_stats
 except ImportError:
@@ -24,6 +29,7 @@ def apply_triage(
     mode: str = "mock",
     fast_ab: str | None = None,
     thinking_effort: str | None = None,
+    sample_n: str | None = None,
     pack_meta: Callable[[], dict[str, Any]],
     resolve_mode: Callable,
     metric_slice: Callable,
@@ -39,6 +45,19 @@ def apply_triage(
         load_default_csv(sess)
         tid = state["table_id"]
     backend_mode, resolve_warn = resolve_mode(mode)
+    # Budget control: optional small-n sample before fit (live TabPFN cost)
+    want_n = resolve_sample_n(sample_n)
+    _df0 = sess.tables[tid]
+    _label = getattr(sess.domain, "label_col", None)
+    _sampled, _smeta = sample_frame(_df0, want_n, label_col=_label)
+    if _smeta and _smeta.get("sampled"):
+        sess.tables[tid] = _sampled
+        state["n_rows"] = int(len(_sampled))
+        state["demurrage_total"] = money_total(_sampled)
+        state["sample_row_ids"] = sample_ids(_sampled, id_col=sess.domain.id_col or "container_id")
+        state["dev_sample"] = _smeta
+    else:
+        state["dev_sample"] = _smeta  # may be under-cap note or None
     n = len(sess.tables[tid])
     test_size = 0.3 if n >= 10 else 0.25
     if n < 4:
