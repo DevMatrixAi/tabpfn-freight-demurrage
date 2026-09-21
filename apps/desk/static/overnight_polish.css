@@ -1,0 +1,8 @@
+/* overnight polish: empty + loading (demurrage desk) */
+.empty-board{padding:.25rem 0 .15rem}
+.empty-panels{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.65rem;margin-top:.35rem}
+.empty-panel{border:1px dashed var(--border,#2a3548);border-radius:10px;padding:.75rem;background:#121a26}
+.empty-panel h3{margin:0;font-size:.78rem;color:var(--muted,#8b9bb4);font-weight:650;text-transform:uppercase;letter-spacing:.04em}
+.empty-panel .ph{height:.55rem;border-radius:4px;background:#1e2a3c;margin:.4rem 0;opacity:.75}
+.btn-busy{opacity:.55;cursor:wait}
+button:disabled{opacity:.6;cursor:wait}
