@@ -1,0 +1,105 @@
+{
+  "frozen": true,
+  "mock": true,
+  "label": "MCP 7-tool mock smoke receipt",
+  "source": "scripts/freeze_mcp_mock_smoke_receipt.py (no live TabPFN)",
+  "repro": "TABPFN_TOKEN= python scripts/freeze_mcp_mock_smoke_receipt.py",
+  "pack": "freight-demurrage",
+  "has_token": false,
+  "token_mode": "empty",
+  "tools": [
+    "load_table",
+    "profile",
+    "fit_predict",
+    "explain",
+    "export_report",
+    "compare_baseline",
+    "suggest_actions"
+  ],
+  "tool_count": 7,
+  "all_ok": true,
+  "steps": [
+    {
+      "tool": "load_table",
+      "ok": true,
+      "latency_ms_mock": 12,
+      "n_rows": 1200
+    },
+    {
+      "tool": "profile",
+      "ok": true,
+      "latency_ms_mock": 18,
+      "n_cols": 20,
+      "suggested_group_col": "vessel_id",
+      "suggested_time_col": "event_ts"
+    },
+    {
+      "tool": "fit_predict",
+      "ok": true,
+      "latency_ms_mock": 95,
+      "mode": "mock",
+      "backend": "mock",
+      "metrics": {
+        "accuracy": 0.93,
+        "f1": 0.7835051546391752,
+        "roc_auc": 0.9897588126159556,
+        "avg_precision": 0.9514651974802124
+      }
+    },
+    {
+      "tool": "explain",
+      "ok": true,
+      "latency_ms_mock": 42,
+      "method": "permutation_importance",
+      "top": [
+        "projected_demurrage_usd",
+        "free_days_left",
+        "dwell_days_so_far",
+        "weather_alert__len",
+        "blank_sailing"
+      ]
+    },
+    {
+      "tool": "export_report",
+      "ok": true,
+      "latency_ms_mock": 28,
+      "paths": {
+        "markdown": "artifacts/mcp_cookbook/demo_report.md",
+        "json": "artifacts/mcp_cookbook/demo_report.json"
+      }
+    },
+    {
+      "tool": "compare_baseline",
+      "ok": true,
+      "latency_ms_mock": 55,
+      "judge_headline": "mock Δacc=+0.000 Δauc=+0.000 vs HistGBM",
+      "delta": {
+        "avg_precision": 0.0,
+        "roc_auc": 0.0,
+        "f1": 0.0,
+        "accuracy": 0.0
+      }
+    },
+    {
+      "tool": "suggest_actions",
+      "ok": true,
+      "latency_ms_mock": 22,
+      "counts": {
+        "monitor": 15,
+        "cancel_booking": 1,
+        "rebook": 2,
+        "divert": 2
+      },
+      "n_items": 20
+    }
+  ],
+  "wall_s": 0.583,
+  "latency_ms_mock_total": 272,
+  "vo_lines": [
+    "MCP 7-tool mock smoke · empty TABPFN_TOKEN · all ok.",
+    "Tools: load_table → profile → fit_predict → explain → export_report → compare_baseline → suggest_actions.",
+    "Mock latency sum ≈ 272 ms (VO crib; wall ~0.583s).",
+    "Same PipelineSession / TOOL_SPECS the MCP stdio server exposes."
+  ],
+  "frozen_at": "2026-09-21T21:13:00Z"
+}
