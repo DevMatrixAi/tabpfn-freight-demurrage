@@ -6,9 +6,14 @@
 <title>Sign in · Freight Money Desk</title>
 <link rel="stylesheet" href="/static/saas_shell.css"/>
 <link rel="stylesheet" href="/static/saas_density.css"/>
+<link rel="stylesheet" href="/static/ops_board.css"/>
 </head>
 <body class="app-shell">
+{% set state = {"coach_active_beat": "login"} %}
+{% set coach_active_beat = "login" %}
 <div class="login-stage">
+{% include "partials_coach_strip.html" %}
+
   <div class="login-card">
     <div class="mark" style="display:flex;align-items:center;gap:.55rem;margin-bottom:.85rem">
       <div class="mark-orb" style="width:1.7rem;height:1.7rem;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#22d3ee)"></div>
@@ -19,7 +24,8 @@
     <p class="lede">Same TabPFN engine judges will score — demo SaaS shell, not production IAM.</p>
     <div class="hint">Demo credentials: <code>demo</code> / <code>demurrage</code></div>
     {% if error %}<p class="err">{{ error }}</p>{% endif %}
-    <form method="post" action="/login">
+    <form method="post" action="/login" id="coach-login" data-coach="login">
+      <span class="coach-hint" data-coach-hint="login">You’re the shipper — stop late fees before the invoice.</span>
       <label for="username">Work email / user</label>
       <input id="username" name="username" autocomplete="username" placeholder="demo" required/>
       <label for="password">Password</label>
