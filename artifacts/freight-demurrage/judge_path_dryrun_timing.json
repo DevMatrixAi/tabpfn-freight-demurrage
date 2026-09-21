@@ -1,0 +1,21 @@
+{
+  "kind": "judge_path_dryrun_timing",
+  "mode": "mock",
+  "TABPFN_TOKEN": "",
+  "default_dev_n": 60,
+  "full_table_live_blocked": true,
+  "times_s": {
+    "login": 0.004,
+    "judge_path_mock_post": 0.321,
+    "eval_get": 0.015,
+    "wall_login_to_eval": 0.34
+  },
+  "judge_redirect": "/eval?judge=1",
+  "http": {
+    "login": 303,
+    "judge_path": 303,
+    "eval": 200
+  },
+  "recorded_at": "2026-09-21T21:24:13.848906+00:00",
+  "note": "Feature freeze dry-run. Not a live Thinking take. Post-4: preflight \u2192 n=60 Thinking \u2192 VO fulltable."
+}
