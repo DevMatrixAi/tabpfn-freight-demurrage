@@ -1,0 +1,47 @@
+{# In-desk coach strip — DEMO_90S / JUDGE_3MIN beats + crib one-liners #}
+{% set _beat = state.coach_active_beat if state is defined and state.coach_active_beat else (coach_active_beat|default('triage')) %}
+<aside class="coach-strip" id="coach-strip" data-coach-strip="1" aria-label="Demo coach strip"
+  data-active="{{ _beat }}">
+  <div class="coach-strip-head">
+    <span class="coach-kicker">Coach</span>
+    <span class="coach-title">Judge path · mock OK</span>
+    <button type="button" class="coach-dismiss" id="coach-dismiss" title="Hide coach strip" aria-label="Dismiss coach">×</button>
+  </div>
+  <ol class="coach-chips" id="coach-chips">
+    <li class="coach-chip {% if _beat == 'login' %}active{% endif %}" data-beat="login"><a href="/login">Login</a></li>
+    <li class="coach-chip {% if _beat == 'ticker' %}active{% endif %}" data-beat="ticker"><a href="/desk#ticker-dollars">Ticker</a></li>
+    <li class="coach-chip {% if _beat == 'triage' %}active{% endif %}" data-beat="triage"><a href="/desk#triage-panel">Triage</a></li>
+    <li class="coach-chip {% if _beat == 'drawer' %}active{% endif %}" data-beat="drawer"><a href="/desk#risk-board">Drawer</a></li>
+    <li class="coach-chip {% if _beat == 'stream' %}active{% endif %}" data-beat="stream"><a href="/desk#stream-panel">Stream</a></li>
+    <li class="coach-chip {% if _beat == 'eval' %}active{% endif %}" data-beat="eval"><a href="/eval" id="coach-eval-chip">/eval</a></li>
+  </ol>
+  <p class="coach-line" id="coach-line" data-coach-line="1">
+    {% if _beat == 'login' %}You’re the shipper — stop late fees before the invoice.
+    {% elif _beat == 'ticker' %}Dollars that burn if boxes sit past grace days.
+    {% elif _beat == 'triage' %}Score late-fee risk on this messy table.
+    {% elif _beat == 'drawer' %}Not a red flag — pick a money move.
+    {% elif _beat == 'stream' %}New event — score and move can change.
+    {% else %}Plus / Thinking / Fast vs HistGBM for judges.{% endif %}
+  </p>
+</aside>
+<script>
+(function () {
+  var KEY = "tabpfn_coach_strip_dismissed";
+  var strip = document.getElementById("coach-strip");
+  if (!strip) return;
+  try {
+    if (localStorage.getItem(KEY) === "1") {
+      strip.setAttribute("hidden", "");
+      strip.classList.add("dismissed");
+    }
+  } catch (e) {}
+  var btn = document.getElementById("coach-dismiss");
+  if (btn) {
+    btn.addEventListener("click", function () {
+      strip.setAttribute("hidden", "");
+      strip.classList.add("dismissed");
+      try { localStorage.setItem(KEY, "1"); } catch (e) {}
+    });
+  }
+})();
+</script>
