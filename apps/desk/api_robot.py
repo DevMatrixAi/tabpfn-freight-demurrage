@@ -39,7 +39,7 @@ class TriageRequest(BaseModel):
 
     pack: str | None = Field(
         default=None,
-        description="Domain pack id (freight-demurrage, equipment-size, inland-mode, air-freight).",
+        description="Domain pack id (freight-demurrage, equipment-size, inland-mode, air-freight, stow-fit).",
     )
     fixture: str | None = Field(
         default=None,
