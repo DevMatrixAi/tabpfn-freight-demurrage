@@ -23,6 +23,12 @@
   </div>
   <div class="spacer"></div>
   <span class="chip live">Demo · mock-ready</span>
+  {% if live_budget %}
+  <span class="chip live-budget-chip {% if live_budget.mode == 'mock' %}mock{% else %}live{% endif %}"
+        id="live-budget-chip"
+        data-live-budget-chip="1"
+        title="{{ live_budget.formula_note }}">{{ live_budget.short }}</span>
+  {% endif %}
   <form method="post" action="/logout" style="margin:0"><button class="ghost" type="submit">Sign out</button></form>
 </nav>
 
