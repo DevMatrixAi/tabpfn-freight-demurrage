@@ -12,6 +12,7 @@
     <label class="muted stream-auto-label"><input type="checkbox" id="stream-auto" /> Auto-poll (5s)</label>
   </div>
   <p class="muted stream-hint">Appends a synthetic Terminal49 / project44 / EDI fixture row, then re-runs triage and refreshes risk cards — no full page reload.</p>
+  <div id="stream-status" class="stream-status" aria-live="polite"></div>
 </div>
 <script>
 (function(){
@@ -22,8 +23,7 @@
   function syncTicker(root){
     if(!root) return;
     var dollars = document.querySelector('.ticker .dollars, .dollars');
-    var n = root.getAttribute('data-n-rows');
-    var d = root.getAttribute('data-demurrage');
+    var d = root.getAttribute('data-demurrage') || root.getAttribute('data-demurrage-total');
     if(dollars && d != null){
       try { dollars.textContent = '$' + Number(d).toLocaleString('en-US', {maximumFractionDigits:0}); } catch(e) {}
     }
@@ -45,14 +45,12 @@
       var html = await res.text();
       var tmp = document.createElement('div');
       tmp.innerHTML = html;
-      var neu = tmp.querySelector('#live-board') || tmp.firstElementChild;
-      var cur = document.getElementById('live-board');
+      var neu = tmp.querySelector('#live-board') || tmp.querySelector('#risk-board') || tmp.firstElementChild;
+      var cur = document.getElementById('live-board') || document.getElementById('risk-board');
       if(cur && neu){ cur.replaceWith(neu); }
-      else if(neu){
-        var host = document.querySelector('main') || document.body;
-        host.appendChild(neu);
-      }
-      syncTicker(document.getElementById('live-board'));
+      syncTicker(document.getElementById('live-board') || document.getElementById('risk-board'));
+      var st = document.getElementById('stream-status');
+      if(st) st.textContent = 'Re-scored at ' + new Date().toLocaleTimeString();
     } catch (err) {
       var st = document.getElementById('stream-status');
       if(st) st.innerHTML = '<span class="warn-banner">Stream re-score failed: ' + err.message + '</span>';
