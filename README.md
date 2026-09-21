@@ -39,7 +39,7 @@ One-pager: [`docs/JUDGE_3MIN.md`](docs/JUDGE_3MIN.md) · MCP smoke: [`docs/MCP_S
 
 | Login | Home | Desk | Eval |
 | --- | --- | --- | --- |
-| ![login](docs/images/judge/login.png) | ![home](docs/images/judge/home.png) | ![desk](docs/images/judge/desk.png) | ![eval](docs/images/judge/eval.png) |
+| ![login](docs/images/judge/login.svg) | ![home](docs/images/judge/home.svg) | ![desk](docs/images/judge/desk.svg) | ![eval](docs/images/judge/eval.svg) |
 
 Synthetic dark-theme panels for the 3-minute crib (not live captures). Settings stub: `/settings`.
 
