@@ -1,0 +1,14 @@
+<section class="card full" id="eval-learning-curve" style="margin-top:1rem">
+    <h2>Small-n learning curve</h2>
+    <p class="muted" style="margin:0 0 .5rem">{{ result.learning_curve.headline }}</p>
+    <p class="muted" style="margin:0 0 .75rem;font-size:.8rem">{{ result.learning_curve.note }}</p>
+    <div class="metrics" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.5rem">
+      {% for row in result.learning_curve.rows %}
+      <div class="metric-cell card" style="background:var(--panel2);padding:.75rem">
+        <div class="muted" style="font-size:.75rem">n={{ row.n_train }}</div>
+        <div class="val" style="font-size:1.05rem">{% if row.metrics.accuracy is defined %}{{ '%.3f'|format(row.metrics.accuracy) }}{% else %}—{% endif %}</div>
+        <div class="muted" style="font-size:.7rem">accuracy</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
