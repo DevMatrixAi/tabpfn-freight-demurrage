@@ -41,6 +41,31 @@ def _has_deep_markers(path: Path, name: str) -> bool:
     return all(m in text for m in _MARKERS.get(name, ()))
 
 
+def _preserve_eval_learning_curve(data: bytes, *, had_learning_curve: bool) -> bytes:
+    """Keep the readable learning-curve include when unpacking the fallback blob.
+
+    Older commits intentionally keep ``eval.html`` small and rely on the zlib
+    blob for the deep panels. If that small template already contains the
+    learning-curve include, blindly unpacking the blob would silently remove
+    the panel on a clean checkout. Merge the tiny include into the blob output
+    instead of requiring the generated template to be committed.
+    """
+    if not had_learning_curve:
+        return data
+    text = data.decode("utf-8")
+    if "partials_learning_curve.html" in text or 'id="eval-learning-curve"' in text:
+        return data
+    include = (
+        "\n  {% if result.learning_curve %}\n"
+        '  {% include "partials_learning_curve.html" %}\n'
+        "  {% endif %}\n"
+    )
+    for marker in ("\n  {% else %}", "\n{% else %}"):
+        if marker in text:
+            return text.replace(marker, include + marker, 1).encode("utf-8")
+    return data
+
+
 def ensure_deep_templates(*, force: bool = False) -> dict[str, str]:
     """Write templates from blobs only when missing/stale. Returns status map."""
     _DIR.mkdir(parents=True, exist_ok=True)
@@ -50,7 +75,18 @@ def ensure_deep_templates(*, force: bool = False) -> dict[str, str]:
         if (not force) and _has_deep_markers(path, name):
             status[name] = "kept-readable"
             continue
+        had_learning_curve = False
+        if name == "eval.html" and path.is_file():
+            try:
+                existing = path.read_text(encoding="utf-8", errors="replace")
+                had_learning_curve = (
+                    "partials_learning_curve.html" in existing
+                    or 'id="eval-learning-curve"' in existing
+                )
+            except OSError:
+                pass
         data = zlib.decompress(base64.b64decode(blob))
+        data = _preserve_eval_learning_curve(data, had_learning_curve=had_learning_curve)
         if (not path.exists()) or path.read_bytes() != data:
             path.write_bytes(data)
             status[name] = "unpacked"

@@ -82,6 +82,7 @@ def test_calibration_summary_and_from_preds(freight_session, monkeypatch):
     assert cal["brier"] is not None
     assert cal["ece"] is not None
     assert isinstance(cal["bins"], list)
+    # unit
     y = np.array([0, 1, 1, 0, 1, 0, 1, 1])
     p = np.array([0.1, 0.8, 0.7, 0.2, 0.9, 0.3, 0.6, 0.55])
     s = calibration_summary(y, p, n_bins=4)
@@ -130,6 +131,7 @@ def test_eval_page_shows_new_sections():
 
 def test_mcp_cookbook_script(tmp_path, monkeypatch):
     monkeypatch.delenv("TABPFN_TOKEN", raising=False)
+    # Run cookbook main by importing
     import importlib.util
 
     spec = importlib.util.spec_from_file_location(
@@ -157,3 +159,27 @@ def test_stress_fixture_exists():
     df = pd.read_csv(path)
     assert df.shape[1] >= 50
     assert df.isna().any().any()
+
+
+def test_deep_template_unpack_preserves_learning_curve(tmp_path, monkeypatch):
+    """A clean checkout must not lose the curve when the deep blob unpacks."""
+    from apps.desk import ensure_deep_templates as deep_templates
+
+    target = tmp_path / "eval.html"
+    target.write_text(
+        '<section id="eval-learning-curve">'
+        '{% include "partials_learning_curve.html" %}</section>',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(deep_templates, "_DIR", tmp_path)
+    monkeypatch.setattr(
+        deep_templates,
+        "_BLOBS",
+        {"eval.html": deep_templates.EVAL_HTML_BLOB},
+    )
+
+    deep_templates.ensure_deep_templates()
+    rendered_source = target.read_text(encoding="utf-8")
+    assert 'id="eval-latency"' in rendered_source
+    assert 'id="eval-learning-curve"' not in rendered_source
+    assert 'include "partials_learning_curve.html"' in rendered_source

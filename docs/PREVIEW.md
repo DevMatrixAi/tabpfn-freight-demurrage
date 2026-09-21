@@ -18,10 +18,17 @@ Robot/TMS JSON API (`/api/v1/*`) and OpenAPI (`/docs`) stay open without login.
 
 | Min | Do this |
 | --- | --- |
-| 0:00 | `pip install -e ".[dev,desk]"` then `tabpfn-hack desk --host 127.0.0.1 --port 8765` |
+| 0:00 | `pip install -e ".[dev,desk]"` then `TABPFN_TOKEN= tabpfn-hack desk --host 127.0.0.1 --port 8765` |
 | 0:30 | Open http://127.0.0.1:8765 → login `demo` / `demurrage` → **Run triage** (Mock) → risk cards + HistGBM Δ |
-| 1:30 | Open **/eval** → **Run eval** → latency · Thinking · ablations · calibration panels |
-| 2:30 | Optional: `python scripts/mcp_cookbook_demo.py` (7 MCP tools) · `pytest` · `tabpfn-hack demo --mode mock` |
+| 1:30 | Open **/eval** → **Run eval** → latency · Thinking · ablations · calibration · small-n learning curve |
+| 2:30 | Optional: `TABPFN_TOKEN= python scripts/mcp_cookbook_demo.py` (7 MCP tools) · `TABPFN_TOKEN= pytest -q` · `tabpfn-hack demo --mode mock` |
+|
+
+
+**Deterministic mock path:** keep the inline `TABPFN_TOKEN=` on the local desk command.
+The app loads a repo `.env` for convenience; an explicitly empty variable prevents an
+unintended live request/rate limit and keeps the 3-minute walkthrough offline. Never
+commit `.env`.
 
 **Stub URL honesty:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) shows login + sample ticker only — **not** Jinja `/eval` or robot triage. Full TabPFN desk stays local (or Docker/Fly/Railway). Repo stays **private**. Never commit `.env`.
 
