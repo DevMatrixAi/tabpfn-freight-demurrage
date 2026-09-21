@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Settings · Freight Money Desk</title>
+<link rel="stylesheet" href="/static/ops_board.css"/>
+<link rel="stylesheet" href="/static/saas_shell.css"/>
+<link rel="stylesheet" href="/static/saas_density.css"/>
+<link rel="stylesheet" href="/static/settings_stub.css"/>
+</head>
+<body class="app-shell">
+<nav class="app-nav" aria-label="Primary">
+  <a class="mark" href="/"><div class="mark-orb"></div><span>Freight Money Desk</span></a>
+  <div class="links">
+    <a href="/">Desks</a>
+    <a href="/desk">Ops board</a>
+    <a href="/eval">Eval</a>
+    <a href="/anti-wrapper">Anti-wrapper</a>
+    <a class="active" href="/settings" id="settings-link">Settings</a>
+    <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn">Judge path (mock)</button></form>
+    <a href="/docs" target="_blank" rel="noopener">Robot API</a>
+  </div>
+  <div class="spacer"></div>
+  <span class="chip {% if mode.id == 'live-small-n' %}live{% endif %}">{{ mode.label }}</span>
+  <form method="post" action="/logout" style="margin:0"><button class="ghost" type="submit">Sign out</button></form>
+</nav>
+
+<div class="saas-wrap settings-wrap" id="settings-page" data-settings="1">
+  <div class="hero-row">
+    <div>
+      <h1>Settings</h1>
+      <p class="sub">Demo prefs for the judge walkthrough — not production IAM.</p>
+    </div>
+  </div>
+
+  <section class="card settings-card">
+    <p class="empty-kicker" style="margin:0 0 .35rem">Auth stub</p>
+    <p style="margin:0">{{ auth_note }}</p>
+  </section>
+
+  {% if no_client %}
+  <div class="saas-empty" data-empty="settings-client">
+    <p class="empty-kicker">No client</p>
+    <p class="empty-title">Pick a demo client</p>
+    <p>Client switcher lives on Desks home — same product, different customer books.</p>
+    <a class="empty-cta" href="/">Open Desks</a>
+  </div>
+  {% else %}
+  <section class="card settings-card">
+    <p class="empty-kicker" style="margin:0 0 .35rem">Active client</p>
+    <p style="margin:0"><strong>{{ active_client_label }}</strong> <span class="muted">({{ active_client }})</span></p>
+    {% if active_client_gloss %}<p class="muted" style="margin:.35rem 0 0">{{ active_client_gloss }}</p>{% endif %}
+    <p style="margin:.65rem 0 0"><a class="empty-cta secondary" href="/">Change on Desks</a></p>
+  </section>
+  {% endif %}
+
+  <section class="card settings-card">
+    <p class="empty-kicker" style="margin:0 0 .35rem">Mode</p>
+    <p style="margin:0">
+      <span class="settings-mode-badge mode-{{ mode.id }}">{{ mode.label }}</span>
+      <span class="muted" style="margin-left:.4rem">{{ mode.gloss }}</span>
+    </p>
+  </section>
+
+  <section class="card settings-card">
+    <p class="empty-kicker" style="margin:0 0 .35rem">Dev sample · Thinking effort</p>
+    <form method="post" action="/settings" class="settings-prefs">
+      <label for="sample_n">sample_n / TABPFN_DEV_N</label>
+      <select name="sample_n" id="sample_n" aria-label="Demo sample_n preference">
+        <option value="full" {% if not sample_n %}selected{% endif %}>full table (mock OK)</option>
+        {% for n in sample_choices %}
+        <option value="{{ n }}" {% if sample_n == n %}selected{% endif %}>{{ n }} (live budget)</option>
+        {% endfor %}
+      </select>
+      <p class="muted" style="margin:.35rem 0 .75rem;font-size:.78rem">
+        Env <code>TABPFN_DEV_N</code>={% if sample_n_env %}{{ sample_n_env }}{% else %}(unset){% endif %}
+        · resolved default: {% if sample_n_resolved %}{{ sample_n_resolved }}{% else %}full{% endif %}
+        · cookie: {% if sample_n_cookie %}{{ sample_n_cookie }}{% else %}none{% endif %}
+        · triage form still wins per run.
+      </p>
+      <label for="thinking_effort">Thinking effort</label>
+      <select name="thinking_effort" id="thinking_effort" aria-label="Thinking effort preference">
+        {% for e in effort_choices %}
+        <option value="{{ e }}" {% if thinking_effort == e %}selected{% endif %}>{{ e }}</option>
+        {% endfor %}
+      </select>
+      <p class="muted" style="margin:.35rem 0 .75rem;font-size:.78rem">Stored as demo cookie · desk triage form can override.</p>
+      <button type="submit" class="empty-cta" style="border:0">Save demo prefs</button>
+    </form>
+  </section>
+
+  <section class="card settings-card">
+    <p class="empty-kicker" style="margin:0 0 .35rem">Judge links</p>
+    <ul class="settings-links">
+      {% for L in links %}
+      <li>
+        {% if L.method == 'post' %}
+        <form method="post" action="{{ L.href }}" style="display:inline;margin:0"><button type="submit" class="linkish">{{ L.label }}</button></form>
+        {% else %}
+        <a href="{{ L.href }}">{{ L.label }}</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="card settings-card settings-crib">
+    <p class="empty-kicker" style="margin:0 0 .35rem">Plain English crib</p>
+    <p style="margin:0;line-height:1.45">{{ judge_crib }}</p>
+  </section>
+</div>
+<script src="/static/desk_keys.js" defer></script>
+</body>
+</html>
