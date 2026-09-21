@@ -24,7 +24,7 @@ def test_adapter_fetch_and_schema(name: str):
     adapter = get_adapter(name)
     assert adapter.name == name
     events = adapter.fetch_events()
-    assert len(events) >= 2
+    assert len(events) >= 5
     df = adapter.to_dataframe()
     assert list(df.columns) == FREIGHT_COLUMNS
     assert len(df) == len(events)
@@ -45,6 +45,7 @@ def test_unknown_adapter():
 def test_adapter_into_pipeline_mock():
     """At least one fixture adapter loads into PipelineSession and runs triage."""
     domain = load_domain(ROOT / "domains" / "freight-demurrage" / "domain.yaml")
+    # Pad small fixture with domain CSV so train/test split works
     import pandas as pd
 
     adapter = get_adapter("terminal49")
