@@ -97,6 +97,24 @@ def register_triage_routes(
         return RedirectResponse(url="/desk#what-if", status_code=303)
 
 
+
+    try:
+        from apps.desk.judge_path import register_judge_path_routes as _reg_jp
+    except ImportError:
+        from judge_path import register_judge_path_routes as _reg_jp  # type: ignore
+    if not any(getattr(r, "path", None) == "/judge-path" for r in app.routes):
+        _reg_jp(
+            app,
+            state=state,
+            pack_meta=pack_meta,
+            resolve_mode=resolve_mode,
+            metric_slice=metric_slice,
+            money_total=money_total,
+            build_risk_cards=build_risk_cards,
+            load_default_csv=load_default_csv,
+            sample_ids=sample_ids,
+        )
+
     # Auto-wire stream re-score if not already mounted (e.g. older app.py)
     try:
         if not any(getattr(r, "path", None) == "/stream-rescore" for r in app.routes):
