@@ -1,0 +1,20 @@
+{% if state.missingness %}
+<section class="missingness-panel" id="missingness-panel" aria-label="Missingness showcase">
+  <h3>Missing values (TabPFN surface)</h3>
+  <p class="gloss">{{ state.missingness.gloss }}</p>
+  <p class="meta">
+    {{ state.missingness.n_rows }} rows · {{ state.missingness.n_cols }} cols ·
+    {{ state.missingness.n_cols_with_missing }} cols with NaN ·
+    overall {{ state.missingness.overall_pct }}% missing
+  </p>
+  <ul class="missingness-bars">
+    {% for row in state.missingness.top %}
+    <li>
+      <code>{{ row.col }}</code>
+      <span class="bar" style="--pct: {{ row.pct }}%"></span>
+      <span class="pct">{{ row.pct }}%</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
