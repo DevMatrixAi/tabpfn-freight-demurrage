@@ -1,4 +1,3 @@
-{% include "stream_controls.html" %}
 {% if state.chart_stats and state.risk_cards %}
 <section class="card full" id="ops-charts">
 <h2>Board charts <span class="badge">after triage</span></h2>
@@ -6,8 +5,14 @@
 <div class="charts-grid">
   <div class="chart-panel">
     <div class="chart-title">Late fee risk mix</div>
+    {% set cs = state.chart_stats %}
+    {% set n_cards = (cs.counts.high + cs.counts.med + cs.counts.low) %}
+    {% if n_cards == 0 %}
+    <div class="chart-empty" data-chart-state="empty">
+      <p class="msg">No series yet — risk mix fills after triage paints cards.</p>
+    </div>
+    {% else %}
     <div class="dist-bars" role="img" aria-label="Risk distribution">
-      {% set cs = state.chart_stats %}
       <div class="dist-row">
         <span class="dist-lbl high">High</span>
         <div class="dist-track"><div class="dist-fill high" style="width:{{ cs.pct.high }}%"></div></div>
@@ -24,11 +29,24 @@
         <span class="dist-n">{{ cs.counts.low }} <span class="muted">({{ cs.pct.low }}%)</span></span>
       </div>
     </div>
+    {% if cs.counts.high == 0 and cs.counts.med == 0 %}
+    <div class="saas-empty zero-risk" data-empty="zero-risk" style="margin-top:.75rem;width:100%;box-sizing:border-box">
+      <p class="empty-kicker">Zero high / med risk</p>
+      <p class="empty-title">Board looks calm</p>
+      <p>All painted cards are Low late fee risk. Keep streaming or re-run triage if the feed changes.</p>
+    </div>
+    {% endif %}
+    {% endif %}
   </div>
   <div class="chart-panel">
     <div class="chart-title">Money at risk (on cards)</div>
+    {% set denom = cs.money_max if cs.money_max > 0 else 1 %}
+    {% if cs.money_max == 0 %}
+    <div class="chart-empty" data-chart-state="empty-money">
+      <p class="msg">No money at risk on cards — exposure bars stay muted until triage.</p>
+    </div>
+    {% else %}
     <div class="money-bars">
-      {% set denom = cs.money_max if cs.money_max > 0 else 1 %}
       <div class="dist-row">
         <span class="dist-lbl high">High</span>
         <div class="dist-track"><div class="dist-fill high" style="width:{{ (100 * cs.money.high / denom)|round(1) }}%"></div></div>
@@ -46,6 +64,7 @@
       </div>
     </div>
     <p class="muted" style="margin:.55rem 0 0;font-size:.75rem">Board total exposure: <strong>${{ "{:,.0f}".format(state.demurrage_total|float) }}</strong></p>
+    {% endif %}
   </div>
   {% if state.metrics %}
   <div class="chart-panel">
@@ -61,7 +80,51 @@
       {% endfor %}
     </div>
   </div>
+  {% else %}
+  <div class="chart-panel">
+    <div class="chart-title">Scorecard bars</div>
+    <div class="chart-skeleton" data-chart-state="loading" aria-hidden="true">
+      <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar"></div><div class="sk-n"></div></div>
+      <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:70%"></div><div class="sk-n"></div></div>
+      <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:55%"></div><div class="sk-n"></div></div>
+    </div>
+    <p class="msg muted" style="margin:.45rem 0 0;font-size:.78rem">Scores appear after triage finishes.</p>
+  </div>
   {% endif %}
+</div>
+</section>
+{% else %}
+<section class="card full charts-placeholder" id="ops-charts" data-chart-state="pre-triage">
+<h2>Board charts <span class="badge">waiting</span></h2>
+<div class="saas-empty" data-empty="charts">
+  <p class="empty-kicker">No series yet</p>
+  <p class="empty-title">Charts stay muted until triage</p>
+  <p>Run triage (Mock offline) to paint late fee risk mix, money at risk bars, and scorecard. Empty boards never look broken — just waiting.</p>
+  <a class="empty-cta" href="#triage-panel">Run triage</a>
+</div>
+<div class="charts-grid" aria-hidden="true">
+  <div class="chart-panel">
+    <div class="chart-title">Late fee risk mix</div>
+    <div class="chart-skeleton" data-chart-state="skeleton">
+      <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:40%"></div><div class="sk-n"></div></div>
+      <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:65%"></div><div class="sk-n"></div></div>
+      <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:30%"></div><div class="sk-n"></div></div>
+    </div>
+  </div>
+  <div class="chart-panel">
+    <div class="chart-title">Money at risk</div>
+    <div class="chart-skeleton" data-chart-state="skeleton">
+      <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:50%"></div><div class="sk-n"></div></div>
+      <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:35%"></div><div class="sk-n"></div></div>
+      <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:20%"></div><div class="sk-n"></div></div>
+    </div>
+  </div>
+  <div class="chart-panel">
+    <div class="chart-title">Scorecard</div>
+    <div class="chart-empty" data-chart-state="empty">
+      <p class="msg">No metrics yet.</p>
+    </div>
+  </div>
 </div>
 </section>
 {% endif %}
@@ -84,5 +147,13 @@
 {% endfor %}
 </div>
 </section>
+{% elif state.requested_mode == 'thinking' or state.mode == 'thinking' %}
+<section class="card full" id="thinking-timeline" data-empty="timeline">
+<h2>Thinking timeline <span class="badge">waiting</span></h2>
+<div class="saas-empty" data-empty="timeline">
+  <p class="empty-kicker">No events</p>
+  <p class="empty-title">Timeline needs group + time columns</p>
+  <p>Load a feed with vessel / flight grouping, then re-run Thinking (or Mock with thinking requested) to populate the path.</p>
+</div>
+</section>
 {% endif %}
-
