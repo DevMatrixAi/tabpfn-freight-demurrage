@@ -79,6 +79,31 @@ def apply_triage(
     )
     elapsed = time.perf_counter() - t0
     actions = sess.suggest_actions(tid, max_rows=50)
+    # Mock explain → action drawer ("Why this move" + importance bars)
+    try:
+        from apps.desk.explain_ui import format_explain
+    except ImportError:
+        from explain_ui import format_explain  # type: ignore
+    try:
+        expl = sess.explain(tid, mode=backend_mode, max_features=8)
+        top_reason = actions.items[0].reason if actions.items else None
+        top_action = actions.items[0].action if actions.items else None
+        state["explain"] = format_explain(
+            expl,
+            text_cols=list(getattr(sess.domain, "text_cols", None) or []),
+            high_card_cols=list(getattr(sess.domain, "high_card_cols", None) or []),
+            action_reason=top_reason,
+            action=top_action,
+        )
+    except Exception as exc:  # noqa: BLE001
+        state["explain"] = {
+            "method": "unavailable",
+            "notes": f"Explain skipped: {exc}",
+            "bars": [],
+            "top_labels": [],
+            "why": "Explain unavailable on this run.",
+            "n": 0,
+        }
     warnings: list[str] = []
     if resolve_warn:
         warnings.append(resolve_warn)
