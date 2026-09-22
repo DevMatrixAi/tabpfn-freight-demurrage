@@ -1,19 +1,18 @@
 {
   "kind": "live_small_n_thinking_take",
-  "live_status": "live_ok",
   "sample_n": 60,
-  "rows_full": 1200,
+  "rows_full": 200,
   "mode": "thinking",
   "thinking_effort": "medium",
   "group_col": "vessel_id",
   "group_time_col": "event_ts",
-  "elapsed_s": 19.393,
-  "compare_elapsed_s": 20.757,
+  "elapsed_s": 19.46,
+  "compare_elapsed_s": 18.708,
   "metrics": {
     "accuracy": 0.8333333333333334,
     "f1": 0.0,
-    "roc_auc": 0.8,
-    "avg_precision": 0.6666666666666666
+    "roc_auc": 0.6222222222222222,
+    "avg_precision": 0.2528138528138528
   },
   "thinking_narrative": "TabPFN-3.5-Thinking \u00b7 thinking_mode=True \u00b7 thinking_effort=medium \u00b7 group_col=vessel_id \u00b7 group_time_col=event_ts \u00b7 non-i.i.d. vessel/time context visible to the fit (Prior Labs Thinking docs: grouped + temporal rows).",
   "backend": "tabpfn_client",
@@ -23,22 +22,22 @@
     "tabpfn_metrics": {
       "accuracy": 0.8333333333333334,
       "f1": 0.0,
-      "roc_auc": 0.85,
-      "avg_precision": 0.7
+      "roc_auc": 0.6444444444444444,
+      "avg_precision": 0.2694805194805195
     },
     "baseline_metrics": {
       "accuracy": 0.8333333333333334,
       "f1": 0.0,
-      "roc_auc": 1.0,
-      "avg_precision": 1.0
+      "roc_auc": 0.6444444444444445,
+      "avg_precision": 0.2851851851851852
     },
     "delta": {
-      "roc_auc": -0.15000000000000002,
-      "accuracy": 0.0,
       "f1": 0.0,
-      "avg_precision": -0.30000000000000004
+      "roc_auc": -1.1102230246251565e-16,
+      "accuracy": 0.0,
+      "avg_precision": -0.01570466570466572
     },
-    "narrative": "Judge card \u2014 `tabpfn_client` mode=thinking \u00b7 thinking_effort=medium \u00b7 group_col=vessel_id \u00b7 group_time_col=event_ts vs `sklearn_hist_gbm` on the same split. \u0394 accuracy=+0.0000, \u0394 f1=+0.0000, \u0394 roc_auc=-0.1500, \u0394 AP=-0.3000. Domain hints: text_cols=2, high_card_cols=4, group=vessel_id, time=event_ts. No clear positive \u0394 on this mock/live split. Thinking: TabPFN-3.5-Thinking \u00b7 thinking_mode=True \u00b7 thinking_effort=medium \u00b7 group_col=vessel_id \u00b7 group_time_col=event_ts \u00b7 non-i.i.d. vessel/time context visible to the fit (Prior Labs Thinking docs: grouped + temporal rows).",
+    "narrative": "Judge card \u2014 `tabpfn_client` mode=thinking \u00b7 thinking_effort=medium \u00b7 group_col=vessel_id \u00b7 group_time_col=event_ts vs `sklearn_hist_gbm` on the same split. \u0394 accuracy=+0.0000, \u0394 f1=+0.0000, \u0394 roc_auc=-0.0000, \u0394 AP=-0.0157. Domain hints: text_cols=2, high_card_cols=4, group=vessel_id, time=event_ts. No clear positive \u0394 on this mock/live split. Thinking: TabPFN-3.5-Thinking \u00b7 thinking_mode=True \u00b7 thinking_effort=medium \u00b7 group_col=vessel_id \u00b7 group_time_col=event_ts \u00b7 non-i.i.d. vessel/time context visible to the fit (Prior Labs Thinking docs: grouped + temporal rows).",
     "judge_card": {
       "mode": "thinking",
       "backend": "tabpfn_client",
@@ -57,20 +56,24 @@
         "pod"
       ],
       "delta": {
-        "roc_auc": -0.15,
-        "accuracy": 0.0,
         "f1": 0.0,
-        "avg_precision": -0.3
+        "roc_auc": -0.0,
+        "accuracy": 0.0,
+        "avg_precision": -0.0157
       },
       "wins": [],
       "thinking_narrative": "TabPFN-3.5-Thinking \u00b7 thinking_mode=True \u00b7 thinking_effort=medium \u00b7 group_col=vessel_id \u00b7 group_time_col=event_ts \u00b7 non-i.i.d. vessel/time context visible to the fit (Prior Labs Thinking docs: grouped + temporal rows).",
-      "headline": "thinking \u0394acc=+0.000 \u0394auc=-0.150 vs HistGBM"
+      "headline": "thinking \u0394acc=+0.000 \u0394auc=-0.000 vs HistGBM"
     }
   },
-  "prior_labs": {
-    "http": 200
-  },
-  "vo_contrast": "Contrast vs artifacts/freight-demurrage/mock_fulltable_metrics.md",
-  "recorded_at": "2026-09-22T00:35:09.916976+00:00",
-  "preflight": "OK --live-check n=60"
+  "vo_contrast": "Contrast vs artifacts/freight-demurrage/mock_fulltable_metrics.md (mock full-table baseline).",
+  "recorded_at": "2026-09-22T00:36:05.223711+00:00",
+  "preflight": "OK --live-check n=60",
+  "live_status": "OK",
+  "sample_meta": {
+    "sample_n": 60,
+    "full_n": 200,
+    "sampled": true,
+    "gloss": "Dev sample 60 of 200 rows (budget control for live TabPFN)."
+  }
 }
