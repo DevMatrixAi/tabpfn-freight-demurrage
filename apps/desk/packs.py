@@ -16,7 +16,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "container_id",
         },
         "equipment-size": {
-            "label": "Equipment size (extra)",
+            "label": "Which container size to book",
             "gloss": "Right box size for the booking",
             "domain": root / "domains" / "equipment-size" / "domain.yaml",
             "csv": root / "domains" / "equipment-size" / "data" / "bookings.csv",
@@ -26,7 +26,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "booking_id",
         },
         "inland-mode": {
-            "label": "Inland truck vs rail (extra)",
+            "label": "Truck or rail inland",
             "gloss": "Truck or rail to the inland dest",
             "domain": root / "domains" / "inland-mode" / "domain.yaml",
             "csv": root / "domains" / "inland-mode" / "data" / "moves.csv",
@@ -36,7 +36,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "move_id",
         },
         "air-freight": {
-            "label": "Air freight (extra)",
+            "label": "Air freight delays",
             "gloss": "Missed connection / delay cost on air",
             "domain": root / "domains" / "air-freight" / "domain.yaml",
             "csv": root / "domains" / "air-freight" / "data" / "shipments.csv",
@@ -46,7 +46,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "awb_id",
         },
         "stow-fit": {
-            "label": "Stow-fit equip/mode (extra)",
+            "label": "Which equipment and transport mode",
             "gloss": "Suggest the right container size or transport mode",
             "domain": root / "domains" / "stow-fit" / "domain.yaml",
             "csv": root / "domains" / "stow-fit" / "data" / "shipments.csv",

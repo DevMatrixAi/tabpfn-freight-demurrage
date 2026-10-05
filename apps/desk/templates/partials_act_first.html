@@ -2,26 +2,36 @@
 {% set af = state.act_first %}
 <section class="card full act-first" id="act-first" aria-labelledby="act-first-h">
 <h2 id="act-first-h">Act on these first</h2>
-<p class="muted" style="margin:.25rem 0 .6rem">Ranked by expected fee: chance of a late fee times the fee at stake. A container is worth acting on when that beats the ${{ "{:,}".format(af.action_cost) }} cost of one intervention.</p>
-{% if af["items"] %}
-<ol class="act-first-list">
-{% for it in af["items"] %}
-<li><button type="button" class="act-first-row" data-row-id="{{ it.row_id }}" data-money="{{ it.fee }}" data-expected="{{ it.expected }}" data-proba="{{ it.proba }}" data-tier="Act first" data-action-label="{{ it.action|human_action }}" data-action="{{ it.action }}" data-reason="{{ it.reason }}" data-subtitle="Expected fee ${{ "{:,}".format(it.expected) }}" onclick="openActionDrawer(this)" title="Open the suggested move"><strong>{{ it.row_id }}</strong>
-<span>{{ (it.proba * 100)|round|int }}% chance of a late fee</span>
-<span>${{ "{:,}".format(it.fee) }} at stake</span>
-<span class="act-first-exp">expected ${{ "{:,}".format(it.expected) }}</span> <span class="act-first-move">Suggested: {{ it.action|human_action }}</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
+{% if af.by_move %}
+{% set moves = af.by_move|rejectattr("action", "in", ["monitor"])|list %}
+{% set watch = af.by_move|selectattr("action", "in", ["monitor"])|list %}
+{% set n_move = moves|sum(attribute="n") %}{% set n_watch = watch|sum(attribute="n") %}
+<p class="act-first-plan"><strong>{{ n_move }}</strong> of {{ "{:,}".format(af.n_rows) }} containers need a move now{% if n_watch %}, and {{ n_watch }} more are worth watching closely{% endif %}. Here they are, grouped by what to do.</p>
+{% set by_move_rows = moves + watch %}
+<p class="act-first-how">Click a row to see the first container to handle and why.</p>
+<ol class="act-first-list act-first-moves">
+{% for g in by_move_rows %}{% set it = g.top %}
+<li><button type="button" class="act-first-row" data-row-id="{{ it.row_id }}" data-money="{{ it.fee }}" data-expected="{{ it.expected }}" data-proba="{{ it.proba }}" data-tier="Act first" data-action-label="{{ g.action|human_action }}" data-action="{{ g.action }}" data-reason="{{ it.reason }}" data-subtitle="Likely cost ${{ "{:,}".format(it.expected) }}" onclick="openActionDrawer(this)" title="Open the suggested move"><strong class="act-first-move">{{ g.action|human_action }}</strong>
+<span>{{ g.n }} container{{ "s" if g.n != 1 }}</span>
+<span>${{ "{:,}".format(g.at_stake) }} in fees at stake</span>
+<span class="act-first-start">Start with {{ it.row_id }}: {{ (it.proba * 100)|round|int }}% chance of a ${{ "{:,}".format(it.fee) }} fee</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
 {% endfor %}
 </ol>
-{% set acts = af["items"]|map(attribute="action")|unique|list %}
-{% if acts|length == 1 and state.action_counts %}
-<p class="muted act-first-why">These top {{ af["items"]|length }} all get "{{ acts[0]|human_action }}" because the biggest fees in this data sit on cargo worth less than the fee itself. {% set others = state.action_counts.items()|rejectattr(0, "in", [acts[0], "monitor", "cancel"])|sort(attribute=1, reverse=True)|list %}{% if others %} Across all {{ "{:,}".format(state.n_rows) }} containers, other moves also come up:{% for k, v in others %} {{ k|human_action }} ({{ "{:,}".format(v) }}){% if not loop.last %},{% endif %}{% endfor %}.{% endif %}</p>
-{% endif %}
+{% elif af["items"] %}
+<p class="act-first-plan"><strong>{{ af.n_flagged }}</strong> of {{ "{:,}".format(af.n_rows) }} containers are worth acting on.</p>
+<ol class="act-first-list">
+{% for it in af["items"] %}
+<li><button type="button" class="act-first-row" data-row-id="{{ it.row_id }}" data-money="{{ it.fee }}" data-expected="{{ it.expected }}" data-proba="{{ it.proba }}" data-tier="Act first" data-action-label="{{ it.action|human_action }}" data-action="{{ it.action }}" data-reason="{{ it.reason }}" data-subtitle="Likely cost ${{ "{:,}".format(it.expected) }}" onclick="openActionDrawer(this)" title="Open the suggested move"><strong>{{ it.row_id }}</strong>
+<span>{{ (it.proba * 100)|round|int }}% chance of a late fee</span>
+<span>${{ "{:,}".format(it.fee) }} at stake</span>
+<span class="act-first-move">Suggested: {{ it.action|human_action }}</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
+{% endfor %}
+</ol>
 {% else %}
-<p>No container's expected fee is above the action cost right now.</p>
+<p>No container's likely fee is above the action cost right now.</p>
 {% endif %}
-<p class="act-first-sum">Showing the top {{ af["items"]|length }}. {{ af.n_flagged }} of {{ "{:,}".format(af.n_rows) }} containers are worth acting on (<a class="act-first-dl" href="/export-triage.csv" download="triage_actions.csv">download the top 50 as a spreadsheet</a>).
-{% if af.model %} Acting on them saves <strong>${{ "{:,}".format(af.model.net_savings) }}</strong> after action costs, using TabPFN-3.5 scores{% if af.baseline %}, vs ${{ "{:,}".format(af.baseline.net_savings) }} using HistGBM scores on the same containers{% endif %}.{% endif %}</p>
-{% if af.top_risk and not af.top_risk.in_top %}
+<p class="act-first-sum">A container is worth acting on when its chance of a late fee times the fee is more than the ${{ "{:,}".format(af.action_cost) }} an action costs.{% if af.baseline %} Picking with a common off-the-shelf model (HistGBM) instead would save ${{ "{:,}".format(af.baseline.net_savings) }}.{% endif %} <a class="act-first-dl" href="/export-triage.csv" download="triage_actions.csv">Download the top 50 as a spreadsheet</a>.</p>
+{% if af.top_risk and not af.top_risk.in_top and not af.by_move %}
 <p class="muted">{{ af.top_risk.row_id }} is the most likely to get a late fee ({{ (af.top_risk.proba * 100)|round|int }}%), but only ${{ "{:,}".format(af.top_risk.fee) }} is at stake, so it sits below containers with more money on the line.</p>
 {% endif %}
 </section>

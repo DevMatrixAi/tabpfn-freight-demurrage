@@ -18,7 +18,7 @@
     <a href="{{ saas_home }}">Home</a>
     <a href="/desk?pack=freight-demurrage" id="eval-desk-link">Freight desk</a>
     <a class="active" href="/eval">TabPFN vs baseline</a>
-    <a href="/anti-wrapper">How it uses TabPFN</a>
+    <a href="/anti-wrapper">How it works</a>
     <a href="/settings" id="settings-link">Settings</a>
     <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" data-judge-path="1">Guided tour</button></form>
   </div>
@@ -35,12 +35,12 @@
   {% include "partials_judge_path_banner.html" %}
 
   <div class="eval-hero card" style="margin-bottom:1rem">
-    <h1>Does TabPFN beat a standard model?</h1>
+    <h1>Which model saves more money?</h1>
     <p class="muted" style="margin:0">
-      The same containers scored by TabPFN-3.5 and by HistGBM, a standard gradient-boosting model.
-      <span class="token-pill {% if has_token or (result and result.replay) %}ok{% else %}missing{% endif %}">
+      The same containers scored two ways: by TabPFN-3.5, the prediction model this desk uses, and by HistGBM, a common off-the-shelf model.
+      {% if not (result and result.replay) %}<span class="token-pill {% if has_token or (result and result.replay) %}ok{% else %}missing{% endif %}">
         {% if has_token %}TABPFN_TOKEN set · live modes{% elif result and result.replay %}Scored by TabPFN-3.5{% else %}No token: offline stand-in model{% endif %}
-      </span>
+      </span>{% endif %}
     </p>
   </div>
 

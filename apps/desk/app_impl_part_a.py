@@ -109,7 +109,7 @@ except ImportError:
     from clients import DEFAULT_CLIENT, client_meta, list_clients  # type: ignore
 
 _STATE: dict[str, Any] = {
-    "client_id": "ALL", "client_label": "All clients (demo)",
+    "client_id": "ALL", "client_label": "All clients",
     "pack": DEFAULT_PACK, "pack_label": PACKS[DEFAULT_PACK]["label"],
     "source": "domain_csv", "adapter": None, "table_id": None, "n_rows": 0,
     "metrics": None, "baseline_metrics": None, "delta": None, "baseline_narrative": None,

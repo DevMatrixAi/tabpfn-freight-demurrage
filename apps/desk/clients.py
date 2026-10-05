@@ -18,8 +18,8 @@ CLIENTS: dict[str, dict[str, Any]] = {
         "gloss": "Seasonal reefer + dry mix",
     },
     "ALL": {
-        "label": "All clients (demo)",
-        "gloss": "All clients",
+        "label": "All clients",
+        "gloss": "",
     },
 }
 

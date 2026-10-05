@@ -208,3 +208,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .eval-summary .eval-headline{font-size:1.15rem}
 .act-first-dl,.act-first a{color:#93c5fd;text-decoration:underline}
 .act-first-why{font-size:.85rem;margin:.4rem 0 .2rem}
+.act-first-plan{font-size:1rem;margin:.3rem 0 .5rem;color:#e8eef7}
+.act-first-how,.act-first-sum{font-size:.88rem;color:#c3cfdf}
+.act-first-moves .act-first-move{min-width:12rem}
+.act-first-start{color:#c3cfdf}

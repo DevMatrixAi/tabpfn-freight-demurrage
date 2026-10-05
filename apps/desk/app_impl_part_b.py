@@ -43,6 +43,7 @@ async def login_submit(
     )
 
 
+@app.get("/logout")
 @app.post("/logout")
 async def logout() -> RedirectResponse:
     resp = RedirectResponse(url="/login", status_code=303)

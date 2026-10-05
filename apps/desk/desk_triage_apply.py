@@ -88,6 +88,7 @@ def apply_triage(
     )
     elapsed = time.perf_counter() - t0
     actions = sess.suggest_actions(tid, max_rows=100_000)
+    _action_of = {str(a.row_id): (a.action, a.reason) for a in actions.items}
     _rank_actions_by_expected_fee(sess, actions, pack_meta().get("money_col"), keep=50)
     # Mock explain → action drawer ("Why this move" + importance bars)
     try:
@@ -169,6 +170,14 @@ def apply_triage(
             a = _by_id.get(str(it["row_id"])) or {}
             it.setdefault("action", a.get("action") or "Act before free time runs out")
             it.setdefault("reason", a.get("reason") or "")
+        try:
+            from apps.desk.act_first import group_by_move
+        except ImportError:
+            from act_first import group_by_move  # type: ignore
+        state["act_first"]["by_move"] = group_by_move(
+            state["act_first"].get("flagged") or [], _action_of
+        )
+        state["act_first"].pop("flagged", None)
 
     try:
         from apps.desk.triage_digest_hook import after_triage

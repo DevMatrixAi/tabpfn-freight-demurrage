@@ -60,6 +60,18 @@ def build_act_first(
             "expected": round(float(exp[i])),
             "estimate": str(row.get("score_source", "")) == "estimate",
         })
+    flagged = []
+    for i in order:
+        if exp[i] <= cost:
+            break
+        row = pred.iloc[int(i)]
+        flagged.append({
+            "row_id": str(row.get(id_col, i)),
+            "proba": round(float(p[i]), 3),
+            "fee": round(float(fee[i])),
+            "expected": round(float(exp[i])),
+            "estimate": str(row.get("score_source", "")) == "estimate",
+        })
     top_risk = None
     if len(p):
         j = int(np.argmax(p))
@@ -73,6 +85,7 @@ def build_act_first(
         "top_risk": top_risk,
         "action_cost": round(cost),
         "items": items,
+        "flagged": flagged,
         "n_rows": int(len(pred)),
         "n_flagged": int((exp > cost).sum()),
         "model": None,
@@ -85,3 +98,23 @@ def build_act_first(
             pb = pred["proba_hist_gbm"].astype(float).to_numpy()
             out["baseline"] = _net(y, pb, fee, cost)
     return out
+
+
+def group_by_move(
+    flagged: list[dict[str, Any]], action_of: dict[str, tuple[str, str]]
+) -> list[dict[str, Any]]:
+    """Group flagged containers by suggested move; biggest expected fee first.
+
+    ``action_of`` maps row_id -> (action key, reason). Each group carries its top
+    container so the desk can show one example per move.
+    """
+    groups: dict[str, dict[str, Any]] = {}
+    for it in flagged:
+        act, reason = action_of.get(str(it["row_id"]), ("monitor", ""))
+        g = groups.setdefault(act, {"action": act, "n": 0, "at_stake": 0, "expected": 0, "top": None})
+        g["n"] += 1
+        g["at_stake"] += int(it["fee"])
+        g["expected"] += int(it["expected"])
+        if g["top"] is None:
+            g["top"] = dict(it, action=act, reason=reason)
+    return sorted(groups.values(), key=lambda g: -g["expected"])
