@@ -31,7 +31,7 @@
     <p class="muted" style="margin:0">
       Multi-mode <code>compare_baseline</code> on a domain pack.
       <span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">
-        {% if has_token %}TABPFN_TOKEN set · live modes{% else %}no TABPFN_TOKEN → mock fallback{% endif %}
+        {% if has_token %}TABPFN_TOKEN set · live modes{% elif result and result.replay %}No token needed: recorded TabPFN-3.5 scores{% else %}No token: offline stand-in model{% endif %}
       </span>
     </p>
   </div>

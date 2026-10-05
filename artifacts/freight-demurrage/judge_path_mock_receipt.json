@@ -8,8 +8,16 @@
   "path": "/judge-path \u2192 mock triage \u2192 /eval?judge=1",
   "has_token": false,
   "elapsed_s": 0.48,
-  "modes": ["mock", "plus", "thinking", "fast", "hist_gbm"],
-  "modes_run": ["mock"],
+  "modes": [
+    "mock",
+    "plus",
+    "thinking",
+    "fast",
+    "hist_gbm"
+  ],
+  "modes_run": [
+    "mock"
+  ],
   "money_at_risk_usd": 1270000.0,
   "actions_count": 12,
   "n_cards": 8,
@@ -29,9 +37,9 @@
   "derived_from": {
     "mock_fulltable_metrics": "mock_fulltable_metrics.json",
     "mock_eval_judge_card": "mock_eval_judge_card.json",
-    "demo_report": "demo_report.json",
-    "demo_accuracy": 0.9416666666666667,
+    "demo_report": null,
+    "demo_accuracy": null,
     "judge_n_rows": 200
   },
-  "frozen_at": "2026-09-21T20:58:29Z"
+  "frozen_at": "2026-10-05T05:14:45Z"
 }

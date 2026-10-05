@@ -28,4 +28,4 @@
 | roc_auc | +0.0042 |
 | avg_precision | +0.0100 |
 
-_Frozen at 2026-09-21T20:58:29Z · repro: `TABPFN_TOKEN= python scripts/freeze_judge_path_receipt.py`_
+_Frozen at 2026-10-05T05:14:45Z · repro: `TABPFN_TOKEN= python scripts/freeze_judge_path_receipt.py`_

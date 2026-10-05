@@ -1,5 +1,315 @@
-"""Packed source (hex zlib). Expands at exec."""
-from __future__ import annotations
-import zlib
-_BLOB_HEX = "78daed5add6fe3b8117ff75fc1aa2f32ea2877b87b381850d17437c105bbd90489fb7008028296e8988d2caa24e5c4d8e67fef0c497d59b2a3dc6dfbd2cd432c91c3e17066f89b0f3b08828f5c3f11b12932523065c8dfe7e4d7c5e28628591aaec95f48a238339cb2a220e13fcbf49113c50b25a7d16472fec213a04a89c88d2440412d9fc74c2e59a6095b19ae1cd7b3681204c1e46f4013c99cf22dcf4d1868037365114c27295f11ea5fc32939f92bf922733e9f10f85b29b921a9343cdfa29c12d86592a5d40d5992d67b787b7dbd20a72488e00538e3b4e65a931836804f21f3f0e3f9c5d93f3e2fe8cdd9874f8e82de2dce16e7f741c192a7e00168db243d0a9ab125cf2c1dcedfddb7a91fee033fdd5f079ad1fad0bae891834e1c4957aa4730464113e9b6c45344a9dc309147f5cc00bd111b3eb8a89ae8ac59662c6f1f0c8461c6a8b0b5704602cd1399a74ced1ca5653fb3b69a12a988e7a299c844fe18d80dc46a584989de060f91d07425321e4e9dadad44ce9a7cc5cacc5020b332388df04cf38612bd099cc6f0c85bd61f7432719e66157a9ac9479183948aeb42e61a8e9e31ade35f17579f6ffdd074c2f42e4f08baa125a7057be4a1e2ff2ab9367372eb1eac63b6d7cdab13c2315869d6e0d5220179d26a69eb588a9b52e5c02a158a27a66211962a8b8353900f4f526a5069cae39f7ef8c91dd8af321c2e1630d6d1c23fd5ebfd4e601c2b79b4361bb4c9d7802b255530b7d6799d563a29a41e54ca06b6cd626bc99e3274b9dc08137a81ba3a99d9d1527395b30d9fc3291458e142aa4d1845d1d44d17a0f067a9d281e969adc364cde18a54a461c57256afee285317c0e79dcaac5682bb806349f9247878777e777779fd857eb8befe74790e5afc1156af8d017ed92e5ea81204d020861686c770b35f82e9be4991e54863b596be61b5e032dfb24ca460868d44104ed1b90056a3e0b57bbc9f7ff8d1b21d30316078b0674e187200bbafbbf9e46dc5565e73c05541b3e044dcf061e5763cda2aad2bb086b5893949320147edc8ed66a89b09dd07157d773a72b00ae7eac516e5ea37eb80cd4b4ebe26f781255a01ae253892095d89a0c3e9abc5a23a4e7cf87c79fe6531b45303a97e6003c81a0e8833ed060e10a8c2e01ae72c025ba4ab515768924bd30a97c310da83cae948604a213d78039cde710b3bc03c1e9335639aaee566342443b27105471727283ec19598c9585d13fd2c0c608d8a302341e2042c1e7bb339d11aabd8b03660e404adb86753e0e3f4829b62c2715febf82bfad29c3ce17db7369e936d6d6eb46a2172ee06dd230eba5400063b99c16bcd143d13386ed1396d888d00a336e09b96c2799151bbc62d6c2605fa87800e12c2bf2d846a40285ee75562cbe912933cf09ab570a8c65f125e18726949ce119ef638becd87903f13b32b203c88c75c2afeeed08616a4e8053550d6227863a1a2ba3774d690b0c4a0441e59e668f143b3b4d2bab5705bf32046d0666aad0c84f6b335de3abc95a9ab8a8e5c6b706b239f780e84b47ea9485ef7ee8bbf8a23ef0c52d3a5642aed5d1a0ca9c99343cf7f5be80067757072e8365d179a5866d6eb7005f23f453ef53d02c4c277c2f2d43d547ed98cfc09ee99cd8445da49f9f6d36f7c189ceda5de38b89772bf9976db35fd747ba85440d2e9a8d4d403823b9ec5030f064283a120e5c648e50b15cca643a4b90fdc0ba07fd41056da4460efc09264c99a7a775d4259160ce8b04f84070f52c59eb90a906d9ba512e02509d81594e0225a609480e437f806f0617d55665beee968fead00a5cf7910620ac55734df037748fe0c5427ba5eeacd8feeebe821a676e369cd677fd7d025ccef853391a7fc6500ca58ca0aa8996b2cabde01114860c33702853d4b0b45d0e370c9fdb78c3287a3cb431b036b9f4520ac5fc6401cc8adc4064b492c3d50829bdbcbabb3dbdfe8d5f5c7f33b98870ba244429ff80e67afce17b7971fe8a7f3dfee5aeca1f0aa4eb594320b1bd076c3d336dc8e881475a68129386428a361bdf288d8f94a375038bca8fd6dee1d6a1fe6ebc49da527def47be93ba0879f08fd271d2cbb8e24c27e9d2bf107b979dc5a01891f8e8ca429336ca5603a6c9a2a60335170a8f5f95d5d80f7324d4b0d39d7dade0dacf6a32fc026c5fb211538c0053600d009e2e01993c672b5122f7110618760465c45115f40e903f92fcf219984db1b07a5599dfc02a0c534319ba2b9abe90aa5456c86e1c85590f6be39160d98170c448a494555d53060a9aa5f62f56dd812c443e218ffcd881d800016db0cc083c70d4c59a26954e6a090a77023e0f4f923954fb68aec7674b42c55c22d32afaa5b3fff5a691bc5790d3a0b2a77786819a596ba22aa24b354ee285135d621cca992cfba4de646ea661a4f2b1dd8f5fa7e8f5bb7b705256aa914040db8dc86b9e80cb73ae73b37103a967bad36c5b7823f379238a268cd591afe328dc051b29c85907359ef138909a5c20b1b07e0d4d246acff7997cc5f61901994e0c4f643f0ea8f09ee96e2c2b8cdcd0dd91e592273034370d9b0be7833cc7a3fca3131f1d1b0354475b94110c56b40717c5c847d27d3c1e05ae9a4b5d05b1e063a263f763cd04ab9c92d86d6a2c06cb6a39d1994c43e8d3bdf7bb90e1fd04ef9527d463a9dd08e47c3e50028757913b5d8178e29900f95d603d1c06d7b8288d80b086ece22deb1fec7d896c0ef95b92f34c424607ce2fda32fb89ba77efe98f050617c861504e20208c7f5a95b7a5a61ecb34839ad510803874d5fda5eaed7f239619ad7d58acff487c3958f0dd57709d5be01beb8bdede3e1fd83760e8fdc22fe0239876e573dde2f559917bba61b836f11fca7b82a84cdc2b7a4a0b0c4161d2d69a26207b9cf8898861bd8b87520b0bd3f1ab4629b9772de96ec705cc35cfabf10cfbe47a9ef51ea7b94faf651aad3bab73dd513dbbfe9346eedb8ed89844dcf695ca102407df7cc0a620b39c039d89a117732db1fd224ac1091e09735d31ada0bdbd0752da8d55e2baad3b51ffc76d735a0f61066b8f704d0f78e6f7b91bcdf75ea759caa2ef2b166d3ef3459ede2bd568e7ef29e514725fe08f10aaebf7718f77b80c9219ff67d9b916c7a8e3c19a673df97819cae52b64e1bb7fb1f75b32d6efa6eb32aead94e8dad2b69fb6d56b5ebb0b9a03391c07cfbcdcf3781216e470937bb2c4596d2a67916d3fd9159eb87098d09e39e51fdc96a788e9bc7d9e488c9ec4f316c8ed053753335ca6aefe174c4703ddaefc63b683c560850d21252c37d8ddb510af3c76d3682c11153d53458031c1113b337b641fd4326d3bfd2d5f4081f7b0fa7238277e8def4afba151bd74fff178ee73ad6adde6adcedacb64f82cdd5b8d35ab5b5dc218fe05b96d194e9b5fb2e68df8e767a8c3f8ce773c41b5a547fcc17404118a067fecb5ba7659c88db89c2ac0ed710a6e98a2546aa5d5cc5ed96e5ac4f1d31db1f75b2ba8b1e370d756f37fb43bae6177baea6be60da9cdd5ccedb99034c4efe0369561e18"
-exec(compile(zlib.decompress(bytes.fromhex(_BLOB_HEX)).decode(), __file__, "exec"), globals())
+"""Desk impl part B: HTTP routes + create_app (judge repro).
+
+Executed into app_impl globals after part A.
+"""
+@app.on_event("startup")
+def _startup() -> None:
+    from dotenv import load_dotenv
+    load_dotenv(ROOT / ".env")
+    sess = _session(DEFAULT_PACK)
+    _STATE["pack"] = DEFAULT_PACK
+    _STATE["pack_label"] = PACKS[DEFAULT_PACK]["label"]
+    _STATE["pack_gloss"] = PACKS[DEFAULT_PACK].get("gloss")
+    _STATE["group_col"] = sess.domain.group_col
+    _STATE["group_time_col"] = sess.domain.time_col
+    _STATE["blank_label"] = getattr(sess.domain, "secondary_label_col", None) or "blank_sailing"
+    if PACKS[DEFAULT_PACK]["csv"].is_file():
+        _load_default_csv(sess)
+    else:
+        app.state.session = sess
+
+
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request) -> HTMLResponse:
+    if is_authenticated(request):
+        return RedirectResponse(url="/", status_code=303)
+    return templates.TemplateResponse(request, "login.html", {"error": None})
+
+
+@app.post("/login", response_model=None)
+async def login_submit(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...),
+):
+    if check_password(username, password):
+        resp = RedirectResponse(url="/", status_code=303)
+        resp.set_cookie(SESSION_COOKIE, "1", httponly=True, samesite="lax")
+        return resp
+    return templates.TemplateResponse(
+        request, "login.html", {"error": "Invalid demo credentials."}, status_code=401
+    )
+
+
+@app.post("/logout")
+async def logout() -> RedirectResponse:
+    resp = RedirectResponse(url="/login", status_code=303)
+    resp.delete_cookie(SESSION_COOKIE)
+    return resp
+
+
+@app.post("/select-client")
+async def select_client(client_id: str = Form(...)) -> RedirectResponse:
+    _STATE["client_id"] = client_id if client_id in {c["id"] for c in list_clients()} else DEFAULT_CLIENT
+    _STATE["client_label"] = client_meta(_STATE["client_id"])["label"]
+    if getattr(app.state, "session", None) is not None:
+        _load_default_csv(app.state.session)
+        return RedirectResponse(url="/desk", status_code=303)
+    return RedirectResponse(url="/", status_code=303)
+
+
+@app.get("/", response_class=HTMLResponse)
+async def saas_home(request: Request) -> HTMLResponse:
+    """Multi-desk home + client switcher."""
+    cid = _STATE.get("client_id") or DEFAULT_CLIENT
+    cmeta = client_meta(cid)
+    desks = [
+        {"id": k, "label": v["label"], "spine": v["spine"], "gloss": v.get("gloss")}
+        for k, v in PACKS.items()
+    ]
+    try:
+        from apps.desk.dev_sample import live_budget_chip
+    except ImportError:
+        from dev_sample import live_budget_chip  # type: ignore
+    return templates.TemplateResponse(request, "home_saas.html", {
+        "clients": list_clients(),
+        "active_client": cid,
+        "active_client_gloss": cmeta.get("gloss", ""),
+        "desks": desks,
+        "live_budget": live_budget_chip(),
+        "has_token": _has_token(),
+    })
+
+
+def _auto_triage_from_replay() -> None:
+    """First visit with recorded TabPFN scores available: fill the board (free, no API call)."""
+    if _STATE.get("risk_cards") or not meta_is_spine():
+        return
+    from tabpfn_hack_core.core import replay as _replay
+
+    sess = getattr(app.state, "session", None)
+    tid = _STATE.get("table_id")
+    if sess is None or not tid or tid not in sess.tables:
+        return
+    if not _replay.covers(sess.tables[tid], sess.domain.id_col):
+        return
+    try:
+        from apps.desk.desk_triage_apply import apply_triage
+    except ImportError:
+        from desk_triage_apply import apply_triage  # type: ignore
+    apply_triage(
+        app, _STATE, mode="thinking",
+        pack_meta=_pack_meta, resolve_mode=_resolve_mode, metric_slice=_metric_slice,
+        money_total=_money_total, build_risk_cards=_build_risk_cards,
+        load_default_csv=_load_default_csv, sample_ids=sample_ids,
+    )
+
+
+def meta_is_spine() -> bool:
+    return bool(_pack_meta().get("spine"))
+
+
+@app.get("/desk", response_class=HTMLResponse)
+async def desk_board(request: Request, pack: str | None = None) -> HTMLResponse:
+    """Ops board for one desk/pack."""
+    if pack and pack in PACKS and pack != _pack_id():
+        _STATE["pack"] = pack
+        _STATE["pack_label"] = PACKS[pack]["label"]
+        _STATE["pack_gloss"] = PACKS[pack].get("gloss")
+        sess = _session(pack)
+        _load_default_csv(sess)
+    meta = _pack_meta()
+    disclaimer = load_domain(meta["domain"]).disclaimer
+    _auto_triage_from_replay()
+    if not _STATE.get("coach_active_beat"):
+        _STATE["coach_active_beat"] = "drawer" if _STATE.get("risk_cards") else "triage"
+    try:
+        from apps.desk.dev_sample import live_budget_chip, resolve_sample_n
+    except ImportError:
+        from dev_sample import live_budget_chip, resolve_sample_n  # type: ignore
+    pref_n = _STATE.get("settings_sample_n")
+    if pref_n is None:
+        pref_n = resolve_sample_n(None)
+    return templates.TemplateResponse(request, "index.html", {
+        "adapters": list_adapters(), "state": _STATE,
+        "packs": [{"id": k, "label": v["label"], "spine": v["spine"], "gloss": v.get("gloss")} for k, v in PACKS.items()],
+        "disclaimer": disclaimer,
+        "has_token": _has_token(), "primary_modes": PRIMARY_MODES, "metric_keys": METRIC_KEYS,
+        "is_spine": bool(meta.get("spine")),
+        "clients": list_clients(),
+        "saas_home": "/",
+        "live_budget": live_budget_chip(sample_n=pref_n),
+        "default_sample_n": pref_n,
+    })
+
+
+@app.post("/load-adapter")
+async def load_adapter(adapter_name: str = Form(...)) -> RedirectResponse:
+    adapter = get_adapter(adapter_name)
+    df = adapter.to_dataframe()
+    sess: PipelineSession = app.state.session
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False, encoding="utf-8") as tmp:
+        df.to_csv(tmp.name, index=False)
+        path = tmp.name
+    result = sess.load_table(path=path, table_id="desk")
+    Path(path).unlink(missing_ok=True)
+    _STATE["source"] = f"adapter:{adapter.name}"
+    _STATE["adapter"] = adapter.name
+    _STATE["table_id"] = result.table_id
+    _STATE["n_rows"] = result.n_rows
+    loaded = sess.tables[result.table_id]
+    _STATE["demurrage_total"] = _money_total(loaded)
+    _STATE["preview_rows"] = loaded.head(8).fillna("").to_dict(orient="records")
+    _STATE["group_col"] = sess.domain.group_col
+    _STATE["group_time_col"] = sess.domain.time_col
+    _STATE["sample_row_ids"] = sample_ids(loaded, id_col=sess.domain.id_col or "container_id")
+    try:
+        from apps.desk.missingness import missingness_summary as _miss
+    except ImportError:
+        from missingness import missingness_summary as _miss  # type: ignore
+    _STATE["missingness"] = _miss(loaded)
+    try:
+        from apps.desk.column_chips import apply_column_chips as _chips
+    except ImportError:
+        from column_chips import apply_column_chips as _chips  # type: ignore
+    _chips(_STATE, sess.domain, loaded)
+    _reset_triage_state()
+    return RedirectResponse(url="/desk", status_code=303)
+
+
+@app.post("/load-domain-csv")
+async def load_domain_csv() -> RedirectResponse:
+    _load_default_csv(app.state.session)
+    return RedirectResponse(url="/desk", status_code=303)
+
+
+
+@app.post("/load-stress-missing")
+async def load_stress_missing() -> RedirectResponse:
+    """Load fixtures/stress/missing_wide_demurrage.csv for missingness showcase."""
+    sess = app.state.session
+    path = ROOT / "fixtures" / "stress" / "missing_wide_demurrage.csv"
+    if not path.exists():
+        import runpy
+        runpy.run_path(str(ROOT / "fixtures" / "stress" / "_unpack_missing_wide.py"))
+    result = sess.load_table(path=str(path), table_id="desk")
+    loaded = sess.tables[result.table_id]
+    _STATE["source"] = "stress:missing_wide"
+    _STATE["adapter"] = None
+    _STATE["table_id"] = result.table_id
+    _STATE["n_rows"] = result.n_rows
+    _STATE["demurrage_total"] = _money_total(loaded)
+    _STATE["preview_rows"] = loaded.head(8).fillna("").to_dict(orient="records")
+    _STATE["group_col"] = sess.domain.group_col
+    _STATE["group_time_col"] = sess.domain.time_col
+    _STATE["sample_row_ids"] = sample_ids(loaded, id_col=sess.domain.id_col or "container_id")
+    try:
+        from apps.desk.missingness import missingness_summary as _miss
+    except ImportError:
+        from missingness import missingness_summary as _miss  # type: ignore
+    _STATE["missingness"] = _miss(loaded)
+    try:
+        from apps.desk.column_chips import apply_column_chips as _chips
+    except ImportError:
+        from column_chips import apply_column_chips as _chips  # type: ignore
+    _chips(_STATE, sess.domain, loaded)
+    _reset_triage_state()
+    return RedirectResponse(url="/desk", status_code=303)
+
+@app.post("/switch-pack")
+async def switch_pack(pack: str = Form(...)) -> RedirectResponse:
+    """Swap spine / coda domain packs (fixtures only)."""
+    pid = pack if pack in PACKS else DEFAULT_PACK
+    _STATE["pack"] = pid
+    _STATE["pack_label"] = PACKS[pid]["label"]
+    _STATE["pack_gloss"] = PACKS[pid].get("gloss")
+    sess = _session(pid)
+    _load_default_csv(sess)
+    return RedirectResponse(url="/desk", status_code=303)
+
+try:
+    from apps.desk.desk_triage import register_triage_routes
+except ImportError:
+    from desk_triage import register_triage_routes  # type: ignore
+
+register_triage_routes(
+    app,
+    state=_STATE,
+    pack_meta=_pack_meta,
+    resolve_mode=_resolve_mode,
+    metric_slice=_metric_slice,
+    money_total=_money_total,
+    build_risk_cards=_build_risk_cards,
+    load_default_csv=_load_default_csv,
+    sample_ids=sample_ids,
+)
+
+try:
+    from apps.desk.judge_path import register_judge_path_routes
+except ImportError:
+    from judge_path import register_judge_path_routes  # type: ignore
+
+register_judge_path_routes(
+    app,
+    state=_STATE,
+    pack_meta=_pack_meta,
+    resolve_mode=_resolve_mode,
+    metric_slice=_metric_slice,
+    money_total=_money_total,
+    build_risk_cards=_build_risk_cards,
+    load_default_csv=_load_default_csv,
+    sample_ids=sample_ids,
+)
+
+try:
+    from apps.desk.api_robot import register_robot_api
+except ImportError:
+    from api_robot import register_robot_api  # type: ignore
+
+register_robot_api(app)
+
+try:
+    from apps.desk.stream_rescore import register_stream_routes
+except ImportError:
+    from stream_rescore import register_stream_routes  # type: ignore
+
+register_stream_routes(
+    app,
+    state=_STATE,
+    templates=templates,
+    pack_meta=_pack_meta,
+    resolve_mode=_resolve_mode,
+    metric_slice=_metric_slice,
+    money_total=_money_total,
+    build_risk_cards=_build_risk_cards,
+    load_default_csv=_load_default_csv,
+    sample_ids=sample_ids,
+    primary_modes=PRIMARY_MODES,
+    metric_keys=METRIC_KEYS,
+)
+
+
+
+try:
+    from apps.desk.eval_dashboard import register_eval_routes
+except ImportError:
+    from eval_dashboard import register_eval_routes  # type: ignore
+
+register_eval_routes(
+    app,
+    state=_STATE,
+    templates=templates,
+    packs=PACKS,
+    default_pack=DEFAULT_PACK,
+    session_factory=_session,
+    load_pack_csv=_load_default_csv,
+    resolve_mode=_resolve_mode,
+    metric_slice=_metric_slice,
+    has_token=_has_token,
+)
+
+
+
+
+def create_app() -> FastAPI:
+    return app

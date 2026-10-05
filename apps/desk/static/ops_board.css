@@ -177,3 +177,13 @@ button:disabled{opacity:.6;cursor:wait}
 .plain-crib-list{margin:.25rem 0 0;padding-left:1.15rem;font-size:.82rem;line-height:1.4;color:var(--muted)}
 .plain-crib-list li{margin:.28rem 0}
 .plain-crib-list strong{color:#e8eef7}
+
+/* Recorded-scores banner + Act-first strip */
+.replay-banner{margin:0 0 1rem;padding:.6rem .85rem;border-radius:8px;background:#eef4fb;border:1px solid #c9d9ee;color:#1d3557;font-size:.92rem;line-height:1.4}
+.act-first{border-left:4px solid #c0392b}
+.act-first-list{margin:.25rem 0 .5rem;padding-left:1.3rem}
+.act-first-list li{margin:.2rem 0}
+.act-first-row{all:unset;cursor:pointer;display:flex;flex-wrap:wrap;gap:.35rem .9rem;align-items:baseline;max-width:100%}
+.act-first-row:hover strong,.act-first-row:focus-visible strong{text-decoration:underline}
+.act-first-exp{font-weight:600}
+.act-first-sum{margin:.4rem 0 .2rem}

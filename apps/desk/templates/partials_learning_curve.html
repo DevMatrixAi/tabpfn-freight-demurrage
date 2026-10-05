@@ -1,7 +1,22 @@
 <section class="card full" id="eval-learning-curve" style="margin-top:1rem">
-    <h2>Small-n learning curve</h2>
+    <h2>{% if result.learning_curve.recorded %}How much data does each model need?{% else %}Small-n learning curve{% endif %}</h2>
     <p class="muted" style="margin:0 0 .5rem">{{ result.learning_curve.headline }}</p>
     <p class="muted" style="margin:0 0 .75rem;font-size:.8rem">{{ result.learning_curve.note }}</p>
+    {% if result.learning_curve.recorded %}
+    <div style="overflow-x:auto">
+    <table id="lc-table">
+      <thead><tr><th>Training rows</th><th>Plus AUC</th><th>Thinking AUC</th><th>HistGBM AUC</th><th>Plus saves</th><th>Thinking saves</th><th>HistGBM saves</th></tr></thead>
+      <tbody>
+      {% for row in result.learning_curve.rows %}
+      <tr><td>{{ row.n_train }}</td>
+        {% for m in ("plus","thinking","hist_gbm") %}<td style="font-variant-numeric:tabular-nums">{% if row.get(m) %}{{ "%.3f"|format(row[m].roc_auc) }}{% else %}—{% endif %}</td>{% endfor %}
+        {% for m in ("plus","thinking","hist_gbm") %}<td style="font-variant-numeric:tabular-nums">{% if row.get(m) %}${{ "{:,.0f}".format(row[m].net_savings) }}{% else %}—{% endif %}</td>{% endfor %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    {% else %}
     <div class="metrics" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.5rem">
       {% for row in result.learning_curve.rows %}
       <div class="metric-cell card" style="background:var(--panel2);padding:.75rem">
@@ -11,4 +26,5 @@
       </div>
       {% endfor %}
     </div>
+    {% endif %}
   </section>

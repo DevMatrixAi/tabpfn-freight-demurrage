@@ -57,6 +57,10 @@ def _resolve_mode(requested: str) -> tuple[BackendMode, str | None]:
     except ValueError:
         return BackendMode.mock, f"Unknown mode {requested!r}; using mock"
     warn = None
+    from tabpfn_hack_core.core import replay as _replay
+
+    if mode in {BackendMode.plus, BackendMode.thinking} and _replay.replay_enabled():
+        return mode, None  # recorded TabPFN-3.5 scores stand in; labeled on the page
     if mode in {BackendMode.plus, BackendMode.thinking, BackendMode.fast} and not _has_token():
         warn = (
             f"TABPFN_TOKEN not set; requested mode={mode.value} will fall back to mock "

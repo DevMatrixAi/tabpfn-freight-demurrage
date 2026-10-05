@@ -185,7 +185,7 @@ class _FitMixin:
     ) -> FitPredictResult:
         """Score every row from recorded TabPFN-3.5 out-of-fold probabilities (no API call)."""
         shown_mode = BackendMode.thinking if req_mode == BackendMode.mock else req_mode
-        col = _replay.proba_column(shown_mode.value)
+        col = _replay.proba_column(shown_mode.value)  # Fast was not recorded; it never reaches here
         proba, est = _replay.score_table(
             df, X, y, self.domain.id_col, col,
             text_cols=self.domain.text_cols, high_card_cols=self.domain.high_card_cols,
@@ -291,7 +291,7 @@ class _FitMixin:
         req_mode = resolve_backend(mode)
         if (
             label == self.domain.label_col
-            and req_mode != BackendMode.local
+            and req_mode in (BackendMode.mock, BackendMode.plus, BackendMode.thinking)
             and _replay.covers(df, id_col)
         ):
             return self._fit_predict_replay(

@@ -141,3 +141,52 @@ def score_table(
         else:
             out[missing] = float(np.nanmean(out[have])) if have.any() else 0.5
     return out, missing
+
+
+def recorded_learning_curve() -> dict[str, Any] | None:
+    """Learning curve recorded with the replay (TabPFN Plus/Thinking vs HistGBM by training size)."""
+    p = replay_path().with_name("learning_curve_summary.csv")
+    meta_p = replay_path().with_name("learning_curve_meta.json")
+    if not p.is_file():
+        return None
+    try:
+        df = pd.read_csv(p, header=[0, 1], index_col=[0, 1])
+        meta = json.loads(meta_p.read_text(encoding="utf-8")) if meta_p.is_file() else {}
+    except (OSError, ValueError):
+        return None
+    rows: dict[int, dict[str, Any]] = {}
+    for (n, model), r in df.iterrows():
+        try:
+            n_i = int(n)
+        except (TypeError, ValueError):
+            continue
+        d = rows.setdefault(n_i, {"n_train": n_i})
+        d[str(model)] = {
+            "roc_auc": float(r[("roc_auc", "mean")]),
+            "net_savings": float(r[("net_savings_300", "mean")]),
+        }
+    out = [rows[k] for k in sorted(rows)]
+    return {
+        "recorded": True,
+        "rows": out,
+        "ns": [r["n_train"] for r in out],
+        "n_test": meta.get("test_rows"),
+        "headline": (
+            "Recorded TabPFN-3.5 runs at each training size, scored on the same held-out vessels. "
+            "TabPFN ranks risk better at every size; HistGBM saves slightly more dollars at 30 and 60 rows."
+        ),
+        "note": (
+            f"{meta.get('test_rows', '?')} held-out containers from vessels never seen in training; "
+            f"average of {meta.get('repeats', 'several')} draws. Savings assume a $300 action cost."
+        ),
+    }
+
+
+def recorded_net_savings(action_cost: float = 300.0) -> dict[str, int]:
+    rec = load_receipt()
+    out: dict[str, int] = {}
+    for k, v in (rec.get("metrics") or {}).items():
+        for c in v.get("cost") or []:
+            if float(c.get("action_cost", -1)) == float(action_cost):
+                out[k] = int(c["net_savings"])
+    return out

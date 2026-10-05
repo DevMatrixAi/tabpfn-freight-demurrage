@@ -2,9 +2,19 @@
     <h2>Metrics table <span class="badge">{{ result.elapsed_s }}s</span></h2>
     <p class="muted" style="margin:0 0 .75rem">
       Pack <strong>{{ result.pack_label or result.pack }}</strong>
-      · n={{ result.n_rows }} · test_size={{ result.test_size }}
-      {% if result.has_token %}<span class="live-pill">live token</span>{% else %}<span class="mock-pill">mock / offline</span>{% endif %}
+      · {{ result.n_rows }} containers · {% if result.replay %}5-fold, split by vessel{% else %}30% held out{% endif %}
+      {% if result.replay %}<span class="live-pill">recorded TabPFN-3.5</span>{% elif result.has_token %}<span class="live-pill">live token</span>{% else %}<span class="mock-pill">mock / offline</span>{% endif %}
     </p>
+    {% if result.replay %}
+    <div class="replay-banner" id="eval-replay-banner" role="note"><strong>{{ result.replay.label }}.</strong> {{ result.replay.banner }}
+      Every container was scored by a model that never saw it (5 folds, split by vessel), and HistGBM was scored on the same folds.
+      {% if result.replay.skipped_modes %}Fast wasn't part of the recorded run, so it isn't shown; set <code>TABPFN_TOKEN</code> to run it live.{% endif %}</div>
+    {% if result.replay.net_savings_300 %}
+    <p id="eval-money" style="margin:.25rem 0 .75rem">Money view at a $300 action cost:
+      {% for k, label in [("plus","Plus"),("thinking","Thinking"),("hist_gbm","HistGBM")] %}{% if result.replay.net_savings_300.get(k) is not none %}<strong>{{ label }}</strong> saves ${{ "{:,}".format(result.replay.net_savings_300[k]) }}{% if not loop.last %} · {% endif %}{% endif %}{% endfor %}.
+      These match the desk's "Act on these first" totals.</p>
+    {% endif %}
+    {% endif %}
     {% if result.warnings %}
     <div class="warn-banner" style="margin-bottom:.75rem">
       {% for w in result.warnings %}<div>{{ w }}</div>{% endfor %}
@@ -27,7 +37,7 @@
         {% for r in result.display_rows %}
         <tr>
           <td><span class="mode-chip {{ r.mode }}">{{ r.mode }}</span>
-            {% if r.live %}<span class="live-pill">live</span>{% elif not r.is_baseline %}<span class="mock-pill">{{ r.effective_mode }}</span>{% endif %}
+            {% if r.live %}<span class="live-pill">live</span>{% elif r.recorded %}<span class="live-pill">recorded</span>{% elif not r.is_baseline %}<span class="mock-pill">{{ r.effective_mode }}</span>{% endif %}
           </td>
           <td class="muted">{{ r.backend }}</td>
           {% for k in result.metric_keys %}
@@ -100,7 +110,7 @@
       <span class="badge">group={{ result.thinking_showcase.group_col or '—' }}</span>
       <span class="badge">time={{ result.thinking_showcase.group_time_col or '—' }}</span>
       <span class="badge">effort={{ result.thinking_showcase.thinking_effort or 'medium' }}</span>
-      {% if result.thinking_showcase.live %}<span class="live-pill">live</span>{% else %}<span class="mock-pill">mock fallback</span>{% endif %}
+      {% if result.thinking_showcase.live %}<span class="live-pill">live</span>{% elif result.replay %}<span class="live-pill">recorded</span>{% else %}<span class="mock-pill">offline stand-in</span>{% endif %}
     </p>
     {% if result.thinking_showcase.narrative %}
     <p style="margin:0;font-size:.9rem">{{ result.thinking_showcase.narrative }}</p>
@@ -165,7 +175,7 @@
 
   {% if result.calibration and result.calibration.n %}
   <section class="card full" id="eval-calibration" style="margin-top:1rem">
-    <h2>Uncertainty / calibration</h2>
+    <h2>Are the percentages honest?</h2>
     <p class="muted" style="margin:0 0 .5rem">{{ result.calibration.note }}</p>
     <div class="metrics-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.75rem;margin-bottom:.75rem">
       <div class="card" style="background:var(--panel2);padding:.65rem"><div class="muted" style="font-size:.7rem">Brier</div><div style="font-size:1.1rem">{% if result.calibration.brier is not none %}{{ "%.4f"|format(result.calibration.brier) }}{% else %}—{% endif %}</div></div>

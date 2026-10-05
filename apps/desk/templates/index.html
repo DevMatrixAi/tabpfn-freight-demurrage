@@ -50,7 +50,7 @@
 <h1>Freight Ops Board</h1>
 <p class="tagline">Money-first triage · pack <strong>{{ state.pack_label or state.pack }}</strong>
 {% if state.pack_gloss %}<span class="pack-gloss"> — {{ state.pack_gloss }}</span>{% endif %}
-<span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% else %}no TABPFN_TOKEN → mock fallback{% endif %}</span></p>
+<span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% elif state.replay %}No token needed: recorded TabPFN-3.5 scores{% else %}No token: offline stand-in model{% endif %}</span></p>
 </div>
 </div>
 <div class="ticker" id="money-ticker" data-coach="money-at-risk" role="status" aria-live="polite">

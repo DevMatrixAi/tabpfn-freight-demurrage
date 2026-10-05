@@ -74,6 +74,13 @@ def register_eval_routes(
         result = state.get("eval_result")
         if result and result.get("pack") and result["pack"] != pid:
             result = None
+        if result is None:
+            # Recorded TabPFN scores are free to show: fill the board on first visit.
+            from tabpfn_hack_core.core import replay as _replay
+
+            tid0 = state.get("table_id")
+            if tid0 in _sess.tables and _replay.covers(_sess.tables[tid0], _sess.domain.id_col):
+                result = _compute(pid, _sess)
         return templates.TemplateResponse(
             request,
             "eval.html",
@@ -102,9 +109,7 @@ def register_eval_routes(
             },
         )
 
-    @app.post("/eval/run")
-    async def eval_run(pack: str = Form(default_pack)) -> RedirectResponse:
-        pid, sess = _ensure_pack(pack)
+    def _compute(pid: str, sess: PipelineSession) -> dict[str, Any]:
         tid = state.get("table_id")
         if not tid or tid not in sess.tables:
             load_pack_csv(sess)
@@ -127,4 +132,10 @@ def register_eval_routes(
         result["pack_label"] = packs[pid]["label"]
         result["has_token"] = has_token()
         state["eval_result"] = result
+        return result
+
+    @app.post("/eval/run")
+    async def eval_run(pack: str = Form(default_pack)) -> RedirectResponse:
+        pid, sess = _ensure_pack(pack)
+        _compute(pid, sess)
         return RedirectResponse(url=f"/eval?pack={pid}", status_code=303)

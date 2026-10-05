@@ -63,6 +63,15 @@ def run_multi_mode_eval(
         from dev_sample import resolve_sample_n  # type: ignore
     _dev = resolve_sample_n(None)
     max_rows = int(_dev) if _dev else 200
+    from tabpfn_hack_core.core import replay as _replay
+
+    replay_on = _replay.covers(sess.tables[table_id], sess.domain.id_col)
+    skipped: list[str] = []
+    if replay_on:
+        # Recorded scores: whole table, free. Fast was not part of the recorded run.
+        max_rows = full_n
+        skipped = [m for m in modes if m not in ("plus", "thinking")]
+        modes = tuple(m for m in modes if m in ("plus", "thinking"))
     if full_n > max_rows:
         # stratified-ish: shuffle with fixed seed then head
         sess.tables[table_id] = (
@@ -99,7 +108,7 @@ def run_multi_mode_eval(
         if sess.last_warning:
             warnings.append(f"{mode_name}: {sess.last_warning}")
 
-        live = backend not in {"mock", "unknown"} and eff_s == mode_name
+        live = backend not in {"mock", "unknown", "tabpfn_replay"} and eff_s == mode_name
         rows.append(
             {
                 "mode": mode_name,
@@ -113,6 +122,7 @@ def run_multi_mode_eval(
                 "elapsed_s": elapsed_mode,
                 "narrative": cmp_.narrative,
                 "live": live,
+                "recorded": backend == "tabpfn_replay",
                 "is_baseline": False,
             }
         )
@@ -125,7 +135,11 @@ def run_multi_mode_eval(
         "metrics": baseline_metrics or {},
         "delta": {k: 0.0 for k in METRIC_KEYS},
         "elapsed_s": None,
-        "narrative": "sklearn HistGradientBoosting baseline (shared compare_baseline split)",
+        "narrative": (
+            "HistGBM scored on the same 5 folds as the recorded TabPFN run"
+            if replay_on
+            else "sklearn HistGradientBoosting baseline (shared compare_baseline split)"
+        ),
         "live": False,
         "is_baseline": True,
     }
@@ -184,6 +198,8 @@ def run_multi_mode_eval(
     except Exception as exc:  # noqa: BLE001
         warnings.append(f"ablations skipped: {exc}")
 
+    if replay_on:
+        ablations = None  # would only retrain HistGBM; not a TabPFN result
     calibration = calibration_from_predictions(sess.last_predictions)
 
     # Denser judge card from last compare_baseline (thinking row preferred)
@@ -214,7 +230,17 @@ def run_multi_mode_eval(
         from apps.desk.eval_lc import maybe_learning_curve
     except ImportError:
         from eval_lc import maybe_learning_curve  # type: ignore
-    learning_curve = maybe_learning_curve(sess, table_id, warnings)
+    learning_curve = (
+        _replay.recorded_learning_curve() if replay_on else None
+    ) or maybe_learning_curve(sess, table_id, warnings)
+    replay_meta = None
+    if replay_on:
+        latency_panel = None  # recorded scores load instantly; latency needs a live run
+        replay_meta = {
+            **_replay.replay_info(),
+            "net_savings_300": _replay.recorded_net_savings(300.0),
+            "skipped_modes": skipped,
+        }
 
     return {
         "rows": rows,
@@ -235,6 +261,7 @@ def run_multi_mode_eval(
         "calibration": calibration,
         "judge_card": judge_card,
         "thinking_showcase": thinking_showcase,
+        "replay": replay_meta,
     }
 
 

@@ -77,8 +77,9 @@ def calibration_summary(
         "ece": round(ece, 4) if ece is not None else None,
         "bins": bins,
         "note": (
-            "Lower Brier / ECE = better-calibrated late-fee probabilities; "
-            "desk thresholds (divert / rebook / …) spend these scores."
+            "When the model says 30%, about 30% of those containers should end up with a fee. "
+            "Points near the diagonal mean the percentages are safe to multiply by dollars. "
+            "Brier and ECE are standard error scores for this; lower is better."
         ),
     }
 

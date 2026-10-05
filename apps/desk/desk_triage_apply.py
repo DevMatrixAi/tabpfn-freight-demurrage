@@ -147,6 +147,20 @@ def apply_triage(
     state["chart_stats"] = chart_stats(
         state["risk_cards"], float(state.get("demurrage_total") or 0.0)
     )
+    try:
+        from apps.desk.act_first import build_act_first
+    except ImportError:
+        from act_first import build_act_first  # type: ignore
+    _pm = pack_meta()
+    state["act_first"] = (
+        build_act_first(
+            sess.last_predictions,
+            id_col=sess.domain.id_col or _pm.get("id_hint") or "container_id",
+            money_col=_pm.get("money_col"),
+        )
+        if _pm.get("spine")
+        else None
+    )
 
     try:
         from apps.desk.triage_digest_hook import after_triage
