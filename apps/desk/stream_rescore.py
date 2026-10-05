@@ -125,6 +125,7 @@ def register_stream_routes(
             build_risk_cards=build_risk_cards,
             load_default_csv=load_default_csv,
             sample_ids=sample_ids,
+            keep_rows=True,
         )
         return appended
 

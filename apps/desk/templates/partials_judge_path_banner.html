@@ -1,0 +1,14 @@
+{% if judge_path %}
+<section class="card judge-path-banner" id="judge-path-banner" data-judge-path-banner="1" style="margin-bottom:1rem">
+  <h2 style="margin:0 0 .4rem">{{ judge_path.title or "Judge path" }}</h2>
+  <p class="muted" style="margin:0 0 .4rem">
+    Desk run finished{% if judge_path.n_cards %}: {{ judge_path.n_cards }} risk cards{% endif %}{% if judge_path.money_at_risk %}, ${{ "{:,.0f}".format(judge_path.money_at_risk) }} money at risk{% endif %}.
+    {% if judge_path.mock %}Recorded scores, no live calls (frozen).{% endif %}
+  </p>
+  {% if judge_path.beats %}
+  <ol class="judge-path-beats" style="margin:.2rem 0 0 1.1rem;padding:0">
+    {% for b in judge_path.beats %}<li>{{ b }}</li>{% endfor %}
+  </ol>
+  {% endif %}
+</section>
+{% endif %}

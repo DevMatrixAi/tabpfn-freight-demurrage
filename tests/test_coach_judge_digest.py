@@ -80,6 +80,7 @@ def test_templates_have_coach_and_digest_markers():
     assert 'data-coach="login"' in login
     assert "coach-strip" in login or "partials_coach_strip" in login
     css = (ROOT / "apps/desk/static/ops_board.css").read_text()
+    css += (ROOT / "apps/desk/static/coach_strip.css").read_text()
     assert ".coach-strip" in css
     assert ".morning-digest" in css
     assert ".judge-path-btn" in css

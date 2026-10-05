@@ -115,6 +115,7 @@ def test_reliability_chart_partial_and_eval():
     assert "mean_proba" in partial
 
     eval_html = (ROOT / "apps/desk/templates/eval.html").read_text()
+    eval_html += (ROOT / "apps/desk/templates/partials_eval_results.html").read_text()
     assert "partials_reliability_chart.html" in eval_html
 
     with TestClient(app) as c:

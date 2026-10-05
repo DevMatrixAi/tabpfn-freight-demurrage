@@ -25,5 +25,6 @@ def test_readme_mentions_raw_dataframe():
 
 def test_index_has_thinking_effort_select():
     text = (ROOT / "apps/desk/templates/index.html").read_text()
+    text += (ROOT / "apps/desk/templates/partials_desk_main.html").read_text()
     assert 'name="thinking_effort"' in text
     assert "effort-chip" in text

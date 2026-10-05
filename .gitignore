@@ -11,3 +11,11 @@ artifacts/*.html
 dist/
 *.egg-info/
 .uv/
+
+# local run output
+artifacts/freight-demurrage/live_cache/
+artifacts/mcp_cookbook/
+desk.log
+/data/
+domains/*/data/*.csv
+!domains/freight-demurrage/data/containers.csv
