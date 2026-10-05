@@ -89,7 +89,7 @@ function openActionDrawer(el) {
     var expected = el.getAttribute('data-expected');
     var pct = Math.round(100 * Number(el.getAttribute('data-proba') || 0));
     var facts = pct + '% chance of a late fee';
-    if (money) facts += ' · $' + Math.round(Number(money)).toLocaleString() + ' at stake';
+    if (money) facts += ' · $' + Math.round(Number(money)).toLocaleString() + ' possible fee';
     var ttl = document.getElementById('drawer-title'); if (ttl) ttl.textContent = el.getAttribute('data-row-id') || '';
     focus.innerHTML =
       '<div class="focus-sub">' + facts + '</div>' +

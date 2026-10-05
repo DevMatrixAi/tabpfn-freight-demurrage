@@ -4,12 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Freight desk · Freight Money Desk</title>
-<link rel="stylesheet" href="/static/ops_board.css?v=r10"/>
-<link rel="stylesheet" href="/static/column_chips.css?v=r10" />
-<link rel="stylesheet" href="/static/coach_strip.css?v=r10" />
-<link rel="stylesheet" href="/static/stream_board.css?v=r10" />
-<link rel="stylesheet" href="/static/saas_shell.css?v=r10" />
-<link rel="stylesheet" href="/static/saas_density.css?v=r10" />
+<link rel="stylesheet" href="/static/ops_board.css?v=r11"/>
+<link rel="stylesheet" href="/static/column_chips.css?v=r11" />
+<link rel="stylesheet" href="/static/coach_strip.css?v=r11" />
+<link rel="stylesheet" href="/static/stream_board.css?v=r11" />
+<link rel="stylesheet" href="/static/saas_shell.css?v=r11" />
+<link rel="stylesheet" href="/static/saas_density.css?v=r11" />
 </head>
 <body class="app-shell">
 <nav class="app-nav saas-crumb" aria-label="Primary">
@@ -54,7 +54,7 @@
 <div>
 <div class="lbl">{{ state.money_label or ('Money at risk' if is_spine else 'Pack exposure') }}</div>
 <div class="dollars" id="ticker-dollars">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
-{% if is_spine %}<div class="ticker-gloss">Projected late-container fees if nothing changes</div>{% endif %}
+{% if is_spine %}<div class="ticker-gloss">Total possible late fees across all containers if nothing changes</div>{% endif %}
 </div>
 <div class="meta">
 {% if state.replay %}{% if state.act_first and state.act_first.model %}<span class="ticker-save">Acting on the right <strong>{{ state.act_first.n_flagged }}</strong> containers saves <strong>${{ "{:,}".format(state.act_first.model.net_savings) }}</strong> after action costs</span><span class="ticker-caveat">Best case: demo containers, easier to predict than real shipments. Details at the bottom of the page.</span>{% endif %}

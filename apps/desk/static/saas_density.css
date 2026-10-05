@@ -29,7 +29,7 @@
 .action-drawer .drawer-head{padding:1.05rem 1.15rem!important;gap:.75rem}
 .action-drawer .drawer-head h2{font-size:1.05rem!important;letter-spacing:-.015em;color:var(--saas-text)!important}
 .action-drawer .drawer-eyebrow{margin:0;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--saas-accent-2);font-weight:650}
-.action-drawer .drawer-close{border-radius:8px!important;padding:.35rem .6rem!important;font-size:.85rem}
+.action-drawer .drawer-close{border-radius:8px!important;padding:.45rem .85rem!important;font-size:1rem}
 .action-drawer .drawer-hint{font-size:.8rem!important;line-height:1.4;padding:0 1.15rem!important}
 .action-drawer .drawer-focus{margin:.35rem 1.15rem .85rem!important;padding:.9rem 1rem!important;border-radius:12px!important;border-color:rgba(59,130,246,.5)!important;background:rgba(59,130,246,.08)!important}
 .action-drawer .drawer-focus .focus-kicker{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--saas-muted);margin-bottom:.25rem}

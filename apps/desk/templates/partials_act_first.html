@@ -5,18 +5,19 @@
 {% if af.by_move %}
 {% set by_move_rows = af.by_move %}
 <p class="act-first-plan"><strong>{{ af.n_flagged }}</strong> of {{ "{:,}".format(af.n_rows) }} containers are worth acting on: their likely fee is more than the ${{ "{:,}".format(af.action_cost) }} an action costs. Here they are, grouped by what to do.</p>
-{% if af.model %}<ul class="act-first-how act-first-math">
-<li>These {{ af.n_flagged }} containers carry ${{ "{:,}".format(af.by_move|sum(attribute="at_stake")) }} of the ${{ "{:,}".format(state.demurrage_total|float|round|int) }} at risk.</li>
-<li>Acting on them avoids ${{ "{:,}".format(af.model.fees_avoided) }} in fees that would really have been charged.</li>
-<li>The {{ af.n_flagged }} actions cost ${{ "{:,}".format(af.model.action_spend) }} (${{ "{:,}".format(af.action_cost) }} each).</li>
+{% set flag_fees = af.by_move|sum(attribute="at_stake") %}{% set all_fees = state.demurrage_total|float|round|int %}{% if af.model %}<ul class="act-first-how act-first-math">
+<li>If nothing is done, these {{ af.n_flagged }} containers could run up ${{ "{:,}".format(flag_fees) }} in late fees, out of ${{ "{:,}".format(all_fees) }} possible across all {{ "{:,}".format(af.n_rows) }}.</li>
+{% if flag_fees > af.model.fees_avoided %}<li>In the recorded outcomes, ${{ "{:,}".format(af.model.fees_avoided) }} of that was really charged. The other ${{ "{:,}".format(flag_fees - af.model.fees_avoided) }} never happened because some flagged containers left in time anyway.</li>
+{% else %}<li>Acting on them avoids ${{ "{:,}".format(af.model.fees_avoided) }} in fees that would really have been charged.</li>
+{% endif %}<li>The {{ af.n_flagged }} actions cost ${{ "{:,}".format(af.model.action_spend) }} (${{ "{:,}".format(af.action_cost) }} each).</li>
 <li>Fees avoided minus action costs: <strong>${{ "{:,}".format(af.model.net_savings) }} saved</strong>.</li>
 </ul>{% endif %}
-<p class="act-first-rank"><strong>Biggest money first.</strong> A container with a 32% chance of a $15,000 fee matters more than one with a 99% chance of a $3,000 fee, so groups are ranked by money at stake, not by chance of a fee. Click a group to see its first container.</p>
+<p class="act-first-rank"><strong>Biggest likely cost first.</strong> Likely cost is the chance of a fee times the full fee. A 32% chance of a $15,000 fee (likely cost about $4,800) outranks a 99% chance of a $3,000 fee (about $3,000). Groups show the full possible fees; click a group to see its first container.</p>
 <ol class="act-first-list act-first-moves">
 {% for g in by_move_rows %}{% set it = g.top %}
 <li><button type="button" class="act-first-row" data-row-id="{{ it.row_id }}" data-money="{{ it.fee }}" data-expected="{{ it.expected }}" data-proba="{{ it.proba }}" data-tier="Act first" data-action-label="{{ g.action|human_action }}" data-action="{{ g.action }}" data-reason="{{ it.reason }}" data-subtitle="Likely cost ${{ "{:,}".format(it.expected) }}" onclick="openActionDrawer(this)" title="Open the suggested move"><strong class="act-first-move">{{ g.action|human_action }}</strong>
 <span>{{ g.n }} container{{ "s" if g.n != 1 }}</span>
-<span>${{ "{:,}".format(g.at_stake) }} in fees at stake</span>
+<span>${{ "{:,}".format(g.at_stake) }} in possible fees</span>
 <span class="act-first-start">Start with {{ it.row_id }}: {{ (it.proba * 100)|round|int }}% chance of a ${{ "{:,}".format(it.fee) }} fee</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
 {% endfor %}
 </ol>
@@ -33,7 +34,7 @@
 {% else %}
 <p>No container's likely fee is above the action cost right now.</p>
 {% endif %}
-<p class="act-first-sum">The other {{ "{:,}".format(af.n_rows - af.n_flagged) }} containers cost more to act on than their likely fee, so leave them alone. <a class="act-first-dl" href="/export-triage.csv" download="triage_actions.csv">Download the top 50 containers as a spreadsheet</a>.</p>
+<p class="act-first-sum">{% if af.model %}The other {{ "{:,}".format(af.n_rows - af.n_flagged) }} containers could run up ${{ "{:,}".format(all_fees - flag_fees) }} in fees, but each is unlikely enough that a $300 action would cost more than it saves on average, so leave them alone.{% else %}The other {{ "{:,}".format(af.n_rows - af.n_flagged) }} containers cost more to act on than their likely fee, so leave them alone.{% endif %} <a class="act-first-dl" href="/export-triage.csv" download="triage_actions.csv">Download the top 50 containers as a spreadsheet</a>.</p>
 {% if af.top_risk and not af.top_risk.in_top and not af.by_move %}
 <p class="muted">{{ af.top_risk.row_id }} is the most likely to get a late fee ({{ (af.top_risk.proba * 100)|round|int }}%), but only ${{ "{:,}".format(af.top_risk.fee) }} is at stake, so it sits below containers with more money on the line.</p>
 {% endif %}
