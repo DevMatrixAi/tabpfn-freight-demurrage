@@ -1,6 +1,8 @@
 """One-click Judge path (mock) — empty-token safe triage → /eval."""
 from __future__ import annotations
 
+import os
+
 from typing import Any, Callable
 
 from fastapi import FastAPI
@@ -65,6 +67,9 @@ def register_judge_path_routes(
                 from judge_path_receipt import write_receipt  # type: ignore
             except ImportError:
                 write_receipt = None  # type: ignore
+        # Only rewrite the committed receipt when asked (keeps a judge's clone clean).
+        if os.environ.get("JUDGE_PATH_WRITE_RECEIPT") != "1":
+            write_receipt = None  # type: ignore
         if write_receipt is not None:
             try:
                 actions = state.get("actions") or state.get("suggested_actions") or []
@@ -72,10 +77,10 @@ def register_judge_path_routes(
                 write_receipt(
                     extra={
                         "triage_ok": bool(state.get("metrics") or cards),
-                        "money_at_risk": money or 1_270_000.0,
-                        "n_cards": len(cards) or 8,
-                        "actions_count": n_actions or 12,
-                        "elapsed_s": float(state.get("elapsed_s") or 0.48),
+                        "money_at_risk": float(money or 0.0),
+                        "n_cards": len(cards),
+                        "actions_count": n_actions,
+                        "elapsed_s": float(state.get("elapsed_s") or 0.0),
                     }
                 )
             except Exception:

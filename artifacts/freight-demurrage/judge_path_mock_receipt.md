@@ -17,7 +17,7 @@
 - Judge path mock · empty TABPFN_TOKEN · ~0.48s wall.
 - Modes on crib: mock triage → /eval Plus/Thinking/Fast vs HistGBM.
 - Thinking Δacc=+0.010 vs HistGBM (frozen mock full-table).
-- Money at risk ≈ $1.27M · 12 suggested actions · 8 risk cards.
+- Money at risk, suggested actions, and risk cards come from the live desk state.
 
 ## Δ table (Thinking vs HistGBM)
 
@@ -28,4 +28,4 @@
 | roc_auc | +0.0042 |
 | avg_precision | +0.0100 |
 
-_Frozen at 2026-10-05T05:14:45Z · repro: `TABPFN_TOKEN= python scripts/freeze_judge_path_receipt.py`_
+_Frozen at 2026-10-05T05:15:25Z · repro: `TABPFN_TOKEN= python scripts/freeze_judge_path_receipt.py`_

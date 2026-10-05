@@ -44,7 +44,7 @@ RECEIPT = {
         "Judge path mock · empty TABPFN_TOKEN · ~0.48s wall.",
         "Modes on crib: mock triage → /eval Plus/Thinking/Fast vs HistGBM.",
         "Thinking Δacc=+0.010 vs HistGBM (frozen mock full-table).",
-        "Money at risk ≈ $1.27M · 12 suggested actions · 8 risk cards.",
+        "Money at risk, suggested actions, and risk cards come from the live desk state.",
     ],
 }
 

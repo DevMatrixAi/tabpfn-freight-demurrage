@@ -32,7 +32,7 @@
     "Judge path mock \u00b7 empty TABPFN_TOKEN \u00b7 ~0.48s wall.",
     "Modes on crib: mock triage \u2192 /eval Plus/Thinking/Fast vs HistGBM.",
     "Thinking \u0394acc=+0.010 vs HistGBM (frozen mock full-table).",
-    "Money at risk \u2248 $1.27M \u00b7 12 suggested actions \u00b7 8 risk cards."
+    "Money at risk, suggested actions, and risk cards come from the live desk state."
   ],
   "derived_from": {
     "mock_fulltable_metrics": "mock_fulltable_metrics.json",
@@ -41,5 +41,5 @@
     "demo_accuracy": null,
     "judge_n_rows": 200
   },
-  "frozen_at": "2026-10-05T05:14:45Z"
+  "frozen_at": "2026-10-05T05:15:25Z"
 }
