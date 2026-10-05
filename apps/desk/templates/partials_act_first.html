@@ -18,7 +18,7 @@
 {% for g in by_move_rows %}{% set it = g.top %}
 <li><button type="button" class="act-first-row" data-row-id="{{ it.row_id }}" data-money="{{ it.fee }}" data-expected="{{ it.expected }}" data-proba="{{ it.proba }}" data-tier="Act first" data-action-label="{{ g.action|human_action }}" data-action="{{ g.action }}" data-reason="{{ it.reason }}" data-subtitle="Likely cost ${{ "{:,}".format(it.expected) }}" onclick="openActionDrawer(this)" title="Open the suggested move"><strong class="act-first-move">{{ g.action|human_action }}</strong>
 <span>{{ g.n }} container{{ "s" if g.n != 1 }}</span>
-<span class="act-first-cost">${{ "{:,}".format(g.expected) }} likely cost <small class="muted">(${{ "{:,}".format(g.at_stake) }} in possible fees)</small></span>
+<span class="act-first-cost">${{ "{:,}".format(g.expected) }} likely cost <small class="muted">(${{ "{:,}".format(g.at_stake) }} in possible late fees)</small></span>
 <span class="act-first-start">Start with {{ it.row_id }}: {{ "%.2f"|format(it.proba * 100) }}% chance of a ${{ "{:,}".format(it.fee) }} fee</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
 {% endfor %}
 </ol>
