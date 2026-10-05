@@ -55,7 +55,7 @@
 <div>
 <div class="lbl">{{ state.money_label or ('Money at risk' if is_spine else 'Pack exposure') }}</div>
 <div class="dollars" id="ticker-dollars">${{ "{:,.0f}".format(state.demurrage_total|float) }}</div>
-{% if is_spine %}<div class="ticker-gloss">Total across all containers if nothing changes{% if state.act_first and state.act_first.by_move %}. ${{ "{:,}".format(state.act_first.by_move|sum(attribute="at_stake")) }} of it sits in the {{ state.act_first.n_flagged }} containers worth acting on.{% endif %}</div>{% endif %}
+{% if is_spine %}<div class="ticker-gloss">Total across all containers if nothing changes{% if state.act_first and state.act_first.by_move %}. ${{ "{:,}".format(state.act_first.fees_held_by_flagged if state.act_first.fees_held_by_flagged is defined and state.act_first.fees_held_by_flagged is not none else state.act_first.by_move|sum(attribute="at_stake")) }} of it sits in the {{ state.act_first.n_flagged }} containers worth acting on.{% endif %}</div>{% endif %}
 </div>
 <div class="meta">
 {% if state.replay %}{% if state.act_first and state.act_first.model %}<span class="ticker-save">Acting on the right <strong>{{ state.act_first.n_flagged }}</strong> containers saves <strong>${{ "{:,}".format(state.act_first.model.net_savings) }}</strong> after action costs</span><span class="ticker-caveat">Best case: demo containers, easier to predict than real shipments. Details under “More detail and charts” at the bottom of the page.</span>{% endif %}

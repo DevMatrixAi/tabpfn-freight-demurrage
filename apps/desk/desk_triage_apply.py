@@ -116,6 +116,32 @@ def _apply_triage_impl(
                 pass
     _action_of = {str(a.row_id): (a.action, a.reason) for a in actions.items}
     _rank_actions_by_expected_fee(sess, actions, pack_meta().get("money_col"), keep=50)
+    # Keep the demo showcase container visible on the board (not buried by rank).
+    try:
+        from tabpfn_hack_core.core import replay as _replay_pin
+        _sid = str((_replay_pin.replay_info() or {}).get("showcase_container_id") or "CONT-000121")
+        _items = list(actions.items or [])
+        _hit = [a for a in _items if str(a.row_id) == _sid]
+        if not _hit and sess.last_predictions is not None:
+            _pred = sess.last_predictions
+            _icol = sess.domain.id_col or "container_id"
+            if _icol in _pred.columns and "proba_1" in _pred.columns:
+                _row = _pred.loc[_pred[_icol].astype(str) == _sid]
+                if len(_row):
+                    from types import SimpleNamespace
+                    _r0 = _row.iloc[0]
+                    _hit = [SimpleNamespace(
+                        row_id=_sid,
+                        proba=float(_r0["proba_1"]),
+                        action=_action_of.get(_sid, ("call_terminal", _push_reason))[0],
+                        reason=_action_of.get(_sid, ("call_terminal", _push_reason))[1],
+                    )]
+                    _action_of[_sid] = (_hit[0].action, _hit[0].reason)
+        if _hit:
+            actions.items = _hit + [a for a in _items if str(a.row_id) != _sid]
+            actions.items = actions.items[:50]
+    except Exception:
+        pass
     # Mock explain → action drawer ("Why this move" + importance bars)
     try:
         from apps.desk.explain_ui import format_explain

@@ -18,7 +18,8 @@ from typing import Any
 import pandas as pd
 
 _REPO = Path(__file__).resolve().parents[3]
-DEFAULT_REPLAY = _REPO / "artifacts" / "freight-demurrage" / "replay_tabpfn_oof.csv"
+DEFAULT_REPLAY = _REPO / "artifacts" / "freight-demurrage" / "replay_tabpfn_oof_clean12.csv"
+# Old leaky file kept at replay_tabpfn_oof.csv (not used by the desk).
 MIN_COVERAGE = 0.8
 
 
@@ -64,11 +65,18 @@ def replay_info() -> dict[str, Any]:
     rec = load_receipt()
     leaky = bool(rec.get("leaky", True))
     when = str(rec.get("recorded_at") or "")[:10]
+    n_feat = rec.get("n_features") or (len(rec.get("features") or []) or None)
+    feature_set = rec.get("feature_set") or (
+        "all columns" if leaky else (f"{n_feat} honest columns" if n_feat else "clean")
+    )
     return {
         "active": replay_enabled(),
         "recorded_at": when,
         "leaky": leaky,
-        "feature_set": rec.get("feature_set") or ("all columns" if leaky else "clean"),
+        "feature_set": feature_set,
+        "features": list(rec.get("features") or []),
+        "n_features": n_feat,
+        "showcase_container_id": rec.get("showcase_container_id") or "CONT-000121",
         "label": f"Real TabPFN-3.5 scores, recorded {when}" if when else "Real TabPFN-3.5 scores, recorded earlier",
         "banner": (
             "The containers are made up for this demo, and this sample is easier to predict than real shipments, "

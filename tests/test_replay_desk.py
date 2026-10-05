@@ -1,6 +1,7 @@
 """Recorded TabPFN-3.5 replay: desk and /eval show real model scores with no token."""
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -20,10 +21,23 @@ from tabpfn_hack_core.core.pipeline import PipelineSession
 from tabpfn_hack_core.domain import load_domain
 
 
+def _receipt() -> dict:
+    return json.loads(
+        (ROOT / "artifacts/freight-demurrage/replay_tabpfn_oof_clean12_receipt.json").read_text()
+    )
+
+
+def _money(n: int) -> str:
+    return f"${n:,}"
+
+
 @pytest.fixture
 def replay_on(monkeypatch):
     monkeypatch.setenv("DESK_REPLAY", "1")
+    monkeypatch.delenv("TABPFN_TOKEN", raising=False)
+    replay._load.cache_clear()
     assert replay.replay_enabled()
+    assert "clean12" in str(replay.replay_path())
 
 
 def _sess():
@@ -45,15 +59,24 @@ def test_token_disables_replay_unless_forced(monkeypatch):
     assert replay.replay_enabled()
 
 
+def test_default_replay_is_clean12():
+    assert replay.replay_path().name == "replay_tabpfn_oof_clean12.csv"
+    assert (ROOT / "artifacts/freight-demurrage/replay_tabpfn_oof.csv").is_file()  # old leaky kept
+    rec = _receipt()
+    assert rec.get("leaky") is False
+    assert rec.get("n_features") == 12
+
+
 def test_fit_predict_uses_recorded_scores(replay_on):
     s = _sess()
+    rec = _receipt()
     fit = s.fit_predict("t", mode="thinking")
     assert fit.backend == "tabpfn_replay"
     assert fit.n_test == 1200
-    assert fit.metrics["roc_auc"] == pytest.approx(0.987, abs=0.002)
+    assert fit.metrics["roc_auc"] == pytest.approx(rec["metrics"]["thinking"]["roc_auc"], abs=0.002)
     cmp_ = s.compare_baseline("t", mode="plus")
-    assert cmp_.tabpfn_metrics["roc_auc"] == pytest.approx(0.986, abs=0.002)
-    assert cmp_.baseline_metrics["roc_auc"] == pytest.approx(0.957, abs=0.002)
+    assert cmp_.tabpfn_metrics["roc_auc"] == pytest.approx(rec["metrics"]["plus"]["roc_auc"], abs=0.002)
+    assert cmp_.baseline_metrics["roc_auc"] == pytest.approx(rec["metrics"]["hist_gbm"]["roc_auc"], abs=0.002)
     assert "proba_hist_gbm" in s.last_predictions.columns
 
 
@@ -80,8 +103,11 @@ def test_act_first_matches_receipt(replay_on):
     af = build_act_first(s.last_predictions, id_col="container_id", money_col="projected_demurrage_usd")
     assert af["model"]["net_savings"] == replay.recorded_net_savings(300)["plus"]
     assert af["baseline"]["net_savings"] == replay.recorded_net_savings(300)["hist_gbm"]
-    assert len(af["items"]) == 5
-    exp = [it["expected"] for it in af["items"]]
+    assert af["n_flagged"] == _receipt()["desk_view_300"]["plus"]["n_flagged"]
+    assert len(af["items"]) >= 5
+    # Showcase container must appear in the act-first strip
+    assert any(it["row_id"] == "CONT-000121" for it in af["items"])
+    exp = [it["expected"] for it in af["items"] if it["row_id"] != "CONT-000121"]
     assert exp == sorted(exp, reverse=True)
 
 
@@ -93,7 +119,7 @@ def test_act_first_rule_small():
         "y_true": [1, 0, 1],
     })
     af = build_act_first(pred, id_col="container_id", money_col="projected_demurrage_usd")
-    assert [i["row_id"] for i in af["items"]] == ["B", "A"]  # C: 0.99*100 < $300
+    assert [i["row_id"] for i in af["items"] if i["row_id"] in {"A", "B", "C"}][:2] == ["B", "A"]
     assert af["model"]["net_savings"] == 1000 - 600
     assert af["top_risk"]["row_id"] == "C" and not af["top_risk"]["in_top"]
 
@@ -102,19 +128,33 @@ def test_desk_and_eval_show_replay(replay_on):
     from apps.desk.app import app
     from apps.desk.auth import SESSION_COOKIE
 
+    rec = _receipt()
+    plus_net = int(rec["desk_view_300"]["plus"]["net_savings"])
+    think_net = int(rec["desk_view_300"]["thinking"]["net_savings"])
+    hist_net = int(rec["desk_view_300"]["hist_gbm"]["net_savings"])
+    n_flag = int(rec["desk_view_300"]["plus"]["n_flagged"])
+    held = int(rec["desk_view_300"]["plus"]["fees_held_by_flagged"])
+
     with TestClient(app) as c:
         c.cookies.set(SESSION_COOKIE, "1")
         c.post("/load-domain-csv", follow_redirects=False)
-        r = c.post("/run-triage", data={"mode": "thinking"}, follow_redirects=True)
+        r = c.post("/run-triage", data={"mode": "plus"}, follow_redirects=True)
         t = r.text
         assert 'id="replay-banner"' in t and 'id="act-first"' in t
         assert "Real TabPFN-3.5 scores" in t
-        assert "$898,376" in t and "$877,962" in t
+        assert _money(plus_net) in t and _money(hist_net) in t
+        assert str(n_flag) in t and _money(held) in t  # fees_held_by_flagged from float sum
+        assert "CONT-000121" in t
         assert "mock fallback" not in t
         c.post("/eval/run", data={"pack": "freight-demurrage"}, follow_redirects=False)
         e = c.get("/eval?pack=freight-demurrage").text
         assert "recorded TabPFN-3.5" in e
-        assert "$900,610" in e
+        assert _money(plus_net) in e
         assert "tabpfn_replay" in e
         assert 'id="lc-table"' in e
+        assert "eval-fee-note" in e
+        assert "12 honest columns" in e
         assert "requested mode=plus will fall back" not in e
+        # Percent captured appears on the eval headline
+        pct = rec["desk_view_300"]["plus"]["pct_captured"]
+        assert f"{pct}%" in e or f"{pct:.1f}%" in e

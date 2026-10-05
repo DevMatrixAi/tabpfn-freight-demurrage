@@ -15,6 +15,9 @@
     {% endif %}
     {% endif %}
     {% if result.replay %}
+    <p class="eval-fee-note muted" id="eval-fee-note" style="font-size:.82rem;margin:.25rem 0 0">Dollar math uses each container's projected fee from the data (the scores use 12 honest columns; no fee or ID columns).</p>
+    {% endif %}
+    {% if result.replay %}
     <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">A perfect forecast means acting only on the containers that really get charged. Every container was scored by a model that had not seen it, and both models were tested the same way. The data is a made-up demo set; details are under "Detailed scores, charts and method".</p>
     {% endif %}
   </section>

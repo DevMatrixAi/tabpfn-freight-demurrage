@@ -5,7 +5,7 @@
 {% if af.by_move %}
 {% set by_move_rows = af.by_move %}
 <p class="act-first-plan"><strong>{{ af.n_flagged }}</strong> of {{ "{:,}".format(af.n_rows) }} containers are worth acting on: their likely cost is more than the ${{ "{:,}".format(af.action_cost) }} an action costs. Here they are, grouped by what to do.</p>
-{% set flag_fees = af.by_move|sum(attribute="at_stake") %}{% set all_fees = state.demurrage_total|float|round|int %}{% if af.model %}<ul class="act-first-how act-first-math">
+{% set flag_fees = (af.fees_held_by_flagged if af.fees_held_by_flagged is defined and af.fees_held_by_flagged is not none else af.by_move|sum(attribute="at_stake")) %}{% set all_fees = state.demurrage_total|float|round|int %}{% if af.model %}<ul class="act-first-how act-first-math">
 <li>If nothing is done, these {{ af.n_flagged }} containers hold ${{ "{:,}".format(flag_fees) }} in possible late fees, out of ${{ "{:,}".format(all_fees) }} across all {{ "{:,}".format(af.n_rows) }}.</li>
 {% if flag_fees > af.model.fees_avoided %}<li>In the recorded outcomes, ${{ "{:,}".format(af.model.fees_avoided) }} of that was really charged, so acting on them avoids that ${{ "{:,}".format(af.model.fees_avoided) }}. The remaining ${{ "{:,}".format(flag_fees - af.model.fees_avoided) }} was never charged, because some flagged containers got out in time on their own.</li>
 {% else %}<li>Acting on them avoids ${{ "{:,}".format(af.model.fees_avoided) }} in fees that would really have been charged.</li>

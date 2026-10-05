@@ -1,0 +1,316 @@
+{
+ "kind": "tabpfn_oof_replay_clean12",
+ "leaky": false,
+ "rows": 1200,
+ "positives": 221,
+ "folds": 5,
+ "split": "StratifiedGroupKFold(5, shuffle=True, random_state=42) by vessel_id \u2014 fold ids verified identical to replay_tabpfn_oof.csv",
+ "dropped_columns": {
+  "projected_demurrage_usd": "fee outcome; label-adjacent (AUC 0.83 alone); also the $ used by the cost model",
+  "fee_inevitable": "derived from free_days_left<=0 and the fee outcome",
+  "cargo_vs_fee_collapse": "computed from projected fee vs cargo value",
+  "container_id": "row identifier",
+  "bol_id": "row identifier (1199 unique)",
+  "event_ts": "unique timestamp per row (identifier-like)"
+ },
+ "kept_after_scan": {
+  "blank_sailing": "known at decision time (sailing cancelled); is the desk's secondary label but not computed from demurrage_risk",
+  "inland_can_beat_freedays": "derived from free_days_left (an input), not from label/fee outcome",
+  "dwell_days_so_far": "snapshot to date, ex-ante",
+  "vessel_id": "group key; test vessels unseen in train (grouped folds)"
+ },
+ "features": [
+  "vessel_id",
+  "pol",
+  "pod",
+  "terminal_note",
+  "weather_alert",
+  "free_days_left",
+  "dwell_days_so_far",
+  "teu",
+  "cargo_value_usd",
+  "daily_demurrage_usd",
+  "blank_sailing",
+  "inland_can_beat_freedays"
+ ],
+ "n_features": 12,
+ "model_versions": {
+  "plus": "tabpfn_client v3.5",
+  "thinking": "tabpfn_client v3.5 thinking_mode=True effort=medium group_col=vessel_id (no group_time_col: event_ts dropped)",
+  "fast": "tabpfn_client v3.5-fast",
+  "hist_gbm": "sklearn HistGBM via repo fit_mock (text_cols=terminal_note,weather_alert; high_card_cols=pol,pod)"
+ },
+ "models_run": [
+  "plus",
+  "thinking",
+  "fast",
+  "hist_gbm"
+ ],
+ "recorded_at": "2026-10-05T12:11:36.995026+00:00",
+ "recorded_at_pt": "2026-10-05 05:11 PT",
+ "cells_per_model": 72000,
+ "usage": {
+  "before": {
+   "daily_tokens_used": 5458516,
+   "daily_token_limit": 25000000,
+   "monthly_tokens_used": 5458516,
+   "monthly_token_limit": 20000000,
+   "daily_reset_time": "2026-10-06 00:00:00 UTC"
+  },
+  "after": {
+   "daily_tokens_used": 6537541,
+   "daily_token_limit": 25000000,
+   "monthly_tokens_used": 6537541,
+   "monthly_token_limit": 20000000,
+   "daily_reset_time": "2026-10-06 00:00:00 UTC"
+  },
+  "job_tokens": 1079025,
+  "fold_tokens": {
+   "fast_fold0": 10000,
+   "fast_fold1": 10000,
+   "fast_fold2": 10000,
+   "fast_fold3": 10000,
+   "fast_fold4": 10000,
+   "thinking_fold0": 195805,
+   "thinking_fold1": 195805,
+   "thinking_fold2": 195805,
+   "thinking_fold3": 195805,
+   "thinking_fold4": 195805
+  },
+  "preflight_estimate": {
+   "plus": 50000,
+   "fast": 50000,
+   "thinking": 244760,
+   "total": 344760
+  },
+  "abort_threshold": 3000000
+ },
+ "action_costs_assumed": [
+  150.0,
+  300.0,
+  600.0
+ ],
+ "cost_model_note": "same as old: flag if p*projected_demurrage_usd > action cost; payoff = projected fee of true positives",
+ "metrics": {
+  "plus": {
+   "roc_auc": 0.9112,
+   "avg_precision": 0.8329,
+   "cost": [
+    {
+     "action_cost": 150.0,
+     "n_flagged": 256,
+     "precision": 0.6641,
+     "recall": 0.7692,
+     "f1": 0.7128,
+     "fees_avoided": 759488,
+     "action_spend": 38400,
+     "net_savings": 721088,
+     "act_on_all_net": 791792,
+     "oracle_net": 942234
+    },
+    {
+     "action_cost": 300.0,
+     "n_flagged": 195,
+     "precision": 0.7692,
+     "recall": 0.6787,
+     "f1": 0.7212,
+     "fees_avoided": 653810,
+     "action_spend": 58500,
+     "net_savings": 595310,
+     "act_on_all_net": 611792,
+     "oracle_net": 914480
+    },
+    {
+     "action_cost": 600.0,
+     "n_flagged": 122,
+     "precision": 0.9098,
+     "recall": 0.5023,
+     "f1": 0.6472,
+     "fees_avoided": 480244,
+     "action_spend": 73200,
+     "net_savings": 407044,
+     "act_on_all_net": 251792,
+     "oracle_net": 862860
+    }
+   ]
+  },
+  "thinking": {
+   "roc_auc": 0.9034,
+   "avg_precision": 0.8398,
+   "cost": [
+    {
+     "action_cost": 150.0,
+     "n_flagged": 239,
+     "precision": 0.6987,
+     "recall": 0.7557,
+     "f1": 0.7261,
+     "fees_avoided": 673586,
+     "action_spend": 35850,
+     "net_savings": 637736,
+     "act_on_all_net": 791792,
+     "oracle_net": 942234
+    },
+    {
+     "action_cost": 300.0,
+     "n_flagged": 195,
+     "precision": 0.7692,
+     "recall": 0.6787,
+     "f1": 0.7212,
+     "fees_avoided": 525747,
+     "action_spend": 58500,
+     "net_savings": 467247,
+     "act_on_all_net": 611792,
+     "oracle_net": 914480
+    },
+    {
+     "action_cost": 600.0,
+     "n_flagged": 127,
+     "precision": 0.9213,
+     "recall": 0.5294,
+     "f1": 0.6724,
+     "fees_avoided": 460130,
+     "action_spend": 76200,
+     "net_savings": 383930,
+     "act_on_all_net": 251792,
+     "oracle_net": 862860
+    }
+   ]
+  },
+  "fast": {
+   "roc_auc": 0.9014,
+   "avg_precision": 0.816,
+   "cost": [
+    {
+     "action_cost": 150.0,
+     "n_flagged": 265,
+     "precision": 0.634,
+     "recall": 0.7602,
+     "f1": 0.6914,
+     "fees_avoided": 686484,
+     "action_spend": 39750,
+     "net_savings": 646734,
+     "act_on_all_net": 791792,
+     "oracle_net": 942234
+    },
+    {
+     "action_cost": 300.0,
+     "n_flagged": 202,
+     "precision": 0.7525,
+     "recall": 0.6878,
+     "f1": 0.7187,
+     "fees_avoided": 628132,
+     "action_spend": 60600,
+     "net_savings": 567532,
+     "act_on_all_net": 611792,
+     "oracle_net": 914480
+    },
+    {
+     "action_cost": 600.0,
+     "n_flagged": 133,
+     "precision": 0.8722,
+     "recall": 0.5249,
+     "f1": 0.6554,
+     "fees_avoided": 460388,
+     "action_spend": 79800,
+     "net_savings": 380588,
+     "act_on_all_net": 251792,
+     "oracle_net": 862860
+    }
+   ]
+  },
+  "hist_gbm": {
+   "roc_auc": 0.8725,
+   "avg_precision": 0.7641,
+   "cost": [
+    {
+     "action_cost": 150.0,
+     "n_flagged": 235,
+     "precision": 0.6468,
+     "recall": 0.6878,
+     "f1": 0.6667,
+     "fees_avoided": 554314,
+     "action_spend": 35250,
+     "net_savings": 519064,
+     "act_on_all_net": 791792,
+     "oracle_net": 942234
+    },
+    {
+     "action_cost": 300.0,
+     "n_flagged": 180,
+     "precision": 0.75,
+     "recall": 0.6109,
+     "f1": 0.6733,
+     "fees_avoided": 489587,
+     "action_spend": 54000,
+     "net_savings": 435587,
+     "act_on_all_net": 611792,
+     "oracle_net": 914480
+    },
+    {
+     "action_cost": 600.0,
+     "n_flagged": 133,
+     "precision": 0.8571,
+     "recall": 0.5158,
+     "f1": 0.6441,
+     "fees_avoided": 452543,
+     "action_spend": 79800,
+     "net_savings": 372743,
+     "act_on_all_net": 251792,
+     "oracle_net": 862860
+    }
+   ]
+  }
+ },
+ "desk_view_300": {
+  "plus": {
+   "n_flagged": 195,
+   "fees_avoided": 653810,
+   "action_spend": 58500,
+   "net_savings": 595310,
+   "missed_fees": 317982,
+   "fees_held_by_flagged": 708152,
+   "oracle_net": 914480,
+   "pct_captured": 65.1
+  },
+  "thinking": {
+   "n_flagged": 195,
+   "fees_avoided": 525747,
+   "action_spend": 58500,
+   "net_savings": 467247,
+   "missed_fees": 446046,
+   "fees_held_by_flagged": 579729,
+   "oracle_net": 914480,
+   "pct_captured": 51.1
+  },
+  "fast": {
+   "n_flagged": 202,
+   "fees_avoided": 628132,
+   "action_spend": 60600,
+   "net_savings": 567532,
+   "missed_fees": 343660,
+   "fees_held_by_flagged": 687544,
+   "oracle_net": 914480,
+   "pct_captured": 62.1
+  },
+  "hist_gbm": {
+   "n_flagged": 180,
+   "fees_avoided": 489587,
+   "action_spend": 54000,
+   "net_savings": 435587,
+   "missed_fees": 482206,
+   "fees_held_by_flagged": 545994,
+   "oracle_net": 914480,
+   "pct_captured": 47.6
+  }
+ },
+ "feature_set": "12 honest columns (no fee or ID columns)",
+ "showcase_container_id": "CONT-000121",
+ "cont_000121": {
+  "proba_plus": 0.268,
+  "proba_thinking": 0.5211,
+  "proba_hist_gbm": 0.0254,
+  "fee": 11308,
+  "likely_cost": 3031,
+  "label": 1
+ }
+}

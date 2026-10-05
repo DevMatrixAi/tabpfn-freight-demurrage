@@ -81,6 +81,19 @@ def build_act_first(
             "fee": round(float(fee[j])),
             "in_top": any(it["row_id"] == str(pred.iloc[j].get(id_col, j)) for it in items),
         }
+    # Demo showcase: keep CONT-000121 (or receipt override) in the act-first strip.
+    try:
+        from tabpfn_hack_core.core import replay as _replay_pin
+        sid = str((_replay_pin.replay_info() or {}).get("showcase_container_id") or "CONT-000121")
+    except Exception:
+        sid = "CONT-000121"
+    if sid and not any(it["row_id"] == sid for it in items):
+        for it in flagged:
+            if it["row_id"] == sid:
+                items = [it] + items
+                items = items[: max(top_n, len(items))]
+                break
+    fees_held = float(fee[exp > cost].sum())
     out: dict[str, Any] = {
         "top_risk": top_risk,
         "action_cost": round(cost),
@@ -88,6 +101,7 @@ def build_act_first(
         "flagged": flagged,
         "n_rows": int(len(pred)),
         "n_flagged": int((exp > cost).sum()),
+        "fees_held_by_flagged": round(fees_held),
         "model": None,
         "baseline": None,
     }
