@@ -24,7 +24,7 @@ playbook:
     min_proba: 0.35
     when_col: cargo_vs_fee_collapse
     when_equals: "1"
-    reason: "This shipment's cargo is worth less than the late fee it is likely to run up, so cancelling the booking (or releasing the cargo if it has already landed) loses less money than paying the fee."
+    reason: "This shipment's cargo is worth less than the late fee it is likely to run up, so cancelling the booking loses less money than paying the fee."
   - action: divert
     min_proba: 0.78
     reason: "Very likely to sit past its free days (the days before late fees start) at this terminal; sending it to another terminal avoids the fee."

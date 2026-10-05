@@ -111,8 +111,9 @@ def group_by_move(
     groups: dict[str, dict[str, Any]] = {}
     for it in flagged:
         act, reason = action_of.get(str(it["row_id"]), ("monitor", ""))
-        if act in ("monitor", ""):
-            # Flagged = likely fee beats the action cost, so "watch" undersells it.
+        if act in ("monitor", "", "authorize_fee"):
+            # Flagged = likely fee beats the action cost and the savings count it as avoided,
+            # so "watch" undersells it and "pay the fee" would contradict the savings math.
             act = "call_terminal"
             reason = (
                 "The likely fee is far above the $300 cost of acting. Push the terminal or trucker "

@@ -88,6 +88,16 @@ def apply_triage(
     )
     elapsed = time.perf_counter() - t0
     actions = sess.suggest_actions(tid, max_rows=100_000)
+    _push_reason = (
+        "The likely fee is far above the $300 cost of acting. Push the terminal or trucker "
+        "to collect this container before its free days run out and late fees start."
+    )
+    for a in actions.items:
+        if a.action == "authorize_fee":
+            try:
+                a.action, a.reason = "call_terminal", _push_reason
+            except Exception:
+                pass
     _action_of = {str(a.row_id): (a.action, a.reason) for a in actions.items}
     _rank_actions_by_expected_fee(sess, actions, pack_meta().get("money_col"), keep=50)
     # Mock explain → action drawer ("Why this move" + importance bars)

@@ -12,13 +12,13 @@
 {% endif %}<li>The {{ af.n_flagged }} actions cost ${{ "{:,}".format(af.model.action_spend) }} (${{ "{:,}".format(af.action_cost) }} each).</li>
 <li>Fees avoided minus action costs: <strong>${{ "{:,}".format(af.model.net_savings) }} saved</strong>.</li>
 </ul>{% endif %}
-<p class="act-first-rank"><strong>Biggest likely cost first.</strong> A container's likely cost is its chance of a fee times the fee: a 50% chance of a $10,000 fee is a $5,000 likely cost. Groups are ranked by the likely cost of all their containers added up, so many small fees can outrank a few large ones. Click a group to see its first container.</p>
+<p class="act-first-rank"><strong>Biggest likely cost first.</strong> A container's likely cost is its chance of a fee times the fee: a 50% chance of a $10,000 fee is a $5,000 likely cost. Groups are ranked by the likely cost of all their containers added up (${{ "{:,}".format(by_move_rows|sum(attribute='expected')) }} across the {{ af.n_flagged }}), so many small fees can outrank a few large ones. Click a group to see its first container.</p>
 <ol class="act-first-list act-first-moves">
 {% for g in by_move_rows %}{% set it = g.top %}
 <li><button type="button" class="act-first-row" data-row-id="{{ it.row_id }}" data-money="{{ it.fee }}" data-expected="{{ it.expected }}" data-proba="{{ it.proba }}" data-tier="Act first" data-action-label="{{ g.action|human_action }}" data-action="{{ g.action }}" data-reason="{{ it.reason }}" data-subtitle="Likely cost ${{ "{:,}".format(it.expected) }}" onclick="openActionDrawer(this)" title="Open the suggested move"><strong class="act-first-move">{{ g.action|human_action }}</strong>
 <span>{{ g.n }} container{{ "s" if g.n != 1 }}</span>
 <span class="act-first-cost">${{ "{:,}".format(g.expected) }} likely cost <small class="muted">(${{ "{:,}".format(g.at_stake) }} possible)</small></span>
-<span class="act-first-start">Start with {{ it.row_id }}: {{ (it.proba * 100)|round|int }}% chance of a ${{ "{:,}".format(it.fee) }} fee</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
+<span class="act-first-start">Start with {{ it.row_id }}: {{ ("%.1f"|format(it.proba * 100))|replace(".0", "") }}% chance of a ${{ "{:,}".format(it.fee) }} fee</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
 {% endfor %}
 </ol>
 {% elif af["items"] %}
