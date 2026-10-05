@@ -12,7 +12,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "csv": root / "domains" / "freight-demurrage" / "data" / "containers.csv",
             "spine": True,
             "money_col": "projected_demurrage_usd",
-            "money_label": "Money at risk",
+            "money_label": "Possible late fees",
             "id_hint": "container_id",
         },
         "equipment-size": {

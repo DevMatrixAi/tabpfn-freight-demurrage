@@ -119,7 +119,7 @@ _STATE: dict[str, Any] = {
     "blank_metrics": None, "blank_backend": None, "blank_warning": None,
     "blank_label": "blank_sailing", "what_if": None, "sample_row_ids": [],
     "risk_cards": [], "chart_stats": None, "thinking_timeline": [], "explain": None,
-    "money_label": "Money at risk", "pack_gloss": PACKS[DEFAULT_PACK].get("gloss"),
+    "money_label": "Possible late fees", "pack_gloss": PACKS[DEFAULT_PACK].get("gloss"),
     "stream_cursor": 0, "stream_log": [], "stream_last": [],
 }
 

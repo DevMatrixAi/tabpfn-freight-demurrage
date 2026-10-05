@@ -24,7 +24,7 @@ playbook:
     min_proba: 0.35
     when_col: cargo_vs_fee_collapse
     when_equals: "1"
-    reason: "The shipment record shows this cargo is worth less than this container's likely cost in late fees, so paying to get it out is a losing trade. Give up the cargo and let the carrier dispose of it. The savings count this as a $300 action and leave out the cargo's value, which is smaller than the fee."
+    reason: "The shipment record shows this cargo is worth less than the late fee this container is likely to be charged, so paying to get it out is a losing trade. Give up the cargo and let the carrier dispose of it. The savings count this as a $300 action and leave out the cargo's value, which is smaller than that fee."
   - action: divert
     min_proba: 0.78
     reason: "Very likely to sit past its free days (the days before late fees start) at its planned terminal. Route it to a less crowded terminal before it arrives to avoid the fee."

@@ -222,7 +222,7 @@ ul.act-first-math strong{color:#4ade80}
 .act-first-moves .act-first-row{display:grid;grid-template-columns:13rem 7.5rem 17rem minmax(0,1fr);gap:.2rem .9rem;align-items:baseline;width:100%}
 .act-first-moves .act-first-move{min-width:0}
 .act-first-cost small{font-size:.8rem}
-.act-first-moves .act-first-row{grid-template-columns:12.5rem 7rem 18.5rem minmax(0,1fr);text-align:left}
+.act-first-moves .act-first-row{grid-template-columns:12rem 6.5rem 15rem minmax(0,1fr);text-align:left}
 .act-first-moves .act-first-row>*{justify-self:start;text-align:left}
 .act-first-cost{white-space:normal}
 .act-first-cost small{display:block;white-space:nowrap}
