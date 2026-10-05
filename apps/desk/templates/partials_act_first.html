@@ -11,7 +11,7 @@
 {% else %}<li>Acting on them avoids ${{ "{:,}".format(af.model.fees_avoided) }} in fees that would really have been charged.</li>
 {% endif %}<li>The {{ af.n_flagged }} actions cost ${{ "{:,}".format(af.model.action_spend) }} (${{ "{:,}".format(af.action_cost) }} each).</li>
 <li>Fees avoided minus action costs: <strong>${{ "{:,}".format(af.model.net_savings) }} saved</strong>.</li>
-<li class="muted">This assumes every action costs ${{ "{:,}".format(af.action_cost) }} and fully stops the fee when one would have been charged. Real actions will sometimes cost more or fail.</li>
+<li class="muted">This assumes every action costs ${{ "{:,}".format(af.action_cost) }} and fully stops the fee when one would have been charged. For "Abandon the cargo" the savings leave out the value of the cargo you give up. Real actions will sometimes cost more or fail.</li>
 </ul>{% endif %}
 <p class="act-first-rank"><strong>Groups with the biggest likely cost come first.</strong> A container's likely cost is its chance of a fee times the fee: a 50% chance of a $10,000 fee is a $5,000 likely cost. Groups are ranked by the likely cost of all their containers added up (${{ "{:,}".format(by_move_rows|sum(attribute='expected')) }} across the {{ af.n_flagged }}), so many small fees can outrank a few large ones. Click a group to see its first container; the side panel can also open a list of the top 50 containers.</p>
 <ol class="act-first-list act-first-moves">

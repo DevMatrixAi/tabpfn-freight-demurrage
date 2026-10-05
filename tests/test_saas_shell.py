@@ -28,7 +28,7 @@ def test_login_and_home():
     c.cookies.set(SESSION_COOKIE, r.cookies.get(SESSION_COOKIE) or "1")
     home = c.get("/")
     assert home.status_code == 200
-    assert b"Money Desk" in home.content
+    assert b"Late Fee Control" in home.content
 
 
 def test_desk_after_login():
