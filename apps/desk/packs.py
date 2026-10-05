@@ -6,7 +6,7 @@ from typing import Any
 def build_packs(root: Path) -> dict[str, dict[str, Any]]:
     return {
         "freight-demurrage": {
-            "label": "Late container fees",
+            "label": "Freight desk: late container fees",
             "gloss": "Which containers will run up port late fees (demurrage), and what to do",
             "domain": root / "domains" / "freight-demurrage" / "domain.yaml",
             "csv": root / "domains" / "freight-demurrage" / "data" / "containers.csv",
