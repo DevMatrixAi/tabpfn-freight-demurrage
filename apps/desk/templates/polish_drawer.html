@@ -37,7 +37,7 @@
   </section>
   {% endif %}
 
-  <details class="drawer-all"><summary>See the top {{ (state.actions or [])|length }} containers and their moves</summary>
+  <details class="drawer-all"><summary>See the top {{ (state.actions or [])|length }} containers and their suggested actions</summary>
   <div class="drawer-list" id="drawer-list">
   {% if state.actions %}
     {% for a in state.actions %}
