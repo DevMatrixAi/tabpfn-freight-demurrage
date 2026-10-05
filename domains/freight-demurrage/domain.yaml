@@ -42,7 +42,7 @@ playbook:
     min_proba: 0.35
     when_col: fee_inevitable
     when_equals: "1"
-    reason: "The fee is close to certain; approving it now is cheaper than a surprise invoice later."
+    reason: "This fee is likely and no move can avoid it, so approving it now is cheaper than a surprise invoice later."
   - action: monitor
     min_proba: 0.0
     reason: "Risk is low enough to leave it on the normal path for now."

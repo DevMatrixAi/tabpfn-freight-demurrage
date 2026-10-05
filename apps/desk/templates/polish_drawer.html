@@ -87,7 +87,7 @@ function openActionDrawer(el) {
     if (noselect) { noselect.hidden = true; noselect.style.display = 'none'; }
     var money = el.getAttribute('data-money');
     var expected = el.getAttribute('data-expected');
-    var pct = Math.round(100 * Number(el.getAttribute('data-proba') || 0));
+    var pct = (100 * Number(el.getAttribute('data-proba') || 0)).toFixed(1).replace(/\.0$/, '');
     var facts = pct + '% chance of a late fee';
     if (money) facts += ' · $' + Math.round(Number(money)).toLocaleString() + ' possible fee';
     if (expected) facts += ' · likely cost $' + Math.round(Number(expected)).toLocaleString();
