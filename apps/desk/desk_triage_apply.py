@@ -4,6 +4,7 @@ from __future__ import annotations
 import time
 from typing import Any, Callable
 
+import pandas as pd
 from fastapi import FastAPI, Form
 from fastapi.responses import RedirectResponse
 
@@ -86,7 +87,8 @@ def apply_triage(
         tid, mode=backend_mode, baseline="sklearn_hist_gbm", test_size=test_size, thinking_effort=effort
     )
     elapsed = time.perf_counter() - t0
-    actions = sess.suggest_actions(tid, max_rows=50)
+    actions = sess.suggest_actions(tid, max_rows=100_000)
+    _rank_actions_by_expected_fee(sess, actions, pack_meta().get("money_col"), keep=50)
     # Mock explain → action drawer ("Why this move" + importance bars)
     try:
         from apps.desk.explain_ui import format_explain
@@ -161,6 +163,12 @@ def apply_triage(
         if _pm.get("spine")
         else None
     )
+    if state["act_first"]:
+        _by_id = {str(a["row_id"]): a for a in state["actions"]}
+        for it in state["act_first"].get("items", []):
+            a = _by_id.get(str(it["row_id"])) or {}
+            it.setdefault("action", a.get("action") or "Act before free time runs out")
+            it.setdefault("reason", a.get("reason") or "")
 
     try:
         from apps.desk.triage_digest_hook import after_triage
@@ -205,3 +213,12 @@ def apply_triage(
         state["fast_ab"] = None
 
 
+def _rank_actions_by_expected_fee(sess: Any, actions: Any, money_col: str | None, keep: int = 50) -> None:
+    """Order the board like the Act-first strip: chance of a fee times the fee at stake."""
+    pred = getattr(sess, "last_predictions", None)
+    id_col = getattr(sess.domain, "id_col", None) or "container_id"
+    items = list(getattr(actions, "items", []) or [])
+    if pred is not None and money_col and money_col in pred.columns and id_col in pred.columns:
+        fee = dict(zip(pred[id_col].astype(str), pd.to_numeric(pred[money_col], errors="coerce").fillna(0.0)))
+        items.sort(key=lambda a: float(a.proba) * float(fee.get(str(a.row_id), 0.0)), reverse=True)
+    actions.items = items[:keep]

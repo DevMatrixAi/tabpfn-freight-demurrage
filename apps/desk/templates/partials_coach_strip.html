@@ -9,7 +9,7 @@
   </div>
   <ol class="coach-chips" id="coach-chips">
     <li class="coach-chip {% if _beat == 'login' %}active{% endif %}" data-beat="login"><a href="/login">Login</a></li>
-    <li class="coach-chip {% if _beat == 'ticker' %}active{% endif %}" data-beat="ticker"><a href="/desk#ticker-dollars">Ticker</a></li>
+    <li class="coach-chip {% if _beat == 'ticker' %}active{% endif %}" data-beat="ticker"><a href="/desk#ticker-dollars">Money at risk</a></li>
     <li class="coach-chip {% if _beat == 'triage' %}active{% endif %}" data-beat="triage"><a href="/desk#triage-panel">Triage</a></li>
     <li class="coach-chip {% if _beat == 'drawer' %}active{% endif %}" data-beat="drawer"><a href="/desk#risk-board">Drawer</a></li>
     <li class="coach-chip {% if _beat == 'stream' %}active{% endif %}" data-beat="stream"><a href="/desk#stream-panel">Stream</a></li>
@@ -19,7 +19,7 @@
     {% if _beat == 'login' %}You’re the shipper — stop late fees before the invoice.
     {% elif _beat == 'ticker' %}Dollars that burn if boxes sit past grace days.
     {% elif _beat == 'triage' %}Score late-fee risk on this messy table.
-    {% elif _beat == 'drawer' %}Not a red flag — pick a money move.
+    {% elif _beat == 'drawer' %}Click a container to see the suggested move.
     {% elif _beat == 'stream' %}New event — score and move can change.
     {% else %}Plus / Thinking / Fast vs HistGBM for judges.{% endif %}
   </p>

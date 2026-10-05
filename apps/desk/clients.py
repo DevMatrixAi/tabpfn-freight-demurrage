@@ -19,7 +19,7 @@ CLIENTS: dict[str, dict[str, Any]] = {
     },
     "ALL": {
         "label": "All clients (demo)",
-        "gloss": "No client filter — full fixture table",
+        "gloss": "All clients",
     },
 }
 

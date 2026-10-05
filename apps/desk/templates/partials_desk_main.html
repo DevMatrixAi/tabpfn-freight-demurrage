@@ -1,13 +1,21 @@
 <main>
 {% include "partials_act_first.html" %}
+{% if state.act_first %}
+{% include "live_board.html" %}
+{% include "partials_plain_english.html" %}
+<details class="advanced-box" id="advanced-panel">
+<summary>Advanced: data sources, model settings and detailed scores</summary>
+{% include "partials_morning_digest.html" %}
+{% else %}
 {% include "partials_plain_english.html" %}
 {% include "partials_morning_digest.html" %}
+{% endif %}
 <div class="grid">
 <section class="card full">
 <h2>Domain pack</h2>
 <span class="coach-hint" data-coach-hint="pack-selector">Same engine — equipment, inland, air, stow-fit.</span>
 <form class="row" method="post" action="/switch-pack">
-<label class="muted" for="pack">Spine + coda packs</label>
+<label class="muted" for="pack">Dataset</label>
 <select name="pack" id="pack" data-coach="pack-selector">
 {% for p in packs %}
 <option value="{{ p.id }}" {% if state.pack == p.id %}selected{% endif %}>{{ p.label }}{% if p.spine %} ★{% endif %}</option>
@@ -16,7 +24,7 @@
 <button type="submit">Switch pack</button>
 </form>
 <p class="muted" style="margin:.5rem 0 0">
-<strong>Freight demurrage</strong> (spine) = late-container fee risk.
+<strong>Freight demurrage</strong> = late-container fee risk.
 {% for p in packs if not p.spine %}
  · <strong>{{ p.label }}</strong>{% if p.gloss %} — {{ p.gloss }}{% endif %}
 {% endfor %}
@@ -29,7 +37,7 @@
 <section class="card">
 <h2>Load feed</h2>
 <form class="row" method="post" action="/load-adapter">
-<label class="muted" for="adapter_name">Fixture adapter</label>
+<label class="muted" for="adapter_name">Data source</label>
 <select name="adapter_name" id="adapter_name">
 {% for a in adapters %}
 <option value="{{ a }}" {% if state.adapter == a %}selected{% endif %}>{{ a }}</option>
@@ -41,7 +49,7 @@
 <button class="secondary" type="submit">Reload pack CSV</button>
 </form>
 <form class="row" method="post" action="/load-stress-missing" style="margin-top:.75rem">
-<button class="secondary" type="submit" title="fixtures/stress/missing_wide_demurrage.csv">Load stress missing/wide</button>
+<button class="secondary" type="submit" title="fixtures/stress/missing_wide_demurrage.csv">Load messy data (missing values)</button>
 </form>
 </section>
 
@@ -61,7 +69,7 @@
 </section>
 
 <section class="card priority full" id="triage-panel">
-<h2>Run triage <span class="req">judge card · Plus | Thinking | Mock + HistGBM Δ</span></h2>
+<h2>Re-run scoring <span class="req">TabPFN Plus or Thinking vs HistGBM</span></h2>
 <form method="post" action="/run-triage">
 <p class="mode-hint">Modes: <strong>Plus</strong> (messy notes) · <strong>Thinking</strong> (vessel / flight over time) · <strong>Mock</strong> (offline). Every run shows lift vs HistGBM.</p>
 <div class="mode-toggle" role="radiogroup" aria-label="TabPFN mode">
@@ -87,7 +95,7 @@
   <option value="medium" {% if eff == 'medium' %}selected{% endif %}>medium</option>
   <option value="high" {% if eff == 'high' %}selected{% endif %}>high</option>
 </select>
-<label class="muted" for="sample_n" title="Live TabPFN budget: sample rows before fit">sample_n</label>
+<label class="muted" for="sample_n" title="Live TabPFN budget: sample rows before fit">Rows to send (live only)</label>
 <select name="sample_n" id="sample_n" data-coach="sample-n" aria-label="Dev sample size for live TabPFN">
   {% set sn = (state.dev_sample.sample_n if state.dev_sample and state.dev_sample.sampled else (default_sample_n if default_sample_n is defined else 60)) %}
   <option value="" {% if sn is none or sn == '' %}selected{% endif %}>full table</option>
@@ -173,7 +181,7 @@ Fast A/B stub (optional)
 <h2 style="margin-top:1rem">Cancelled sailing (blank) <span class="badge">{{ state.blank_label or 'blank_sailing' }}</span></h2>
 <p class="muted" style="margin:0 0 .5rem">Same table, second label — will this sailing be cancelled (blank)? Primary judge card above stays late-fee risk + HistGBM Δ.
 {% if state.blank_backend %} · {{ state.blank_backend }}{% endif %}</p>
-{% if state.blank_warning %}<div class="warn-banner">{{ state.blank_warning }}</div>{% endif %}
+{% if state.blank_warning and state.replay %}<p class="muted">This check uses a local estimate; the recorded TabPFN run covers late fees only.</p>{% elif state.blank_warning %}<div class="warn-banner">{{ state.blank_warning }}</div>{% endif %}
 <div class="metrics-grid">
 {% for k in metric_keys %}
 <div class="metric-cell">
@@ -183,7 +191,7 @@ Fast A/B stub (optional)
 {% endfor %}
 </div>
 {% elif is_spine and state.blank_warning %}
-<div class="warn-banner" style="margin-top:.75rem">Cancelled sailing (blank): {{ state.blank_warning }}</div>
+{% if not state.replay %}<div class="warn-banner" style="margin-top:.75rem">Cancelled sailing (blank): {{ state.blank_warning }}</div>{% endif %}
 {% endif %}
 <div class="stream-panel" id="stream-panel">
   <div class="stream-controls">
@@ -198,9 +206,9 @@ Fast A/B stub (optional)
     <span class="coach-hint" data-coach-hint="stream-rescore">New event — score and move can change.</span>
     <label class="muted stream-auto-label"><input type="checkbox" id="stream-auto" /> Auto-poll (5s)</label>
   </div>
-  <p class="muted stream-hint">Appends a synthetic Terminal49 / project44 / EDI fixture row, then re-runs triage and refreshes risk cards — no full page reload.</p>
+  <p class="muted stream-hint">Appends a synthetic Terminal49 / project44 / EDI sample row, then re-runs triage and refreshes risk cards — no full page reload.</p>
 </div>
 </section>
 
-{% include "live_board.html" %}
+{% if not state.act_first %}{% include "live_board.html" %}{% endif %}
 {% include "partials_desk_tail.html" %}

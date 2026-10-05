@@ -32,7 +32,7 @@ def test_coach_beats_and_cribs_match_pitch():
     assert len(COACH_BEATS) == 6
     assert "shipper" in coach_crib("login").lower() or "late fees" in coach_crib("login").lower()
     assert "HistGBM" in coach_crib("compare-eval") or "HistGBM" in COACH_CRIBS["compare-eval"]
-    assert "money move" in coach_crib("risk-drawer").lower()
+    assert "suggested move" in coach_crib("risk-drawer").lower()
     assert active_beat_for_path("/login") == "login"
     assert active_beat_for_path("/eval") == "eval"
     assert active_beat_for_path("/desk", has_triage=True) == "drawer"

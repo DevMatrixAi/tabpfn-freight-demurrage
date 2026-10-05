@@ -16,7 +16,7 @@
     <span class="muted">· {{ state.n_rows }} rows · ${{ "{:,.0f}".format(state.demurrage_total|float) }}</span>
     {% if state.elapsed_s is not none %}<span class="muted">· re-score {{ state.elapsed_s }}s</span>{% endif %}
     {% else %}
-    <span class="muted">Stream idle — click <strong>Stream event + re-score</strong> to append a fixture adapter row and refresh cards.</span>
+    <span class="muted">Stream idle — click <strong>Stream event + re-score</strong> to add a sample arrival and refresh cards.</span>
     {% endif %}
   </div>
 
@@ -24,7 +24,7 @@
 
   {% if state.risk_cards %}
   <section class="card full" id="risk-board" data-coach="risk-drawer">
-  <span class="coach-hint" data-coach-hint="risk-drawer">Not a red flag — pick a money move.</span>
+  <span class="coach-hint" data-coach-hint="risk-drawer">Click a container to see the suggested move.</span>
   <h2>{% if is_spine %}Late fee risk board{% else %}Shipment risk board{% endif %} <span class="badge">click card → moves</span>
   {% if state.stream_cursor %}<span class="badge">stream #{{ state.stream_cursor }}</span>{% endif %}
   </h2>
@@ -75,7 +75,7 @@
   <div class="empty-board saas-empty" data-empty="risk-board">
     <p class="empty-kicker">Empty board</p>
     <p class="empty-title">No late fee risk cards yet</p>
-    <p>Run triage (Mock works fully offline) to paint Low / Med / High cards with money at risk and a suggested move. Or stream a fixture event below.</p>
+    <p>Run triage to fill Low / Med / High cards with money at risk and a suggested move. Or stream a sample arrival below.</p>
     <a class="empty-cta" href="#triage-panel">Run triage</a>
     <div class="empty-panels" aria-hidden="true" style="width:100%;margin-top:.5rem">
       <div class="empty-panel"><h3>High</h3><div class="ph" style="width:55%"></div><div class="ph" style="width:35%"></div></div>

@@ -6,7 +6,7 @@ from typing import Any
 def build_packs(root: Path) -> dict[str, dict[str, Any]]:
     return {
         "freight-demurrage": {
-            "label": "Freight demurrage (spine)",
+            "label": "Freight demurrage (main demo)",
             "gloss": "Late-container fee (demurrage) — money left on the dock",
             "domain": root / "domains" / "freight-demurrage" / "domain.yaml",
             "csv": root / "domains" / "freight-demurrage" / "data" / "containers.csv",
@@ -16,7 +16,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "container_id",
         },
         "equipment-size": {
-            "label": "Equipment size (coda)",
+            "label": "Equipment size (extra)",
             "gloss": "Right box size for the booking",
             "domain": root / "domains" / "equipment-size" / "domain.yaml",
             "csv": root / "domains" / "equipment-size" / "data" / "bookings.csv",
@@ -26,7 +26,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "booking_id",
         },
         "inland-mode": {
-            "label": "Inland truck vs rail (coda)",
+            "label": "Inland truck vs rail (extra)",
             "gloss": "Truck or rail to the inland dest",
             "domain": root / "domains" / "inland-mode" / "domain.yaml",
             "csv": root / "domains" / "inland-mode" / "data" / "moves.csv",
@@ -36,7 +36,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "move_id",
         },
         "air-freight": {
-            "label": "Air freight (coda)",
+            "label": "Air freight (extra)",
             "gloss": "Missed connection / delay cost on air",
             "domain": root / "domains" / "air-freight" / "domain.yaml",
             "csv": root / "domains" / "air-freight" / "data" / "shipments.csv",
@@ -46,7 +46,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "awb_id",
         },
         "stow-fit": {
-            "label": "Stow-fit equip/mode (coda)",
+            "label": "Stow-fit equip/mode (extra)",
             "gloss": "Suggest equipment/mode — not a 3D packer",
             "domain": root / "domains" / "stow-fit" / "domain.yaml",
             "csv": root / "domains" / "stow-fit" / "data" / "shipments.csv",

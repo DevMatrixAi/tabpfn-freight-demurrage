@@ -16,7 +16,7 @@
     <a href="/">Desks</a>
     <a href="/desk">Ops board</a>
     <a href="/eval">Eval</a>
-    <a href="/anti-wrapper">Anti-wrapper</a>
+    <a href="/anti-wrapper">How it uses TabPFN</a>
     <a class="active" href="/settings" id="settings-link">Settings</a>
     <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn">Judge path (mock)</button></form>
     <a href="/docs" target="_blank" rel="noopener">Robot API</a>
@@ -81,7 +81,7 @@
   <section class="card settings-card">
     <p class="empty-kicker" style="margin:0 0 .35rem">Dev sample · Thinking effort</p>
     <form method="post" action="/settings" class="settings-prefs">
-      <label for="sample_n">sample_n / TABPFN_DEV_N</label>
+      <label for="sample_n">Rows sent per live TabPFN call</label>
       <select name="sample_n" id="sample_n" aria-label="Demo sample_n preference">
         <option value="full" {% if not sample_n %}selected{% endif %}>full table (mock OK)</option>
         {% for n in sample_choices %}

@@ -187,3 +187,14 @@ button:disabled{opacity:.6;cursor:wait}
 .act-first-row:hover strong,.act-first-row:focus-visible strong{text-decoration:underline}
 .act-first-exp{font-weight:600}
 .act-first-sum{margin:.4rem 0 .2rem}
+
+/* global: honor the hidden attribute everywhere; never scroll the page sideways */
+[hidden]{display:none!important}
+html,body{max-width:100%;overflow-x:hidden}
+
+.act-first-headline{font-size:1.2rem;font-weight:700;margin:0 0 .45rem}
+.act-first-row{cursor:pointer}
+.act-first-row:hover{outline:1px solid rgba(61,156,240,.6)}
+.advanced-box{margin:1rem 0;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:.4rem .8rem}
+.advanced-box>summary{cursor:pointer;font-weight:600;padding:.35rem 0;color:var(--muted)}
+.eval-headline{font-size:1.25rem;font-weight:700;margin:.2rem 0 .7rem}

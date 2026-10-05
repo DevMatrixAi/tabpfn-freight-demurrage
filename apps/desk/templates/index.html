@@ -16,17 +16,17 @@
   <a class="mark" href="/"><div class="mark-orb"></div><span>Freight Money Desk</span></a>
   <div class="links">
     <a href="/">Desks</a>
-    <a class="active" href="/desk">Ops board</a>
-    <a href="/eval" id="eval-link" data-coach="compare-eval">Eval</a>
-    <a href="/anti-wrapper" id="anti-wrapper-link">Anti-wrapper</a>
+    <a class="active" href="/desk">Desk</a>
+    <a href="/eval" id="eval-link" data-coach="compare-eval">TabPFN vs baseline</a>
+    <a href="/anti-wrapper" id="anti-wrapper-link">How it uses TabPFN</a>
     <a href="/settings" id="settings-link">Settings</a>
-    <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn" data-judge-path="1" title="Mock triage then open /eval (empty-token safe)">Judge path (mock)</button></form>
+    <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn" data-judge-path="1" title="Score the desk, then open the comparison page">Guided tour</button></form>
     <a href="/export-triage.csv" id="export-triage-csv" download="triage_actions.csv" title="Download triage rows + suggested actions">Export CSV</a>
     <a href="/docs" data-coach="robot-api" target="_blank" rel="noopener">API</a>
   </div>
   <div class="spacer"></div>
   <span class="chip">{{ state.client_label or "All clients" }}</span>
-  {% if live_budget %}
+  {% if live_budget and not state.replay %}
   <span class="chip live-budget-chip {% if live_budget.mode == 'mock' %}mock{% else %}live{% endif %}"
         id="live-budget-chip"
         data-live-budget-chip="1"
@@ -50,7 +50,7 @@
 <h1>Freight Ops Board</h1>
 <p class="tagline">Money-first triage · pack <strong>{{ state.pack_label or state.pack }}</strong>
 {% if state.pack_gloss %}<span class="pack-gloss"> — {{ state.pack_gloss }}</span>{% endif %}
-<span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% elif state.replay %}No token needed: recorded TabPFN-3.5 scores{% else %}No token: offline stand-in model{% endif %}</span></p>
+<span class="token-pill {% if has_token or state.replay %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% elif state.replay %}Recorded TabPFN-3.5 scores, no token needed{% else %}No token: offline stand-in model{% endif %}</span></p>
 </div>
 </div>
 <div class="ticker" id="money-ticker" data-coach="money-at-risk" role="status" aria-live="polite">
@@ -60,16 +60,18 @@
 {% if is_spine %}<div class="ticker-gloss">Projected late-container fees if nothing changes</div>{% endif %}
 </div>
 <div class="meta">
+{% if state.replay %}<span id="ticker-rows">{{ state.n_rows }}</span> containers · TabPFN-3.5 {{ (state.requested_mode or state.mode)|capitalize }}, recorded run
+{% else %}
 <span class="badge">{{ state.source }}</span>
 · <span id="ticker-rows">{{ state.n_rows }}</span> rows
 {% if state.backend %} · {{ state.backend }} ({{ state.requested_mode or state.mode }} → {{ state.mode }}){% endif %}
 {% if state.elapsed_s is not none %} · {{ state.elapsed_s }}s{% endif %}
+{% endif %}
 </div>
 </div>
 </header>
 <!-- deep-showcase markers (kept for ensure_deep_templates): thinking_effort judge-strip mode-thinking -->
 <!-- plain crib via partials_desk_main → partials_plain_english.html -->
-{% include "partials_morning_digest.html" %}
 {% include "partials_desk_main.html" %}
 
 <footer>{{ disclaimer }}</footer>

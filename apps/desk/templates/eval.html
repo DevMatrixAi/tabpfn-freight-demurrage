@@ -15,8 +15,9 @@
 
   <div class="crumb">
     <a href="{{ saas_home }}">← Desks</a>
+    <a href="/desk?pack=freight-demurrage" id="eval-desk-link">Freight desk</a>
     <span class="muted" style="font-size:.85rem">Eval dashboard</span>
-    <a href="/anti-wrapper">Anti-wrapper</a>
+    <a href="/anti-wrapper">How it uses TabPFN</a>
     <a href="/settings" id="settings-link">Settings</a>
     <form method="post" action="/logout" style="margin-left:auto"><button class="signout" type="submit">Sign out</button></form>
   </div>
@@ -27,11 +28,11 @@
   {% include "partials_judge_path_banner.html" %}
 
   <div class="eval-hero card" style="margin-bottom:1rem">
-    <h1>Plus / Thinking / Fast vs HistGBM</h1>
+    <h1>Does TabPFN beat a standard model?</h1>
     <p class="muted" style="margin:0">
-      Multi-mode <code>compare_baseline</code> on a domain pack.
-      <span class="token-pill {% if has_token %}ok{% else %}missing{% endif %}">
-        {% if has_token %}TABPFN_TOKEN set · live modes{% elif result and result.replay %}No token needed: recorded TabPFN-3.5 scores{% else %}No token: offline stand-in model{% endif %}
+      The same containers scored by TabPFN-3.5 and by HistGBM, a standard gradient-boosting model.
+      <span class="token-pill {% if has_token or (result and result.replay) %}ok{% else %}missing{% endif %}">
+        {% if has_token %}TABPFN_TOKEN set · live modes{% elif result and result.replay %}Recorded TabPFN-3.5 scores, no token needed{% else %}No token: offline stand-in model{% endif %}
       </span>
     </p>
   </div>
@@ -39,7 +40,7 @@
   <section class="card" style="margin-bottom:1rem">
     <h2>Pack</h2>
     <form class="row" method="post" action="/eval/run">
-      <label class="muted" for="pack">Spine + coda</label>
+      <label class="muted" for="pack">Dataset</label>
       <select name="pack" id="pack">
         {% for p in packs %}
         <option value="{{ p.id }}" {% if p.id == active_pack %}selected{% endif %}>{{ p.label }}{% if p.spine %} ★{% endif %}</option>
@@ -81,7 +82,7 @@
       <p class="empty-title">No eval yet</p>
       <p>Pick a pack above and hit <strong>Run eval</strong>. Mock works offline; set <code>TABPFN_TOKEN</code> for live Plus / Thinking / Fast.</p>
       <button type="button" class="empty-cta" id="eval-empty-cta" onclick="var b=document.getElementById('eval-run-btn'); if(b) b.click();">Run eval</button>
-      <a class="empty-cta secondary" href="/desk">Load freight fixture on desk</a>
+      <a class="empty-cta secondary" href="/desk">Load the freight data on the desk</a>
     </div>
     <div class="empty-panels" aria-hidden="true">
       <div class="empty-panel"><h3>Latency</h3><div class="ph" style="width:70%"></div><div class="ph" style="width:45%"></div></div>

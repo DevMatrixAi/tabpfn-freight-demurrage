@@ -17,7 +17,7 @@ COACH_BEATS: list[dict[str, str]] = [
     },
     {
         "id": "ticker",
-        "label": "Ticker",
+        "label": "Money at risk",
         "target": "#ticker-dollars",
         "href": "/desk#ticker-dollars",
         "line": "Dollars that burn if boxes sit past grace days.",
@@ -34,7 +34,7 @@ COACH_BEATS: list[dict[str, str]] = [
         "label": "Drawer",
         "target": "#risk-board",
         "href": "/desk#risk-board",
-        "line": "Not a red flag — pick a money move.",
+        "line": "Click a container to see the suggested move.",
     },
     {
         "id": "stream",
@@ -63,7 +63,7 @@ COACH_CRIBS: dict[str, str] = {
     "run-triage": "Score late-fee risk on this messy table.",
     "histgbm-delta": "Lift vs a normal model on the same data.",
     "thinking-timeline": "Vessel across time — story, not just a score.",
-    "risk-drawer": "Not a red flag — pick a money move.",
+    "risk-drawer": "Click a container to see the suggested move.",
     "stream-rescore": "New event — score and move can change.",
     "compare-eval": "Plus / Thinking / Fast vs HistGBM for judges.",
     "pack-selector": "Same engine — equipment, inland, air, stow-fit.",
