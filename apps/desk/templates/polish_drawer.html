@@ -1,6 +1,6 @@
 <!-- Action drawer: suggested moves + Why this move (mock explain) -->
 <div id="drawer-backdrop" class="drawer-backdrop" hidden onclick="closeActionDrawer()"></div>
-<aside id="action-drawer" class="action-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Suggested move">
+<aside id="action-drawer" class="action-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Suggested action">
   <div class="drawer-head">
     <div>
       <h2 id="drawer-title"></h2>
@@ -47,7 +47,7 @@
         <strong>{{ a.row_id }}</strong>
         <span class="badge" title="Late fee risk">Late fee risk {{ "%.0f"|format((a.proba|float)*100) }}%</span>
       </div>
-      <p class="item-kicker">Suggested move</p>
+      <p class="item-kicker">Suggested action</p>
       <div class="drawer-action">{{ a.action|human_action }}</div>
       <p class="muted drawer-reason">{{ a.reason }}</p>
     </div>
@@ -87,14 +87,14 @@ function openActionDrawer(el) {
     if (noselect) { noselect.hidden = true; noselect.style.display = 'none'; }
     var money = el.getAttribute('data-money');
     var expected = el.getAttribute('data-expected');
-    var pct = (100 * Number(el.getAttribute('data-proba') || 0)).toFixed(1).replace(/\.0$/, '');
+    var pct = (100 * Number(el.getAttribute('data-proba') || 0)).toFixed(2);
     var facts = pct + '% chance of a late fee';
     if (money) facts += ' · $' + Math.round(Number(money)).toLocaleString() + ' possible fee';
     if (expected) facts += ' · likely cost $' + Math.round(Number(expected)).toLocaleString();
     var ttl = document.getElementById('drawer-title'); if (ttl) ttl.textContent = el.getAttribute('data-row-id') || '';
     focus.innerHTML =
       '<div class="focus-sub">' + facts + '</div>' +
-      '<div class="focus-kicker">Suggested move</div>' +
+      '<div class="focus-kicker">Suggested action</div>' +
       '<div class="focus-action">' + (el.getAttribute('data-action-label') || '') + '</div>' +
       '<p class="focus-reason">' + (el.getAttribute('data-reason') || '') + '</p>';
     var why = document.getElementById('explain-why');

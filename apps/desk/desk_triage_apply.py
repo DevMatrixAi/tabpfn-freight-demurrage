@@ -89,7 +89,7 @@ def apply_triage(
     elapsed = time.perf_counter() - t0
     actions = sess.suggest_actions(tid, max_rows=100_000)
     _push_reason = (
-        "The likely fee is far above the $300 cost of acting. Push the terminal or trucker "
+        "This container's likely cost is far above the $300 cost of acting. Push the terminal or trucker "
         "to collect this container before its free days run out and late fees start."
     )
     for a in actions.items:

@@ -26,7 +26,7 @@ def test_drawer_has_sticky_foot_and_empty_markers():
     assert 'id="drawer-foot"' in text
     assert "drawer-foot" in text
     assert 'data-empty="no-selection"' in text
-    assert "Suggested move" in text
+    assert "Suggested action" in text
     assert "Late fee risk" in text
     assert "money at risk" in text.lower() or "Money at risk" in text
 
