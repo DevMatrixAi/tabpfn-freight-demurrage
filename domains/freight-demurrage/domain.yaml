@@ -24,26 +24,26 @@ playbook:
     min_proba: 0.35
     when_col: cargo_vs_fee_collapse
     when_equals: "1"
-    reason: "Cancel booking — projected demurrage exceeds cargo economics"
+    reason: "The late fee would likely cost more than this cargo is worth, so cancelling the booking is the cheaper move."
   - action: divert
     min_proba: 0.78
-    reason: "Divert — upper-tail dwell will burn free days at current terminal"
+    reason: "Very likely to sit past its free days at this terminal; sending it to another terminal avoids the fee."
   - action: rebook
     min_proba: 0.55
     when_col: blank_sailing
     when_equals: "1"
-    reason: "Rebook — blank sailing + elevated demurrage risk"
+    reason: "Its ship sailing was cancelled and the late-fee risk is high, so book it on the next ship."
   - action: expedite
     min_proba: 0.45
     when_col: inland_can_beat_freedays
     when_equals: "1"
-    reason: "Expedite inland — still can beat free-day cutoff"
+    reason: "A faster truck or rail move can still get it out before its free days run out."
   - action: authorize_fee
     min_proba: 0.35
     when_col: fee_inevitable
     when_equals: "1"
-    reason: "Authorize fee — lock p90 exposure; cheaper than surprise invoice"
+    reason: "The fee is close to certain; approving it now is cheaper than a surprise invoice later."
   - action: monitor
     min_proba: 0.0
-    reason: "Monitor — log score; leave in normal path"
+    reason: "Risk is low enough to leave it on the normal path for now."
 disclaimer: "Synthetic / public-derived ocean freight demo only. Not a carrier system of record, not customs advice, not production routing."

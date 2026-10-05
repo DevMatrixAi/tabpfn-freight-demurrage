@@ -3,32 +3,30 @@
 <aside id="action-drawer" class="action-drawer" aria-hidden="true" aria-label="Suggested moves">
   <div class="drawer-head">
     <div>
-      <p class="drawer-eyebrow">Ops action</p>
-      <h2>Suggested moves</h2>
+      <p class="drawer-eyebrow">Container</p>
+      <h2>Suggested move</h2>
     </div>
     <button type="button" class="drawer-close" onclick="closeActionDrawer()" aria-label="Close">✕</button>
   </div>
   <div id="drawer-focus" class="drawer-focus no-selection" hidden data-empty-focus="1"></div>
-  <div id="drawer-noselect" class="saas-empty no-selection drawer-empty" data-empty="no-selection">
+  <div id="drawer-noselect" class="saas-empty no-selection drawer-empty" data-empty="no-selection" style="display:none">
     <p class="empty-kicker">No selection</p>
-    <p class="empty-title">Pick a risk card</p>
-    <p>Click a late-fee risk card on the board to focus one container — money at risk, late fee risk %, and suggested move land here.</p>
-    <a class="empty-cta" href="#triage-panel" onclick="closeActionDrawer()">Load freight data</a>
+    <p class="empty-title">Pick a container</p>
+    <p>Click a container in the list to see its late-fee chance, the money at risk and the suggested move.</p>
   </div>
-  <p class="muted drawer-hint">Plain English: <strong>late fee risk</strong> · <strong>money at risk</strong> · <strong>suggested move</strong>.</p>
 
   {% if state.explain and state.explain.bars %}
   <section class="drawer-explain" id="drawer-explain" aria-label="Why this move" data-top-labels="{% if state.explain.top_labels %}{{ state.explain.top_labels|join('|') }}{% endif %}">
-    <p class="item-kicker">Why this move</p>
-    <p class="explain-why" id="explain-why">{{ state.explain.why }}</p>
-    <p class="muted explain-method">Mock drivers · {{ state.explain.method }} · text / high-card / missing-derived</p>
+    <p class="item-kicker">What the model looks at most</p>
+    <p class="explain-why" id="explain-why" hidden>{{ state.explain.why }}</p>
+    <p class="muted explain-method">Across all containers, these columns move the late-fee score the most.</p>
     <div class="explain-bars" id="explain-bars" role="img" aria-label="Top feature importances">
       {% set vmax = namespace(v=0) %}
       {% for b in state.explain.bars %}
       <div class="explain-bar-row" data-kind="{{ b.kind }}">
         <span class="explain-bar-label" title="{{ b.feature }}">{{ b.label }}</span>
         <span class="explain-bar-track"><span class="explain-bar-fill kind-{{ b.kind }}" style="width:{{ b.pct }}%"></span></span>
-        <span class="explain-bar-kind">{{ b.kind_label }}</span>
+        
       </div>
       {% endfor %}
     </div>
@@ -40,6 +38,7 @@
   </section>
   {% endif %}
 
+  <details class="drawer-all"><summary>All suggested moves ({{ (state.actions or [])|length }})</summary>
   <div class="drawer-list" id="drawer-list">
   {% if state.actions %}
     {% for a in state.actions %}
@@ -63,6 +62,7 @@
     </div>
   {% endif %}
   </div>
+  </details>
   
   <div class="desk-skeleton drawer-apply" data-skeleton="drawer-apply" id="drawer-apply-skeleton" hidden aria-hidden="true">
     <div class="sk-bar"></div>
@@ -86,29 +86,19 @@ function openActionDrawer(el) {
   if (focus && el) {
     focus.hidden = false;
     focus.removeAttribute('data-empty-focus');
-    if (noselect) noselect.hidden = true;
+    if (noselect) { noselect.hidden = true; noselect.style.display = 'none'; }
     var money = el.getAttribute('data-money');
     var expected = el.getAttribute('data-expected');
-    var p90 = el.getAttribute('data-p90');
-    var moneyHtml = money ? (' · $' + Number(money).toLocaleString() + ' money at risk') : '';
-    var bandHtml = '';
-    if (expected || p90) {
-      bandHtml = '<div class="focus-fee-band">' +
-        (expected ? ('<span class="badge">Expected $' + Number(expected).toLocaleString() + '</span> ') : '') +
-        (p90 ? ('<span class="badge">p90 $' + Number(p90).toLocaleString() + '</span>') : '') +
-        '</div>';
-    }
+    var pct = Math.round(100 * Number(el.getAttribute('data-proba') || 0));
+    var facts = pct + '% chance of a late fee';
+    if (money) facts += ' · $' + Math.round(Number(money)).toLocaleString() + ' at stake';
+    if (expected) facts += ' · expected $' + Math.round(Number(expected)).toLocaleString();
     focus.innerHTML =
-      '<div class="focus-kicker">Focused container</div>' +
       '<div class="focus-id">' + (el.getAttribute('data-row-id') || '') + '</div>' +
-      '<div class="focus-sub">' + (el.getAttribute('data-subtitle') || '') + moneyHtml + '</div>' +
-      bandHtml +
+      '<div class="focus-sub">' + facts + '</div>' +
       '<div class="focus-kicker">Suggested move</div>' +
       '<div class="focus-action">' + (el.getAttribute('data-action-label') || '') + '</div>' +
-      '<div class="focus-meta"><span class="badge">' + (el.getAttribute('data-tier') || '') +
-      '</span> <span class="badge">Late fee risk ' +
-      Math.round(100 * Number(el.getAttribute('data-proba') || 0)) + '%</span></div>' +
-      '<p class="muted">' + (el.getAttribute('data-reason') || '') + '</p>';
+      '<p class="focus-reason">' + (el.getAttribute('data-reason') || '') + '</p>';
     var why = document.getElementById('explain-why');
     var expl = document.getElementById('drawer-explain');
     if (why && el.getAttribute('data-reason')) {
@@ -122,9 +112,8 @@ function openActionDrawer(el) {
       n.classList.toggle('active', n.getAttribute('data-row-id') === rid);
     });
     var hit = document.getElementById('drawer-item-' + rid);
-    if (hit) hit.scrollIntoView({block: 'nearest'});
   } else if (noselect) {
-    noselect.hidden = false;
+    noselect.hidden = false; noselect.style.display = '';
     if (focus) { focus.hidden = true; }
   }
 }

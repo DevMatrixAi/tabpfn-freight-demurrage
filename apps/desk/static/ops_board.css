@@ -200,3 +200,9 @@ html,body{max-width:100%;overflow-x:hidden}
 .eval-headline{font-size:1.25rem;font-weight:700;margin:.2rem 0 .7rem}
 .hero-cta{display:inline-block;margin-top:.8rem;padding:.6rem 1rem;border-radius:8px;background:#3d9cf0;color:#fff;font-weight:700;text-decoration:none}
 .hero-cta:hover{filter:brightness(1.1)}
+/* round 3: plain first screen */
+.act-first-move{margin-left:auto;color:#60a5fa;font-weight:600;white-space:nowrap}
+.replay-foot{font-size:.78rem;opacity:.8;margin:.5rem 0 1rem}
+.focus-reason{margin:.4rem 0 0;line-height:1.4}
+.drawer-all{margin:.75rem 0}.drawer-all>summary{cursor:pointer;color:var(--muted);font-weight:600}
+.eval-summary .eval-headline{font-size:1.15rem}

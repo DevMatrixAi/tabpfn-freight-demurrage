@@ -4,28 +4,25 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Freight Ops Board</title>
-<link rel="stylesheet" href="/static/ops_board.css"/>
-<link rel="stylesheet" href="/static/column_chips.css" />
-<link rel="stylesheet" href="/static/coach_strip.css" />
-<link rel="stylesheet" href="/static/stream_board.css" />
-<link rel="stylesheet" href="/static/saas_shell.css" />
-<link rel="stylesheet" href="/static/saas_density.css" />
+<link rel="stylesheet" href="/static/ops_board.css?v=r3"/>
+<link rel="stylesheet" href="/static/column_chips.css?v=r3" />
+<link rel="stylesheet" href="/static/coach_strip.css?v=r3" />
+<link rel="stylesheet" href="/static/stream_board.css?v=r3" />
+<link rel="stylesheet" href="/static/saas_shell.css?v=r3" />
+<link rel="stylesheet" href="/static/saas_density.css?v=r3" />
 </head>
 <body class="app-shell">
 <nav class="app-nav saas-crumb" aria-label="Primary">
   <a class="mark" href="/"><div class="mark-orb"></div><span>Freight Money Desk</span></a>
   <div class="links">
-    <a href="/">Desks</a>
-    <a class="active" href="/desk">Desk</a>
+    <a href="/">Home</a>
+    <a class="active" href="/desk">Freight desk</a>
     <a href="/eval" id="eval-link" data-coach="compare-eval">TabPFN vs baseline</a>
     <a href="/anti-wrapper" id="anti-wrapper-link">How it uses TabPFN</a>
     <a href="/settings" id="settings-link">Settings</a>
     <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn" data-judge-path="1" title="Score the desk, then open the comparison page">Guided tour</button></form>
-    <a href="/export-triage.csv" id="export-triage-csv" download="triage_actions.csv" title="Download triage rows + suggested actions">Export CSV</a>
-    <a href="/docs" data-coach="robot-api" target="_blank" rel="noopener">API</a>
   </div>
   <div class="spacer"></div>
-  <span class="chip">{{ state.client_label or "All clients" }}</span>
   {% if live_budget and not state.replay %}
   <span class="chip live-budget-chip {% if live_budget.mode == 'mock' %}mock{% else %}live{% endif %}"
         id="live-budget-chip"
@@ -47,9 +44,8 @@
 <header data-coach="money-at-risk">
 <div class="top">
 <div>
-<h1>Freight Ops Board</h1>
-<p class="tagline">Money-first triage · pack <strong>{{ state.pack_label or state.pack }}</strong>
-{% if state.pack_gloss %}<span class="pack-gloss"> — {{ state.pack_gloss }}</span>{% endif %}
+<h1>Freight desk</h1>
+<p class="tagline">{% if state.replay %}Late-container fees on {{ "{:,}".format(state.n_rows) }} sample containers{% else %}Dataset <strong>{{ state.pack_label or state.pack }}</strong>{% if state.pack_gloss %}<span class="pack-gloss"> — {{ state.pack_gloss }}</span>{% endif %}{% endif %}
 <span class="token-pill {% if has_token or state.replay %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% elif state.replay %}Recorded TabPFN-3.5 scores, no token needed{% else %}No token: offline stand-in model{% endif %}</span></p>
 </div>
 </div>
@@ -74,7 +70,7 @@
 <!-- plain crib via partials_desk_main → partials_plain_english.html -->
 {% include "partials_desk_main.html" %}
 
-<footer>{{ disclaimer }}</footer>
+<footer>{{ disclaimer }} · <a href="/export-triage.csv" id="export-triage-csv" download="triage_actions.csv">Download the list (CSV)</a> · <a href="/docs" data-coach="robot-api" target="_blank" rel="noopener">API docs</a></footer>
 
 {% include "polish_drawer.html" %}
 

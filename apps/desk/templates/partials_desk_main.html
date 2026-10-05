@@ -1,10 +1,10 @@
 <main>
 {% include "partials_act_first.html" %}
 {% if state.act_first %}
+<details class="advanced-box" id="advanced-panel">
+<summary>More detail: risk board, charts, data sources and model settings</summary>
 {% include "live_board.html" %}
 {% include "partials_plain_english.html" %}
-<details class="advanced-box" id="advanced-panel">
-<summary>Advanced: data sources, model settings and detailed scores</summary>
 {% include "partials_morning_digest.html" %}
 {% else %}
 {% include "partials_plain_english.html" %}

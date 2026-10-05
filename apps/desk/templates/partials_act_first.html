@@ -1,9 +1,3 @@
-{% if state.replay %}
-<div class="replay-banner" id="replay-banner" role="note">
-<strong>{{ state.replay.label }}.</strong> {{ state.replay.banner }}
-{% if state.replay.n_estimated %}<span class="muted"> {{ state.replay.n_estimated }} newer rows use a local estimate and are marked.</span>{% endif %}
-</div>
-{% endif %}
 {% if state.act_first %}
 {% set af = state.act_first %}
 <section class="card full act-first" id="act-first" aria-labelledby="act-first-h">
@@ -13,19 +7,25 @@
 {% if af["items"] %}
 <ol class="act-first-list">
 {% for it in af["items"] %}
-<li><button type="button" class="act-first-row" data-row-id="{{ it.row_id }}" data-money="{{ it.fee }}" data-expected="{{ it.expected }}" data-proba="{{ it.proba }}" data-tier="Act first" data-action-label="{{ it.action }}" data-reason="{{ it.reason }}" data-subtitle="Expected fee ${{ "{:,}".format(it.expected) }}" onclick="openActionDrawer(this)" title="Open the suggested move"><strong>{{ it.row_id }}</strong>
+<li><button type="button" class="act-first-row" data-row-id="{{ it.row_id }}" data-money="{{ it.fee }}" data-expected="{{ it.expected }}" data-proba="{{ it.proba }}" data-tier="Act first" data-action-label="{{ it.action|human_action }}" data-action="{{ it.action }}" data-reason="{{ it.reason }}" data-subtitle="Expected fee ${{ "{:,}".format(it.expected) }}" onclick="openActionDrawer(this)" title="Open the suggested move"><strong>{{ it.row_id }}</strong>
 <span>{{ (it.proba * 100)|round|int }}% chance of a late fee</span>
 <span>${{ "{:,}".format(it.fee) }} at stake</span>
-<span class="act-first-exp">expected ${{ "{:,}".format(it.expected) }}</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
+<span class="act-first-exp">expected ${{ "{:,}".format(it.expected) }}</span> <span class="act-first-move">{{ it.action|human_action }} →</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
 {% endfor %}
 </ol>
 {% else %}
 <p>No container's expected fee is above the action cost right now.</p>
 {% endif %}
 <p class="act-first-sum">{{ af.n_flagged }} of {{ af.n_rows }} containers are worth acting on.
-{% if af.model %} Acting on them saves <strong>${{ "{:,}".format(af.model.net_savings) }}</strong> after action costs{% if af.baseline %}, vs ${{ "{:,}".format(af.baseline.net_savings) }} using HistGBM scores on the same containers{% endif %}.{% endif %}</p>
+{% if af.model %} Acting on them saves <strong>${{ "{:,}".format(af.model.net_savings) }}</strong> after action costs, using TabPFN-3.5 scores{% if af.baseline %}, vs ${{ "{:,}".format(af.baseline.net_savings) }} using HistGBM scores on the same containers{% endif %}.{% endif %}</p>
 {% if af.top_risk and not af.top_risk.in_top %}
 <p class="muted">Highest raw risk is {{ af.top_risk.row_id }} at {{ (af.top_risk.proba * 100)|round|int }}%, but only ${{ "{:,}".format(af.top_risk.fee) }} is at stake, so it ranks lower here.</p>
 {% endif %}
 </section>
+{% endif %}
+{% if state.replay %}
+<div class="replay-banner replay-foot" id="replay-banner" role="note">
+<strong>{{ state.replay.label }}.</strong> {{ state.replay.banner }}
+{% if state.replay.n_estimated %}<span class="muted"> {{ state.replay.n_estimated }} newer rows use a local estimate and are marked.</span>{% endif %}
+</div>
 {% endif %}

@@ -4,19 +4,19 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Eval · Plus / Thinking / Fast vs HistGBM</title>
-<link rel="stylesheet" href="/static/ops_board.css"/>
-<link rel="stylesheet" href="/static/column_chips.css"/>
-<link rel="stylesheet" href="/static/coach_strip.css"/>
-<link rel="stylesheet" href="/static/eval_board.css"/>
-<link rel="stylesheet" href="/static/saas_density.css"/>
+<link rel="stylesheet" href="/static/ops_board.css?v=r3"/>
+<link rel="stylesheet" href="/static/column_chips.css?v=r3"/>
+<link rel="stylesheet" href="/static/coach_strip.css?v=r3"/>
+<link rel="stylesheet" href="/static/eval_board.css?v=r3"/>
+<link rel="stylesheet" href="/static/saas_density.css?v=r3"/>
 </head>
 <body>
 <div class="eval-wrap">
 
   <div class="crumb">
-    <a href="{{ saas_home }}">← Desks</a>
+    <a href="{{ saas_home }}">Home</a>
     <a href="/desk?pack=freight-demurrage" id="eval-desk-link">Freight desk</a>
-    <span class="muted" style="font-size:.85rem">Eval dashboard</span>
+    <strong style="font-size:.85rem">TabPFN vs baseline</strong>
     <a href="/anti-wrapper">How it uses TabPFN</a>
     <a href="/settings" id="settings-link">Settings</a>
     <form method="post" action="/logout" style="margin-left:auto"><button class="signout" type="submit">Sign out</button></form>
@@ -37,8 +37,9 @@
     </p>
   </div>
 
+{% set pack_block %}
   <section class="card" style="margin-bottom:1rem">
-    <h2>Pack</h2>
+    <h2>Run it on another dataset</h2>
     <form class="row" method="post" action="/eval/run">
       <label class="muted" for="pack">Dataset</label>
       <select name="pack" id="pack">
@@ -52,12 +53,13 @@
       Active: <strong>{{ pack_label }}</strong>
       {% if pack_gloss %} — {{ pack_gloss }}{% endif %}
       · {{ n_rows }} rows
-      · modes: {% for m in eval_modes %}<span class="mode-chip {{ m }}">{{ m }}</span> {% endfor %}
-      vs <span class="mode-chip hist_gbm">hist_gbm</span>
+
     </p>
   </section>
 
   {% include "partials_mode_glossary.html" %}
+{% endset %}
+  {% if not result %}{{ pack_block }}{% endif %}
 
   <div class="desk-skeleton eval-running" data-skeleton="eval-running" id="eval-running-skeleton" hidden aria-hidden="true">
     <div class="sk-title"></div>
@@ -74,6 +76,9 @@
 
   {% if result %}
   {% include "partials_eval_results.html" %}
+  <details class="advanced-box" id="eval-other-pack"><summary>Other datasets and what Plus, Thinking and Fast mean</summary>
+  {{ pack_block }}
+  </details>
 
   {% else %}
   <section class="card" id="eval-empty">
@@ -93,7 +98,7 @@
   </section>
   {% endif %}
 
-  <p class="muted" style="margin-top:1.5rem;font-size:.8rem">Demo only · same engine as the ops desk · Δ is vs HistGBM from <code>compare_baseline</code>.</p>
+  <p class="muted" style="margin-top:1.5rem;font-size:.8rem">Demo on synthetic data · same engine as the freight desk · Δ means the difference from HistGBM.</p>
 </div>
 <script>
 (function(){

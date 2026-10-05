@@ -1,10 +1,4 @@
-  <section class="card full" style="margin-bottom:1rem" id="eval-results">
-    <h2>Metrics table <span class="badge">{{ result.elapsed_s }}s</span></h2>
-    <p class="muted" style="margin:0 0 .75rem">
-      Pack <strong>{{ result.pack_label or result.pack }}</strong>
-      · {{ result.n_rows }} containers · {% if result.replay %}5-fold, split by vessel{% else %}30% held out{% endif %}
-      {% if result.replay %}<span class="live-pill">recorded TabPFN-3.5</span>{% elif result.has_token %}<span class="live-pill">live token</span>{% else %}<span class="mock-pill">mock / offline</span>{% endif %}
-    </p>
+  <section class="card full eval-summary" id="eval-summary" style="margin-bottom:1rem">
     {% if result.replay and result.replay.net_savings_300 %}
     {% set ns = result.replay.net_savings_300 %}
     {% if ns.get("hist_gbm") and (ns.get("plus") is not none or ns.get("thinking") is not none) %}
@@ -14,15 +8,25 @@
     {% endif %}
     {% endif %}
     {% if result.replay %}
-    <div class="replay-banner" id="eval-replay-banner" role="note"><strong>{{ result.replay.label }}.</strong> {{ result.replay.banner }}
-      Every container was scored by a model that never saw it (5 folds, split by vessel), and HistGBM was scored on the same folds.
-      {% if result.replay.skipped_modes %}Fast wasn't part of the recorded run, so it isn't shown; set <code>TABPFN_TOKEN</code> to run it live.{% endif %}</div>
     {% if result.replay.net_savings_300 %}
-    <p id="eval-money" style="margin:.25rem 0 .75rem">Money view at a $300 action cost:
+    <p id="eval-money" style="margin:.25rem 0 .75rem">Net savings after a $300 cost per action:
       {% for k, label in [("plus","Plus"),("thinking","Thinking"),("hist_gbm","HistGBM")] %}{% if result.replay.net_savings_300.get(k) is not none %}<strong>{{ label }}</strong> saves ${{ "{:,}".format(result.replay.net_savings_300[k]) }}{% if not loop.last %} · {% endif %}{% endif %}{% endfor %}.
-      These match the desk's "Act on these first" totals.</p>
+      The freight desk shows the Thinking number, so the two pages match.</p>
     {% endif %}
+    <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">Each container was scored by a model that never saw it (5 folds, split by vessel), and HistGBM was scored on the same folds. Recorded TabPFN-3.5 run on synthetic data; a few columns nearly give away the answer, so treat these as a demo, not real shipper accuracy.</p>
     {% endif %}
+  </section>
+  <details class="advanced-box" id="eval-advanced">
+  <summary>Detailed scores, charts and method</summary>
+  <section class="card full" style="margin-bottom:1rem" id="eval-results">
+    <h2>Metrics table <span class="badge">{{ result.elapsed_s }}s</span></h2>
+    <p class="muted" style="margin:0 0 .75rem">
+      Pack <strong>{{ result.pack_label or result.pack }}</strong>
+      · {{ result.n_rows }} containers · {% if result.replay %}5-fold, split by vessel{% else %}30% held out{% endif %}
+      {% if result.replay %}<span class="live-pill">recorded TabPFN-3.5</span>{% elif result.has_token %}<span class="live-pill">live token</span>{% else %}<span class="mock-pill">mock / offline</span>{% endif %}
+    </p>
+    {% if result.replay %}<div class="replay-banner" id="eval-replay-banner" role="note"><strong>{{ result.replay.label }}.</strong> {{ result.replay.banner }}
+      {% if result.replay.skipped_modes %}Fast wasn't part of the recorded run, so it isn't shown.{% endif %}</div>{% endif %}
     {% if result.warnings %}
     <div class="warn-banner" style="margin-bottom:.75rem">
       {% for w in result.warnings %}<div>{{ w }}</div>{% endfor %}
@@ -212,3 +216,4 @@
     </div>
   </section>
   {% endif %}
+  </details>
