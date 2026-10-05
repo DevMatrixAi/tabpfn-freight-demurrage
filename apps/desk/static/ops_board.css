@@ -226,3 +226,4 @@ ul.act-first-math strong{color:#4ade80}
 .act-first-moves .act-first-row>*{justify-self:start;text-align:left}
 .act-first-cost{white-space:nowrap}
 .act-first-moves .act-first-move{margin-left:0}
+.act-first-row:focus:not(:focus-visible){outline:none}
