@@ -4,7 +4,7 @@
 - elevated missingness on notes / dwell / free days / cargo value
 - 40+ synthetic `noise_f*` columns (wide-table stress; shape[1] >= 50)
 
-If the CSV is missing after clone, run:
+The CSV is checked in as plain text. To rebuild it deterministically, run:
 `python fixtures/stress/_unpack_missing_wide.py`
 
 Use with mock eval / ablations to show TabPFN-3.5 data-as-is (missing + wide)

@@ -58,7 +58,7 @@ tabpfn-hack desk --host 127.0.0.1 --port 8765   # /eval → Run eval
 
 - Desk `/eval` + index showcase HTML shipped via `ensure_deep_templates` + zlib blobs (`deep_template_blobs_*.py`); eval_dashboard imports ensure on load.
 - Thinking / Fast-vs-Plus latency / text+high-card ablations / calibration / denser HistGBM judge card remain wired.
-- Stress: `fixtures/stress/` packed CSV (`_csv_blob_{a,b}.py` + `_unpack_missing_wide.py`); test unpacks if CSV missing.
+- Stress: `fixtures/stress/missing_wide_demurrage.csv` (plain CSV, checked in; `_unpack_missing_wide.py` rebuilds it deterministically).
 - pytest: 68 passed. Repo stays private. No `.env` commits.
 
 ## 2026-09-21 PT — overnight polish

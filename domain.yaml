@@ -1,0 +1,20 @@
+# Default domain pack for the generic messy-table demo
+# (`tabpfn-hack demo` / run_demo with no --domain). Matches the schema
+# written by tabpfn_hack_core.demo.run_demo.generate_synthetic_table.
+# The freight desk uses domains/freight-demurrage/domain.yaml instead.
+name: generic-messy-table
+label_col: target
+group_col: group_id
+time_col: event_ts
+text_cols: [note_text]
+high_card_cols: [entity_id, code_a, code_b]
+id_col: row_id
+feature_exclude: []
+action_thresholds:
+  high: 0.75
+  mid: 0.45
+actions:
+  high: escalate
+  mid: review
+  low: monitor
+disclaimer: "Synthetic demo table only. Not real operational data."
