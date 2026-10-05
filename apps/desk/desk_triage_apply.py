@@ -156,6 +156,9 @@ def apply_triage(
         for a in actions.items
     ]
     state["action_counts"] = dict(actions.counts)
+    _af = state["action_counts"].pop("authorize_fee", 0)
+    if _af:
+        state["action_counts"]["call_terminal"] = state["action_counts"].get("call_terminal", 0) + _af
     state["risk_cards"] = build_risk_cards(sess, tid, state["actions"])
     state["chart_stats"] = chart_stats(
         state["risk_cards"], float(state.get("demurrage_total") or 0.0)
