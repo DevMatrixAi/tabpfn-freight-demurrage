@@ -6,8 +6,9 @@
     {% set gap = ns[best_k] - ns["hist_gbm"] %}
     {% set oracle = result.replay.oracle_net_300 %}
     {% if oracle %}
+    <p class="eval-headline eval-dollars" id="eval-dollars">TabPFN-3.5 saves <strong>${{ "{:,}".format(gap) }} more</strong> than HistGBM on the same {{ "{:,}".format(result.n_rows) }} containers.</p>
     <p class="eval-headline" id="eval-headline">TabPFN-3.5 captures <strong>{{ "%.1f"|format(100.0 * ns[best_k] / oracle) }}%</strong> of the savings a perfect forecast would get (${{ "{:,}".format(ns[best_k]) }} of ${{ "{:,}".format(oracle) }}). HistGBM gets {{ "%.1f"|format(100.0 * ns["hist_gbm"] / oracle) }}%.</p>
-    <p class="eval-subhead" id="eval-subhead">That's <strong>${{ "{:,}".format(gap) }} more</strong> than HistGBM on the same {{ "{:,}".format(result.n_rows) }} containers, after a $300 cost per action. Put another way, TabPFN-3.5 leaves ${{ "{:,}".format(oracle - ns[best_k]) }} of possible savings on the table, against ${{ "{:,}".format(oracle - ns["hist_gbm"]) }} for HistGBM.</p>
+    <p class="eval-subhead" id="eval-subhead">Both figures are after a $300 cost per action. Put another way, TabPFN-3.5 leaves ${{ "{:,}".format(oracle - ns[best_k]) }} of possible savings on the table, against ${{ "{:,}".format(oracle - ns["hist_gbm"]) }} for HistGBM.</p>
     {% else %}
     <p class="eval-headline" id="eval-headline">TabPFN-3.5 {{ best_k|capitalize }} saves <strong>${{ "{:,}".format(gap) }} more</strong> than HistGBM ({{ "%+.1f"|format(100.0 * gap / ns["hist_gbm"]) }}%) on the same {{ "{:,}".format(result.n_rows) }} containers, after a ${{ "{:,}".format(300) }} cost per action.</p>
     {% endif %}

@@ -81,7 +81,7 @@ footer{padding:1rem 1.5rem;color:var(--muted);font-size:.8rem}
 .judge-strip{display:flex;flex-wrap:wrap;gap:.35rem;margin:.35rem 0 .5rem}
 
 .pack-gloss{color:var(--muted);font-weight:400}
-.ticker-gloss{font-size:.72rem;color:#7d9a88;margin-top:.15rem}
+.ticker-gloss{font-size:.85rem;color:#a7c4b2;margin-top:.2rem}
 .metrics-gloss{font-size:.78rem;color:var(--muted);margin:0 0 .65rem;line-height:1.35}
 .risk-card .money-caption{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:.1rem}
 
@@ -214,3 +214,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .act-first-start{color:#c3cfdf}
 .ticker .meta .ticker-save{display:block;color:#bbf7d0;font-size:1.05rem;line-height:1.35}
 .ticker .meta .ticker-save strong{color:#4ade80;font-size:1.3rem}
+ul.act-first-math{margin:.35rem 0 .6rem;padding-left:1.2rem;line-height:1.5}
+ul.act-first-math strong{color:#4ade80}
+.act-first-rank{font-size:.92rem;color:#dbe4f0;background:#162033;border-left:3px solid #60a5fa;padding:.45rem .7rem;border-radius:6px;margin:.4rem 0 .7rem}
+.ticker .meta .ticker-caveat{display:block;margin-top:.4rem;font-size:.85rem;color:#fcd9a6}
