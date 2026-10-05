@@ -73,7 +73,7 @@
       {% for k in metric_keys %}
       {% set v = state.metrics.get(k) %}
       <div class="dist-row">
-        <span class="dist-lbl metric">{{ k }}{% if k == 'avg_precision' %} (AP){% endif %}</span>
+        <span class="dist-lbl metric">{% if k == 'roc_auc' %}Ranking quality{% elif k == 'avg_precision' %}Rare-case catch rate{% elif k == 'accuracy' %}Correct calls{% elif k == 'f1' %}Balance score{% else %}{{ k }}{% endif %}</span>
         <div class="dist-track"><div class="dist-fill metric" style="width:{% if v is number %}{{ (100 * (v|float))|round(1) }}{% else %}0{% endif %}%"></div></div>
         <span class="dist-n">{% if v is number %}{{ "%.3f"|format(v|float) }}{% else %}—{% endif %}</span>
       </div>

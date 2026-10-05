@@ -5,7 +5,7 @@
     {% if result.learning_curve.recorded %}
     <div style="overflow-x:auto">
     <table id="lc-table">
-      <thead><tr><th>Training rows</th><th>Plus AUC</th><th>Thinking AUC</th><th>HistGBM AUC</th><th>Plus saves</th><th>Thinking saves</th><th>HistGBM saves</th></tr></thead>
+      <thead><tr><th>Training rows</th><th>Plus ranking</th><th>Thinking ranking</th><th>Common-tool ranking</th><th>Plus saves</th><th>Thinking saves</th><th>Common-tool saves</th></tr></thead>
       <tbody>
       {% for row in result.learning_curve.rows %}
       <tr><td>{{ row.n_train }}</td>

@@ -51,10 +51,10 @@
   <div class="id">{{ c.row_id }}</div>
   <div class="sub">{{ c.subtitle or '—' }}</div>
   <div class="money">{% if c.money is not none %}${{ "{:,.0f}".format(c.money|float) }}{% else %}—{% endif %}</div>
-  <div class="money-caption">{% if is_spine %}Money at risk{% else %}Exposure{% endif %}</div>
+  <div class="money-caption">{% if is_spine %}Possible late fee{% else %}Exposure{% endif %}</div>
   {% if c.expected_usd is not none or c.p90_usd is not none %}
-  <div class="fee-band" title="Mock expected $ vs p90 upper-tail fee">
-    <span class="fee-expected">Expected ${{ "{:,.0f}".format((c.expected_usd or 0)|float) }}</span>
+  <div class="fee-band" title="Fee if the late fee is charged, vs a higher p90 estimate">
+    <span class="fee-expected">{% if is_spine %}If charged{% else %}Expected{% endif %} ${{ "{:,.0f}".format((c.expected_usd or 0)|float) }}</span>
     <span class="fee-sep">·</span>
     <span class="fee-p90">p90 ${{ "{:,.0f}".format((c.p90_usd or 0)|float) }}</span>
   </div>

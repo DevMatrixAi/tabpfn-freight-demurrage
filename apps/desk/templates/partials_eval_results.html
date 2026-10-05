@@ -20,6 +20,9 @@
     {% if result.replay %}
     <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">A perfect forecast means acting only on the containers that really get charged. Every container was scored by a model that had not seen it, and both models were tested the same way. The data is a made-up demo set; details are under "Detailed scores, charts and method".</p>
     {% endif %}
+    {% if result.learning_curve and result.learning_curve.headline %}
+    <p class="eval-lc-teaser" id="eval-lc-teaser" style="margin:.55rem 0 0;font-size:.9rem;line-height:1.45"><strong>Small-data edge:</strong> {{ result.learning_curve.headline }}</p>
+    {% endif %}
   </section>
   <details class="advanced-box" id="eval-advanced">
   <summary>Detailed scores, charts and method</summary>
