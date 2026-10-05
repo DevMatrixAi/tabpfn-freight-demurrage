@@ -1,33 +1,57 @@
 <!-- TIP_SHA_PIN_START -->
-**Tip (main):** `718dcef` · live-budget chip · judge-path mock receipt · JUDGE shots
-
-**First-screen gallery (JUDGE_3MIN):**
-
-| Login | Home | Desk | Eval |
-| --- | --- | --- | --- |
-| ![login](docs/images/judge/login.svg) | ![home](docs/images/judge/home.svg) | ![desk](docs/images/judge/desk.svg) | ![eval](docs/images/judge/eval.svg) |
 <!-- TIP_SHA_PIN_END -->
 
 <!-- FREIGHT_FACE_START -->
-# Freight demurrage triage (TabPFN-3.5)
+# Late Fee Control: a freight late-fee desk on TabPFN-3.5
 
-**Demo open:** **$1.27M** projected demurrage — then divert / rebook / expedite / authorize_fee / cancel_booking before free days burn.
+Every day a container sits at the port past its free days, the shipper pays a late fee. This desk flags which containers are headed for those fees before the bill shows up, puts a dollar figure on each, and says what to do: push for early pickup, move it to another terminal, speed up the inland move, or book it on the next ship.
 
-Messy vessel/BOL tables → TabPFN-3.5 Plus / Thinking / Fast → baseline vs HistGBM → MCP money moves.
+**TabPFN-3.5 Plus ranks late-fee risk at AUC 0.911, against 0.873 for HistGBM (scikit-learn's standard gradient-boosting model, the usual default for tables like this). At $300 per action, its picks save $595,310, which is $159,723 more than HistGBM's.**
 
-**Raw DataFrame in:** CSV / fixture adapters land as a pandas table via `load_table` — no custom featurizer. Text, high-cardinality IDs, and missings stay as columns; Thinking adds `group_col` / `group_time_col`. **Web ops board:** projected-$ ticker + risk cards; load Terminal49 / project44 / EDI-315 fixtures and triage in the browser.
+> **Read this before the numbers.** The 1,200 containers are synthetic, generated from demurrage rules, the same way TabPFN itself learned from synthetic tables; real shipments will differ. Three columns that nearly gave the answer away (`projected_demurrage_usd`, `fee_inevitable`, `cargo_vs_fee_collapse`) plus the ID and timestamp columns are removed from what the models see. An earlier run that kept them scored AUC 0.987; we report the clean run. The dollar math still uses `projected_demurrage_usd` as the fee at stake, to decide what's worth acting on and to value each save.
 
-```bash
-pip install -e ".[dev,desk]"
-tabpfn-hack demo --domain domains/freight-demurrage/domain.yaml --data domains/freight-demurrage/data/containers.csv
-tabpfn-hack desk --host 127.0.0.1 --port 8765   # http://127.0.0.1:8765
+**Every container scored by a model that never saw it (12 kept columns, 5 folds grouped by vessel, seed 42):**
+
+| | AUC | Avg precision | Net saved at $300/action | Actions |
+|---|---|---|---|---|
+| TabPFN-3.5 Plus | **0.911** | 0.833 | **$595,310** | 195 |
+| TabPFN-3.5 Thinking | 0.903 | 0.840 | $467,247 | 195 |
+| TabPFN-3.5 Fast | 0.901 | 0.816 | $567,532 | 202 |
+| HistGBM baseline | 0.873 | 0.764 | $435,587 | 180 |
+| Act on everything | | | $611,792 | 1,200 |
+| Perfect foresight | | | $914,480 | |
+
+Plus recovers **65.1%** of perfect foresight ($595,310 / $914,480); HistGBM recovers **47.6%** ($435,587 / $914,480).
+
+**If actions cost more, being picky matters more:**
+
+| Cost per action | TabPFN-3.5 Plus | HistGBM | Act on everything |
+|---|---|---|---|
+| $300 | $595,310 | $435,587 | $611,792 |
+| $500 | $461,792 | $407,964 | $371,792 |
+| $1,000 | $334,548 | $217,928 | −$228,208 |
+
+**What the desk tells you to do:** 195 of 1,200 containers are worth acting on, holding $708,152 of the $1,273,564 in possible late fees. They split into Push for early pickup (87, $523,504), Move to another terminal (91, $161,837), Speed up inland move (11, $16,795) and Book on the next ship (6, $6,015). This assumes every action costs the stated amount and fully stops the fee when one would have been charged; real actions will sometimes cost more or fail.
+
+**One container:** CONT-000121 later ran up an $11,308 fee. TabPFN-3.5 Plus gave it a 26.80% chance ($3,031 likely cost) and the desk flagged **Push for early pickup**. HistGBM gave it 2.5% and would have let it go.
+
+**Where it misses:** CONT-000721 ran up a $40,832 fee and TabPFN-3.5 Plus and Thinking scored it under 2% and HistGBM under 1%. Its row looks routine: 4.7 free days left, under 6 days at the port, no weather or blank-sailing flag. Its fee is exactly half its cargo value, a pattern only the removed columns carried.
+
+**With only 30 containers of history,** TabPFN-3.5 Plus already ranks risk (AUC 0.746) while default HistGBM can't fit yet (AUC 0.500; its minimum leaf size blocks every split). That matches what the video says: with thirty past shipments, the common tool still can't tell risky from safe, and ours already can.
+
+**Run it without a token:** plays back the recorded TabPFN-3.5 run.
 ```
+git clone https://github.com/DevMatrixAi/tabpfn-freight-demurrage.git && cd tabpfn-freight-demurrage
+python3 -m venv .venv && .venv/bin/pip install -e ".[dev,desk]"
+TABPFN_TOKEN= .venv/bin/tabpfn-hack desk --host 127.0.0.1 --port 8765
+```
+Open http://127.0.0.1:8765 and log in with `demo` / `demurrage`. With a token, score live instead: `DESK_REPLAY=0 TABPFN_TOKEN=YOUR_TOKEN .venv/bin/tabpfn-hack desk --host 127.0.0.1 --port 8765`. Tests: `TABPFN_TOKEN= .venv/bin/python -m pytest -q`.
 
-**Judge preview:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) — login `demo` / `demurrage` (mock stub). Full desk: [`docs/PREVIEW.md`](docs/PREVIEW.md). Deploy configs: `app.py` + `vercel.json`, `Dockerfile` + `fly.toml` / `railway.toml`.
+**Video:** `VIDEO_LINK_TBD` (human uploads later).
 
-Synthetic / public-derived demo only. Fixture adapters only — not live carrier APIs. Pack: [`domains/freight-demurrage/`](domains/freight-demurrage/). Pitch: [`docs/FREIGHT_DEMURRAGE_PITCH_v0.md`](docs/FREIGHT_DEMURRAGE_PITCH_v0.md). 90s: [`docs/DEMO_90S_AND_FORM_v1.md`](docs/DEMO_90S_AND_FORM_v1.md).
+## Appendix: learning curve (below the fold)
 
----
+**Learning curve on the clean features** (`artifacts/freight-demurrage/learning_curve_clean12_*`): Plus only leads at n=30 (0.746 vs 0.500, while HistGBM can't fit). A working HistGBM is ahead at 60 rows (0.924 vs 0.798) and 120 rows (0.881 vs 0.825); they tie at 240 (0.939 vs 0.937). We claim only the 30-row case above.
 <!-- FREIGHT_FACE_END -->
 
 ## How judges demo in 3 minutes
@@ -38,8 +62,8 @@ One-pager: [`docs/JUDGE_3MIN.md`](docs/JUDGE_3MIN.md) · MCP smoke: [`docs/MCP_S
 
 | Min | Do this |
 | --- | --- |
-| 0:00 | `pip install -e ".[dev,desk]"` then `TABPFN_TOKEN= tabpfn-hack desk --host 127.0.0.1 --port 8765` |
-| 0:30 | Open http://127.0.0.1:8765 → login `demo` / `demurrage` → **Run triage** (Mock) → risk cards + HistGBM Δ |
+| 0:00 | `pip install -e ".[dev,desk]"` then `TABPFN_TOKEN= .venv/bin/tabpfn-hack desk --host 127.0.0.1 --port 8765` (recorded replay, no token) |
+| 0:30 | Open http://127.0.0.1:8765 → login `demo` / `demurrage` → **Run triage** (replay) → risk cards + HistGBM Δ; star CONT-000121 |
 | 1:30 | Open **/eval** → **Run eval** → latency · Thinking · ablations · calibration · small-n learning curve |
 | 2:30 | Optional: `TABPFN_TOKEN= python scripts/mcp_cookbook_demo.py` (7 MCP tools) · `TABPFN_TOKEN= pytest -q` · `tabpfn-hack demo --mode mock` |
 
