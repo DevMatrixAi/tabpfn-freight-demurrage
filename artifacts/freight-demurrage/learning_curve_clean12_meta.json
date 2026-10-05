@@ -1,0 +1,80 @@
+{
+ "kind": "learning_curve_clean12",
+ "leaky": false,
+ "features": [
+  "vessel_id",
+  "pol",
+  "pod",
+  "terminal_note",
+  "weather_alert",
+  "free_days_left",
+  "dwell_days_so_far",
+  "teu",
+  "cargo_value_usd",
+  "daily_demurrage_usd",
+  "blank_sailing",
+  "inland_can_beat_freedays"
+ ],
+ "n_features": 12,
+ "dropped": [
+  "projected_demurrage_usd",
+  "fee_inevitable",
+  "cargo_vs_fee_collapse",
+  "container_id",
+  "bol_id",
+  "event_ts"
+ ],
+ "sizes": [
+  30,
+  60,
+  120,
+  240
+ ],
+ "repeats": 2,
+ "models": [
+  "plus",
+  "hist_gbm"
+ ],
+ "model_versions": {
+  "plus": "tabpfn_client v3.5 (create_default_for_version)",
+  "hist_gbm": "sklearn HistGBM via repo fit_mock (text_cols=terminal_note,weather_alert; high_card_cols=pol,pod)"
+ },
+ "test_rows": 240,
+ "test_positives": 30,
+ "train_pool_rows": 960,
+ "test_split": "fold 0 of StratifiedGroupKFold(5, shuffle=True, random_state=42) by vessel_id (held-out vessels); verified identical to old curve/replay fold 0",
+ "subsample": "stratified, RandomState(100+repeat) \u2014 same row indices as old curve repeats 0,1",
+ "action_cost_for_net": 300.0,
+ "estimate": {
+  "per_call": {
+   "30": 10000,
+   "60": 10000,
+   "120": 10000,
+   "240": 10000
+  },
+  "calls": 8,
+  "cells": 33840,
+  "est_tokens": 80000,
+  "budget": 400000
+ },
+ "aborted": null,
+ "usage": {
+  "before": {
+   "daily_tokens_used": 6537541,
+   "daily_token_limit": 25000000,
+   "monthly_tokens_used": 6537541,
+   "monthly_token_limit": 20000000,
+   "daily_reset_time": "2026-10-06 00:00:00 UTC"
+  },
+  "after": {
+   "daily_tokens_used": 6617541,
+   "daily_token_limit": 25000000,
+   "monthly_tokens_used": 6617541,
+   "monthly_token_limit": 20000000,
+   "daily_reset_time": "2026-10-06 00:00:00 UTC"
+  },
+  "job_tokens": 80000
+ },
+ "recorded_at": "2026-10-05T12:23:36.017355+00:00",
+ "script": "/workspace/tabpfn-live-beat/clean12/curve_clean12.py"
+}
