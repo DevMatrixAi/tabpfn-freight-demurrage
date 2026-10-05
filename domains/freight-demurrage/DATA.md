@@ -23,13 +23,13 @@
 | `blank_sailing` | 0/1 → rebook gate |
 | `inland_can_beat_freedays` | 0/1 → expedite gate |
 | `fee_inevitable` | 0/1 → authorize_fee gate |
-| `cargo_vs_fee_collapse` | 0/1 → cancel_booking gate |
+| `cargo_vs_fee_collapse` | 0/1 flag: cargo worth at most 2× its possible fee (not used by the playbook) |
 | `projected_demurrage_usd` | numeric (for judge spreadsheet) |
 | `demurrage_risk` | label 0/1 |
 
 ## Playbook
 
-divert → rebook (blank_sailing) → expedite (inland) → authorize_fee → cancel_booking → monitor
+divert → rebook (blank_sailing) → expedite (inland) → authorize_fee → monitor
 
 ## Regenerating the full table
 

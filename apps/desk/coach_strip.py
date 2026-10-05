@@ -81,7 +81,7 @@ JUDGE_PATH_NARRATIVE: dict[str, Any] = {
         "Fixture → Plus → Thinking → run (mock) — messy table → TabPFN stand-in.",
         "Charts + HistGBM Δ — better than a normal model.",
         "Thinking timeline + effort — vessel over time.",
-        "Risk card → action drawer — money move (move / rebook / pay fee / cancel / watch).",
+        "Risk card → action drawer — money move (move / rebook / pay fee / watch).",
         "Stream + re-score (optional) — live update.",
         "Compare /eval — Plus / Thinking / Fast vs HistGBM + ablations + calibration.",
         "Robot / MCP — same actions for humans or robots.",

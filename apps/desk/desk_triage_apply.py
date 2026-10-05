@@ -92,8 +92,24 @@ def _apply_triage_impl(
         "No reroute or rebooking fits this container, so the quickest fix is to get it collected: push the "
         "terminal or trucker to pick it up before its free days run out. Its likely cost is far above the $300 cost of acting."
     )
+    # Containers whose likely cost (chance x fee) beats the action cost are "flagged" and
+    # counted as acted-on in the savings, so they must never read "Watch only" / "pay the fee".
+    _flag_ids: set[str] = set()
+    try:
+        from apps.desk.act_first import action_cost as _action_cost
+    except ImportError:
+        from act_first import action_cost as _action_cost  # type: ignore
+    try:
+        _mc = pack_meta().get("money_col")
+        _pred = sess.last_predictions
+        _icol = sess.domain.id_col or pack_meta().get("id_hint") or "container_id"
+        if _pred is not None and _mc and _mc in _pred.columns and "proba_1" in _pred.columns and _icol in _pred.columns:
+            _exp = _pred["proba_1"].astype(float) * _pred[_mc].astype(float)
+            _flag_ids = {str(r) for r in _pred.loc[_exp > _action_cost(), _icol]}
+    except Exception:
+        _flag_ids = set()
     for a in actions.items:
-        if a.action == "authorize_fee":
+        if a.action == "authorize_fee" or (a.action == "monitor" and str(a.row_id) in _flag_ids):
             try:
                 a.action, a.reason = "call_terminal", _push_reason
             except Exception:

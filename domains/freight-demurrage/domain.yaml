@@ -20,11 +20,6 @@ actions:
   mid_low: authorize_fee
   low: monitor
 playbook:
-  - action: cancel_booking
-    min_proba: 0.35
-    when_col: cargo_vs_fee_collapse
-    when_equals: "1"
-    reason: "The shipment record values this cargo below its possible late fee, so paying that fee to get it out would cost more than the cargo is worth. Give up the cargo and let the carrier dispose of it. The savings count this as a $300 action and leave out the cargo's value."
   - action: divert
     min_proba: 0.78
     reason: "Very likely to sit past its free days (the days before late fees start) at its planned terminal. Route it to a less crowded terminal before it arrives to avoid the fee."
