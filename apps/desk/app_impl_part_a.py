@@ -68,6 +68,19 @@ app = FastAPI(
         "Robot/TMS API under /api/v1 (decisions only). Demo auth, not production IAM."
     ),
 )
+
+
+from fastapi.responses import JSONResponse as _JSONResponse
+from tabpfn_hack_core.core.backend import TabPFNLiveError as _TabPFNLiveError
+
+
+@app.exception_handler(_TabPFNLiveError)
+async def _tabpfn_live_error(request: Request, exc: _TabPFNLiveError) -> _JSONResponse:
+    """A refused live TabPFN call returns a clear error instead of offline numbers."""
+    return _JSONResponse(
+        status_code=getattr(exc, "status", 502),
+        content={"error": "tabpfn_live_failed", "detail": str(exc)},
+    )
 try:
     from apps.desk.ensure_deep_templates import ensure_deep_templates as _ensure_deep_tpl
     _ensure_deep_tpl()

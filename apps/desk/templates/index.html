@@ -40,6 +40,7 @@
 <h1>Freight desk</h1>
 <p class="tagline">{% if state.replay %}Late-container fees on <span id="ticker-rows">{{ "{:,}".format(state.n_rows) }}</span> sample containers, scored by TabPFN-3.5, an AI model built for spreadsheet-style data{% else %}Dataset <strong>{{ state.pack_label or state.pack }}</strong>{% if state.pack_gloss %}<span class="pack-gloss"> — {{ state.pack_gloss }}</span>{% endif %}{% endif %}
 {% if not state.replay %}<span class="token-pill {% if has_token or state.replay %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% elif state.replay %}Scored by TabPFN-3.5{% else %}No token: offline stand-in model{% endif %}</span>{% endif %}</p>
+{% if state.live_error %}<div class="warn-banner live-error" role="alert" id="live-error"><strong>Live TabPFN call failed.</strong> {{ state.live_error }} The desk still shows the previous results.</div>{% endif %}
 <form method="post" action="/select-client" data-coach="client-switcher" class="client-pick" style="display:inline-flex;gap:.4rem;align-items:center;margin:.35rem 0 0">
     <label class="muted" for="client-select" style="font-size:.8rem">Showing</label>
     <select id="client-select" name="client_id" onchange="this.form.submit()" style="background:#0b1220;color:#e8eef7;border:1px solid #243044;border-radius:6px;padding:.25rem .4rem">

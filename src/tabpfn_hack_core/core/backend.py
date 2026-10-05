@@ -216,6 +216,35 @@ def _thinking_narrative(
     return " · ".join(bits)
 
 
+class TabPFNLiveError(RuntimeError):
+    """A live TabPFN call was refused or failed. Raised instead of swapping in mock numbers."""
+
+    def __init__(self, message: str, status: int = 502):
+        super().__init__(message)
+        self.status = status
+
+
+def _allow_mock_fallback() -> bool:
+    return os.environ.get("TABPFN_ALLOW_MOCK_FALLBACK", "").strip().lower() in {"1", "true", "yes"}
+
+
+def _live_error(mode: BackendMode, exc: BaseException) -> TabPFNLiveError:
+    text = str(exc)
+    if "429" in text or "usage limit" in text.lower():
+        return TabPFNLiveError(
+            f"Live TabPFN ({mode.value}) refused the request: the daily usage limit is used up "
+            "(it resets at 00:00 UTC, 5 PM Pacific). No results were produced, and no offline "
+            "numbers were put in their place.",
+            status=429,
+        )
+    first = text.splitlines()[0][:200] if text else type(exc).__name__
+    return TabPFNLiveError(
+        f"Live TabPFN ({mode.value}) call failed: {first}. No results were produced, and no "
+        "offline numbers were put in their place.",
+        status=502,
+    )
+
+
 def _try_tabpfn_client(
     mode: BackendMode,
     X_train: pd.DataFrame,
@@ -231,7 +260,9 @@ def _try_tabpfn_client(
         return None
     try:
         from tabpfn_client import TabPFNClassifier  # type: ignore
-    except ImportError:
+    except ImportError as exc:
+        if not _allow_mock_fallback():
+            raise _live_error(mode, exc) from exc
         warnings.warn("tabpfn_client not installed; falling back to mock", stacklevel=2)
         return None
 
@@ -287,6 +318,8 @@ def _try_tabpfn_client(
             ),
         )
     except Exception as exc:  # noqa: BLE001
+        if not _allow_mock_fallback():
+            raise _live_error(mode, exc) from exc
         warnings.warn(f"tabpfn_client failed ({exc}); falling back to mock", stacklevel=2)
         return None
 

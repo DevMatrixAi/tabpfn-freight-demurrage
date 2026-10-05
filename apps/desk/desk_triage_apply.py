@@ -23,7 +23,7 @@ except ImportError:
     from risk_board import build_thinking_timeline, chart_stats  # type: ignore
 
 
-def apply_triage(
+def _apply_triage_impl(
     app: FastAPI,
     state: dict[str, Any],
     *,
@@ -244,3 +244,28 @@ def _rank_actions_by_expected_fee(sess: Any, actions: Any, money_col: str | None
         fee = dict(zip(pred[id_col].astype(str), pd.to_numeric(pred[money_col], errors="coerce").fillna(0.0)))
         items.sort(key=lambda a: float(a.proba) * float(fee.get(str(a.row_id), 0.0)), reverse=True)
     actions.items = items[:keep]
+
+
+def apply_triage(app: FastAPI, state: dict[str, Any], **kwargs: Any) -> None:
+    """Run triage; if a live TabPFN call is refused, keep the previous results and show why."""
+    from tabpfn_hack_core.core.backend import TabPFNLiveError
+
+    sess = getattr(app.state, "session", None)
+    saved_state = dict(state)
+    saved_tables = dict(sess.tables) if sess is not None else None
+    attrs = ("last_predictions", "last_metrics", "last_backend", "last_mode", "last_warning",
+             "last_baseline", "last_fit")
+    saved_attrs = {a: getattr(sess, a, None) for a in attrs} if sess is not None else {}
+    try:
+        _apply_triage_impl(app, state, **kwargs)
+        state["live_error"] = None
+    except TabPFNLiveError as exc:
+        state.clear()
+        state.update(saved_state)
+        sess = getattr(app.state, "session", None)
+        if sess is not None and saved_tables is not None:
+            sess.tables.clear()
+            sess.tables.update(saved_tables)
+            for a, v in saved_attrs.items():
+                setattr(sess, a, v)
+        state["live_error"] = str(exc)
