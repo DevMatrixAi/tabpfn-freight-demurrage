@@ -23,7 +23,7 @@
   </div>
   <div class="spacer"></div>
   <span class="chip live">Demo · synthetic data</span>
-  {% if live_budget %}
+  {% if live_budget and not replay_on %}
   <span class="chip live-budget-chip {% if live_budget.mode == 'mock' %}mock{% else %}live{% endif %}"
         id="live-budget-chip"
         data-live-budget-chip="1"
@@ -38,8 +38,9 @@
 <div class="saas-wrap">
   <div class="hero-row">
     <div>
-      <h1>Your desks</h1>
-      <p class="sub">Pick a dataset. Freight late fees is the main demo; the others reuse the same TabPFN engine on sample data.</p>
+      <h1>Stop paying container late fees</h1>
+      <p class="sub">TabPFN-3.5 predicts which containers will miss their free days, and the desk ranks them by money at stake so you know which to act on first. All data here is synthetic.</p>
+      <a class="hero-cta" id="hero-cta" href="/desk?pack=freight-demurrage">Open the freight desk →</a>
     </div>
   </div>
 
@@ -55,7 +56,7 @@
     <noscript><button type="submit">Switch</button></noscript>
   </form>
 
-  <p class="section-label">Ops desks</p>
+  <p class="section-label">Desks</p>
   {% if desks %}
   <div class="desk-grid">
     {% for d in desks %}
@@ -78,9 +79,9 @@
   <p class="section-label" style="margin-top:1.75rem">Compare</p>
   <div class="desk-grid">
     <a class="desk-card spine" href="/eval" id="eval-link" data-coach="compare-eval">
-      <span class="pill">Judge card</span>
-      <h2>Eval · Plus / Thinking / Fast vs HistGBM</h2>
-      <p class="muted" style="margin:0;font-size:.85rem">How much money TabPFN saves vs a standard model, and how it does with little data</p>
+      <span class="pill">Proof</span>
+      <h2>Does TabPFN beat a standard model?</h2>
+      <p class="muted" style="margin:0;font-size:.85rem">TabPFN-3.5 vs HistGBM on the same containers: money saved, and how each does with little data.</p>
     </a>
   </div>
 

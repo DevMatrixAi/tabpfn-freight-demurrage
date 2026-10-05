@@ -80,6 +80,7 @@ async def saas_home(request: Request) -> HTMLResponse:
         "desks": desks,
         "live_budget": live_budget_chip(),
         "has_token": _has_token(),
+        "replay_on": __import__("tabpfn_hack_core.core.replay", fromlist=["replay_enabled"]).replay_enabled(),
     })
 
 

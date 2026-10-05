@@ -198,3 +198,5 @@ html,body{max-width:100%;overflow-x:hidden}
 .advanced-box{margin:1rem 0;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:.4rem .8rem}
 .advanced-box>summary{cursor:pointer;font-weight:600;padding:.35rem 0;color:var(--muted)}
 .eval-headline{font-size:1.25rem;font-weight:700;margin:.2rem 0 .7rem}
+.hero-cta{display:inline-block;margin-top:.8rem;padding:.6rem 1rem;border-radius:8px;background:#3d9cf0;color:#fff;font-weight:700;text-decoration:none}
+.hero-cta:hover{filter:brightness(1.1)}
