@@ -15,7 +15,7 @@
 {% else %}
 <p>No container's expected fee is above the action cost right now.</p>
 {% endif %}
-<p class="act-first-sum">Showing the top {{ af["items"]|length }}. {{ af.n_flagged }} of {{ af.n_rows }} containers are worth acting on (<a href="/export-triage.csv" download="triage_actions.csv">download the full list</a>).
+<p class="act-first-sum">Showing the top {{ af["items"]|length }}. {{ af.n_flagged }} of {{ "{:,}".format(af.n_rows) }} containers are worth acting on (<a href="/export-triage.csv" download="triage_actions.csv">download the full list</a>).
 {% if af.model %} Acting on them saves <strong>${{ "{:,}".format(af.model.net_savings) }}</strong> after action costs, using TabPFN-3.5 scores{% if af.baseline %}, vs ${{ "{:,}".format(af.baseline.net_savings) }} using HistGBM scores on the same containers{% endif %}.{% endif %}</p>
 {% if af.top_risk and not af.top_risk.in_top %}
 <p class="muted">{{ af.top_risk.row_id }} is the most likely to get a late fee ({{ (af.top_risk.proba * 100)|round|int }}%), but the fee is only ${{ "{:,}".format(af.top_risk.fee) }}, so it is ranked lower: paying it costs less than most interventions.</p>
