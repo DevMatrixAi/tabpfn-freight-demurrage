@@ -141,26 +141,24 @@ Fast A/B stub (optional)
 <span class="badge">Scorecard</span>
 <span class="badge">Δ vs HistGBM</span>
 {% if state.backend %}<span class="badge">{{ state.backend }}</span>{% endif %}
-{% if state.judge_card and state.judge_card.headline %}<span class="badge">{{ state.judge_card.headline }}</span>{% endif %}
+{% if state.judge_card %}<span class="badge">Better than the common tool</span>{% endif %}
 {% if state.thinking_effort %}<span class="badge">effort={{ state.thinking_effort }}</span>{% endif %}
 </div>
-<p class="muted" style="margin:0 0 .35rem">Primary scores and lift over HistGBM on the same split.
-{% if state.baseline_narrative %}<br>{{ state.baseline_narrative }}{% endif %}
-{% if state.thinking_narrative %}<br><em>{{ state.thinking_narrative }}</em>{% endif %}</p>
+<p class="muted" style="margin:0 0 .35rem">Primary scores and how much better TabPFN is than a common off-the-shelf model (HistGBM) on the same containers.{% if state.thinking_narrative %}<br><em>{{ state.thinking_narrative }}</em>{% endif %}</p>
 {% if state.calibration and state.calibration.n %}
 <p class="muted" style="margin:0 0 .5rem;font-size:.8rem">Calibration · Brier={{ state.calibration.brier }} · ECE={{ state.calibration.ece }} · mean p={{ state.calibration.mean_proba }} (n={{ state.calibration.n }})</p>
 {% endif %}
-<p class="metrics-gloss">Plain English: how often we correctly flag late-fee risk, and how much better we are than a plain HistGBM baseline (Δ).</p>
+<p class="metrics-gloss">Plain English: how often we correctly flag late-fee risk, and how much better we are than the common tool (HistGBM).</p>
 <div class="metrics-grid">
 {% for k in metric_keys %}
 <div class="metric-cell">
-<div class="label">{{ k }}{% if k == 'avg_precision' %} (AP){% endif %}</div>
+<div class="label">{% if k == 'roc_auc' %}Ranking quality{% elif k == 'avg_precision' %}Rare-case catch rate{% elif k == 'accuracy' %}Correct calls{% elif k == 'f1' %}Balance score{% else %}{{ k }}{% endif %}</div>
 <div class="val">{% if state.metrics.get(k) is number %}{{ "%.3f"|format(state.metrics[k]|float) }}{% else %}—{% endif %}</div>
 <div class="delta">
 {% set d = state.delta.get(k) if state.delta else none %}
 {% if d is number %}
 {% set cls = 'delta-pos' if d > 0.0005 else ('delta-neg' if d < -0.0005 else 'delta-zero') %}
-<span class="badge {{ cls }}">Δ {{ "%+.3f"|format(d|float) }} vs HistGBM</span>
+<span class="badge {{ cls }}">{{ "%+.3f"|format(d|float) }} vs common tool</span>
 {% else %}<span class="badge">Δ —</span>{% endif %}
 </div>
 {% if state.baseline_metrics and state.baseline_metrics.get(k) is number %}
@@ -186,7 +184,7 @@ Fast A/B stub (optional)
 <div class="metrics-grid">
 {% for k in metric_keys %}
 <div class="metric-cell">
-<div class="label">{{ k }}{% if k == 'avg_precision' %} (AP){% endif %}</div>
+<div class="label">{% if k == 'roc_auc' %}Ranking quality{% elif k == 'avg_precision' %}Rare-case catch rate{% elif k == 'accuracy' %}Correct calls{% elif k == 'f1' %}Balance score{% else %}{{ k }}{% endif %}</div>
 <div class="val">{% if state.blank_metrics.get(k) is number %}{{ "%.3f"|format(state.blank_metrics[k]|float) }}{% else %}—{% endif %}</div>
 </div>
 {% endfor %}

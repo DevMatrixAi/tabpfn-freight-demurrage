@@ -1,7 +1,7 @@
 {% if state.chart_stats and state.risk_cards %}
 <section class="card full" id="ops-charts">
 <h2>Board charts <span class="badge">after triage</span></h2>
-<p class="muted" style="margin:0 0 .65rem">Risk mix, score bars, and money at risk on the cards below.</p>
+<p class="muted" style="margin:0 0 .65rem">Risk mix, score bars, and possible late fees on the cards below.</p>
 <div class="charts-grid">
   <div class="chart-panel">
     <div class="chart-title">Late fee risk mix</div>
@@ -39,7 +39,7 @@
     {% endif %}
   </div>
   <div class="chart-panel">
-    <div class="chart-title">Money at risk (on cards)</div>
+    <div class="chart-title">Possible late fees (on cards)</div>
     {% set denom = cs.money_max if cs.money_max > 0 else 1 %}
     {% if cs.money_max == 0 %}
     <div class="chart-empty" data-chart-state="empty-money">
@@ -112,7 +112,7 @@
     </div>
   </div>
   <div class="chart-panel">
-    <div class="chart-title">Money at risk</div>
+    <div class="chart-title">Possible late fees</div>
     <div class="chart-skeleton" data-chart-state="skeleton">
       <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:50%"></div><div class="sk-n"></div></div>
       <div class="sk-row"><div class="sk-lbl"></div><div class="sk-bar" style="width:35%"></div><div class="sk-n"></div></div>
