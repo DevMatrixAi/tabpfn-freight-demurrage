@@ -24,7 +24,7 @@ from sklearn.preprocessing import LabelEncoder
 
 from tabpfn_hack_core.tools_api import BackendMode
 
-BackendKind = Literal["tabpfn_client", "tabpfn_oss", "mock"]
+BackendKind = Literal["tabpfn_client", "tabpfn_oss", "tabpfn_replay", "mock"]
 
 
 @dataclass

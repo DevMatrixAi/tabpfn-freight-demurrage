@@ -83,7 +83,7 @@ class FitPredictArgs(BaseModel):
 
 class FitPredictResult(BaseModel):
     mode: BackendMode
-    backend: Literal["tabpfn_client", "tabpfn_oss", "mock"]
+    backend: Literal["tabpfn_client", "tabpfn_oss", "tabpfn_replay", "mock"]
     metrics: dict[str, float]
     n_train: int
     n_test: int

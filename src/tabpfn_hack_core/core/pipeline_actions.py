@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from types import SimpleNamespace
+
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -44,15 +46,30 @@ class _BaselineActionsMixin:
             stratify=y if len(np.unique(y)) > 1 else None,
         )
         prefer = "hist_gbm" if baseline == "sklearn_hist_gbm" else "logistic"
-        base = fit_mock(
-            X_train.reset_index(drop=True),
-            y_train,
-            X_test.reset_index(drop=True),
-            y_test,
-            text_cols=self.domain.text_cols,
-            high_card_cols=self.domain.high_card_cols,
-            prefer=prefer,  # type: ignore[arg-type]
-        )
+        if self.last_backend == "tabpfn_replay" and prefer == "hist_gbm":
+            # Same rows, same 5 folds: HistGBM out-of-fold scores recorded with the TabPFN run.
+            from tabpfn_hack_core.core import replay as _replay
+            from tabpfn_hack_core.core.backend import _compute_metrics
+
+            b_proba, _ = _replay.score_table(
+                df, X, y, self.domain.id_col, "p_hist_gbm",
+                text_cols=self.domain.text_cols, high_card_cols=self.domain.high_card_cols,
+            )
+            if self.last_predictions is not None and len(self.last_predictions) == len(b_proba):
+                self.last_predictions["proba_hist_gbm"] = b_proba
+            base = SimpleNamespace(
+                metrics=_compute_metrics(np.asarray(y), (b_proba >= 0.5).astype(int), b_proba)
+            )
+        else:
+            base = fit_mock(
+                X_train.reset_index(drop=True),
+                y_train,
+                X_test.reset_index(drop=True),
+                y_test,
+                text_cols=self.domain.text_cols,
+                high_card_cols=self.domain.high_card_cols,
+                prefer=prefer,  # type: ignore[arg-type]
+            )
 
         tabpfn_metrics = primary.metrics
         baseline_metrics = base.metrics

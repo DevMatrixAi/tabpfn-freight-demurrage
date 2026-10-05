@@ -37,6 +37,7 @@ def apply_triage(
     build_risk_cards: Callable,
     load_default_csv: Callable,
     sample_ids: Callable,
+    keep_rows: bool = False,
 ) -> None:
     """Run triage into ``state`` (shared by /run-triage and stream re-score)."""
     sess: PipelineSession = app.state.session
@@ -49,7 +50,14 @@ def apply_triage(
     want_n = resolve_sample_n(sample_n)
     _df0 = sess.tables[tid]
     _label = getattr(sess.domain, "label_col", None)
-    _sampled, _smeta = sample_frame(_df0, want_n, label_col=_label)
+    from tabpfn_hack_core.core import replay as _replay
+
+    if keep_rows or _replay.covers(_df0, sess.domain.id_col):
+        # keep_rows: stream re-score already holds the sampled table plus new arrivals.
+        # Recorded TabPFN scores cost nothing, so score the full table instead of a sample.
+        _sampled, _smeta = _df0, None
+    else:
+        _sampled, _smeta = sample_frame(_df0, want_n, label_col=_label)
     if _smeta and _smeta.get("sampled"):
         sess.tables[tid] = _sampled
         state["n_rows"] = int(len(_sampled))
@@ -122,6 +130,7 @@ def apply_triage(
     except Exception:
         state["calibration"] = None
     state["backend"] = sess.last_backend
+    state["replay"] = (sess.last_fit or {}).get("replay")
     effective = sess.last_mode
     state["mode"] = effective.value if hasattr(effective, "value") else str(effective)
     state["requested_mode"] = backend_mode.value if hasattr(backend_mode, "value") else str(backend_mode)

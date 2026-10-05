@@ -1,0 +1,147 @@
+{
+ "kind": "tabpfn_oof_replay",
+ "rows": 1200,
+ "positives": 221,
+ "folds": 5,
+ "split": "StratifiedGroupKFold by vessel_id, seed 42",
+ "model": "TabPFN-3.5 (tabpfn_client v3.5)",
+ "thinking": {
+  "effort": "medium",
+  "group_col": "vessel_id",
+  "group_time_col": "event_ts"
+ },
+ "recorded_at": "2026-10-05T04:34:26.441258+00:00",
+ "action_costs_assumed": [
+  150.0,
+  300.0,
+  600.0
+ ],
+ "metrics": {
+  "plus": {
+   "roc_auc": 0.9856,
+   "avg_precision": 0.9323,
+   "cost": [
+    {
+     "action_cost": 150.0,
+     "n_flagged": 240,
+     "precision": 0.7458,
+     "recall": 0.81,
+     "f1": 0.7766,
+     "fees_avoided": 966910,
+     "action_spend": 36000,
+     "net_savings": 930910,
+     "act_on_all_net": 791792,
+     "oracle_net": 942234
+    },
+    {
+     "action_cost": 300.0,
+     "n_flagged": 198,
+     "precision": 0.8333,
+     "recall": 0.7466,
+     "f1": 0.7876,
+     "fees_avoided": 960010,
+     "action_spend": 59400,
+     "net_savings": 900610,
+     "act_on_all_net": 611792,
+     "oracle_net": 914480
+    },
+    {
+     "action_cost": 600.0,
+     "n_flagged": 152,
+     "precision": 0.9013,
+     "recall": 0.6199,
+     "f1": 0.7346,
+     "fees_avoided": 936102,
+     "action_spend": 91200,
+     "net_savings": 844902,
+     "act_on_all_net": 251792,
+     "oracle_net": 862860
+    }
+   ]
+  },
+  "thinking": {
+   "roc_auc": 0.987,
+   "avg_precision": 0.9373,
+   "cost": [
+    {
+     "action_cost": 150.0,
+     "n_flagged": 234,
+     "precision": 0.765,
+     "recall": 0.81,
+     "f1": 0.7868,
+     "fees_avoided": 967130,
+     "action_spend": 35100,
+     "net_savings": 932030,
+     "act_on_all_net": 791792,
+     "oracle_net": 942234
+    },
+    {
+     "action_cost": 300.0,
+     "n_flagged": 199,
+     "precision": 0.8342,
+     "recall": 0.7511,
+     "f1": 0.7905,
+     "fees_avoided": 958076,
+     "action_spend": 59700,
+     "net_savings": 898376,
+     "act_on_all_net": 611792,
+     "oracle_net": 914480
+    },
+    {
+     "action_cost": 600.0,
+     "n_flagged": 157,
+     "precision": 0.9045,
+     "recall": 0.6425,
+     "f1": 0.7513,
+     "fees_avoided": 941406,
+     "action_spend": 94200,
+     "net_savings": 847206,
+     "act_on_all_net": 251792,
+     "oracle_net": 862860
+    }
+   ]
+  },
+  "hist_gbm": {
+   "roc_auc": 0.9568,
+   "avg_precision": 0.8508,
+   "cost": [
+    {
+     "action_cost": 150.0,
+     "n_flagged": 227,
+     "precision": 0.7357,
+     "recall": 0.7557,
+     "f1": 0.7455,
+     "fees_avoided": 945048,
+     "action_spend": 34050,
+     "net_savings": 910998,
+     "act_on_all_net": 791792,
+     "oracle_net": 942234
+    },
+    {
+     "action_cost": 300.0,
+     "n_flagged": 201,
+     "precision": 0.7811,
+     "recall": 0.7104,
+     "f1": 0.7441,
+     "fees_avoided": 938262,
+     "action_spend": 60300,
+     "net_savings": 877962,
+     "act_on_all_net": 611792,
+     "oracle_net": 914480
+    },
+    {
+     "action_cost": 600.0,
+     "n_flagged": 156,
+     "precision": 0.8462,
+     "recall": 0.5973,
+     "f1": 0.7003,
+     "fees_avoided": 906696,
+     "action_spend": 93600,
+     "net_savings": 813096,
+     "act_on_all_net": 251792,
+     "oracle_net": 862860
+    }
+   ]
+  }
+ }
+}

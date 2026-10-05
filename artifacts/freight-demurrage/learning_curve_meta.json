@@ -1,0 +1,16 @@
+{
+ "kind": "learning_curve",
+ "test_rows": 240,
+ "test_positives": 30,
+ "test_split": "fold 0 of StratifiedGroupKFold(5) by vessel_id, seed 42 (held-out vessels)",
+ "sizes": [
+  30,
+  60,
+  120,
+  240,
+  960
+ ],
+ "repeats": "3 (1 at full pool)",
+ "recorded_at": "2026-10-05T04:34:29.536256+00:00",
+ "action_cost_for_net": 300.0
+}

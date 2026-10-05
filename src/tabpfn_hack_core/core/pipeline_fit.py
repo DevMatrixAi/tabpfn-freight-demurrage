@@ -12,7 +12,14 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from tabpfn_hack_core.core.backend import fit_mock, fit_predict_backend
+from tabpfn_hack_core.core import replay as _replay
+from tabpfn_hack_core.core.backend import (
+    BackendResult,
+    _compute_metrics,
+    fit_mock,
+    fit_predict_backend,
+    resolve_backend,
+)
 from tabpfn_hack_core.core.jsonutil import jsonable
 from tabpfn_hack_core.domain import DomainConfig, load_domain
 from tabpfn_hack_core.tools_api import (
@@ -173,6 +180,88 @@ class _FitMixin:
             cols = [c for c in df.columns if c not in exclude]
         return df[cols].copy()
 
+    def _fit_predict_replay(
+        self, df, X, y, table_id, label, req_mode, effort, gcol, tcol, predictions_path
+    ) -> FitPredictResult:
+        """Score every row from recorded TabPFN-3.5 out-of-fold probabilities (no API call)."""
+        shown_mode = BackendMode.thinking if req_mode == BackendMode.mock else req_mode
+        col = _replay.proba_column(shown_mode.value)
+        proba, est = _replay.score_table(
+            df, X, y, self.domain.id_col, col,
+            text_cols=self.domain.text_cols, high_card_cols=self.domain.high_card_cols,
+        )
+        y_a = np.asarray(y)
+        y_pred = (proba >= 0.5).astype(int)
+        metrics = _compute_metrics(y_a, y_pred, proba)
+        info = _replay.replay_info()
+        pred_df = df.copy().reset_index(drop=True)
+        pred_df["y_true"] = y_a
+        pred_df["y_pred"] = y_pred
+        pred_df["proba_1"] = proba
+        pred_df["score_source"] = np.where(est, "estimate", "tabpfn_replay")
+        n = len(df)
+        n_est = int(est.sum())
+        self.last_predictions = pred_df
+        self.last_metrics = metrics
+        self.last_backend = "tabpfn_replay"
+        self.last_mode = shown_mode
+        self.last_warning = None
+        self._feature_names = list(X.columns)
+        self._model = None
+        rec = _replay.load_receipt()
+        think = rec.get("thinking") or {}
+        narrative = None
+        if shown_mode == BackendMode.thinking:
+            narrative = (
+                f"{info['label']}: Thinking mode, effort {think.get('effort', effort)}, "
+                f"grouped by {think.get('group_col', gcol)}, ordered by {think.get('group_time_col', tcol)}. "
+                "Each container was scored by a model that never saw it (5-fold, split by vessel)."
+            )
+        self.last_fit = {
+            "table_id": table_id,
+            "label_col": label,
+            "mode": shown_mode.value,
+            "backend": "tabpfn_replay",
+            "metrics": metrics,
+            "n_train": int(round(n * 0.8)),
+            "n_test": n,
+            "thinking_effort": think.get("effort", effort) if shown_mode == BackendMode.thinking else None,
+            "group_col": gcol,
+            "group_time_col": tcol,
+            "thinking_narrative": narrative,
+            "replay": {**info, "n_scored": n, "n_estimated": n_est, "column": col},
+        }
+        out_path: str | None = None
+        if predictions_path is not None:
+            p = Path(predictions_path)
+            p.parent.mkdir(parents=True, exist_ok=True)
+            clean = [{k: jsonable(v) for k, v in row.items()} for row in pred_df.to_dict(orient="records")]
+            p.write_text(json.dumps(clean, indent=2), encoding="utf-8")
+            out_path = str(p)
+        preview = [
+            {
+                "row_id": str(row.get("row_id", row.get(self.domain.id_col or "row_id", i))),
+                "y_true": jsonable(row["y_true"]),
+                "y_pred": jsonable(row["y_pred"]),
+                "proba_1": float(row["proba_1"]),
+            }
+            for i, row in pred_df.head(5).iterrows()
+        ]
+        return FitPredictResult(
+            mode=shown_mode,
+            backend="tabpfn_replay",  # type: ignore[arg-type]
+            metrics=metrics,
+            n_train=int(round(n * 0.8)),
+            n_test=n,
+            predictions_path=out_path,
+            preview=preview,
+            warning=None,
+            thinking_effort=self.last_fit["thinking_effort"],
+            group_col=gcol,
+            group_time_col=tcol,
+            thinking_narrative=narrative,
+        )
+
     def fit_predict(
         self,
         table_id: str,
@@ -197,6 +286,17 @@ class _FitMixin:
 
         X = self._feature_frame(df, label, feature_cols)
         y = df[label].to_numpy()
+
+        id_col = self.domain.id_col
+        req_mode = resolve_backend(mode)
+        if (
+            label == self.domain.label_col
+            and req_mode != BackendMode.local
+            and _replay.covers(df, id_col)
+        ):
+            return self._fit_predict_replay(
+                df, X, y, table_id, label, req_mode, effort, gcol, tcol, predictions_path
+            )
 
         X_train, X_test, y_train, y_test, idx_train, idx_test = train_test_split(
             X, y, df.index.to_numpy(), test_size=test_size, random_state=random_state,
