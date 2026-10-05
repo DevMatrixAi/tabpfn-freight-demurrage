@@ -181,7 +181,7 @@ def recorded_learning_curve() -> dict[str, Any] | None:
         "n_test": meta.get("test_rows"),
         "headline": (
             "Recorded TabPFN-3.5 runs at each training size, scored on the same held-out vessels. "
-            "TabPFN ranks risk better at every size; HistGBM saves slightly more dollars at 30 and 60 rows."
+            "TabPFN spots risk at 30 rows when the common tool can't fit yet; at larger sizes the two are close."
         ),
         "note": (
             f"{meta.get('test_rows', '?')} held-out containers from vessels never seen in training; "
