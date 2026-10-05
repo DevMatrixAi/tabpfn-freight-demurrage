@@ -5,7 +5,8 @@
 {% if af.by_move %}
 {% set by_move_rows = af.by_move %}
 <p class="act-first-plan"><strong>{{ af.n_flagged }}</strong> of {{ "{:,}".format(af.n_rows) }} containers are worth acting on: their likely fee is more than the ${{ "{:,}".format(af.action_cost) }} an action costs. Here they are, grouped by what to do.</p>
-<p class="act-first-how">Click a row to see the first container to handle and why.</p>
+{% if af.model %}<p class="act-first-how act-first-math">These {{ af.n_flagged }} carry ${{ "{:,}".format(af.by_move|sum(attribute="at_stake")) }} of the ${{ "{:,}".format(state.demurrage_total|float|round|int) }} at risk. Acting on them avoids ${{ "{:,}".format(af.model.fees_avoided) }} in fees that would really have been charged, minus ${{ "{:,}".format(af.model.action_spend) }} for {{ af.n_flagged }} actions at ${{ "{:,}".format(af.action_cost) }} each, which is the ${{ "{:,}".format(af.model.net_savings) }} saved.</p>{% endif %}
+<p class="act-first-how">Groups are ordered by money at stake, not by chance of a fee. Click a row to open its first container; the side panel and the download list the top 50.</p>
 <ol class="act-first-list act-first-moves">
 {% for g in by_move_rows %}{% set it = g.top %}
 <li><button type="button" class="act-first-row" data-row-id="{{ it.row_id }}" data-money="{{ it.fee }}" data-expected="{{ it.expected }}" data-proba="{{ it.proba }}" data-tier="Act first" data-action-label="{{ g.action|human_action }}" data-action="{{ g.action }}" data-reason="{{ it.reason }}" data-subtitle="Likely cost ${{ "{:,}".format(it.expected) }}" onclick="openActionDrawer(this)" title="Open the suggested move"><strong class="act-first-move">{{ g.action|human_action }}</strong>

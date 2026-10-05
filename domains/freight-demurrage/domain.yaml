@@ -27,7 +27,7 @@ playbook:
     reason: "This shipment's cargo is worth less than the late fee it is likely to run up, so cancelling the booking loses less money than paying the fee."
   - action: divert
     min_proba: 0.78
-    reason: "Very likely to sit past its free days at this terminal; sending it to another terminal avoids the fee."
+    reason: "Very likely to sit past its free days (the days before late fees start) at this terminal; sending it to another terminal avoids the fee."
   - action: rebook
     min_proba: 0.55
     when_col: blank_sailing

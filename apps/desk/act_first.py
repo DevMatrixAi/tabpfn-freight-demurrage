@@ -116,7 +116,7 @@ def group_by_move(
             act = "call_terminal"
             reason = (
                 "No special rule fits this one, but the likely fee is well above the cost of acting, "
-                "so push the terminal or trucker to pick it up before free time runs out."
+                "so push the terminal or trucker to pick it up before its free days run out and late fees start."
             )
         g = groups.setdefault(act, {"action": act, "n": 0, "at_stake": 0, "expected": 0, "top": None})
         g["n"] += 1

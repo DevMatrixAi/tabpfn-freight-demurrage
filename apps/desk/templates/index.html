@@ -38,7 +38,7 @@
 <div class="top">
 <div>
 <h1>Freight desk</h1>
-<p class="tagline">{% if state.replay %}Late-container fees on <span id="ticker-rows">{{ "{:,}".format(state.n_rows) }}</span> sample containers, scored by TabPFN-3.5{% else %}Dataset <strong>{{ state.pack_label or state.pack }}</strong>{% if state.pack_gloss %}<span class="pack-gloss"> — {{ state.pack_gloss }}</span>{% endif %}{% endif %}
+<p class="tagline">{% if state.replay %}Late-container fees on <span id="ticker-rows">{{ "{:,}".format(state.n_rows) }}</span> sample containers, scored by TabPFN-3.5, an AI model built for spreadsheet-style data{% else %}Dataset <strong>{{ state.pack_label or state.pack }}</strong>{% if state.pack_gloss %}<span class="pack-gloss"> — {{ state.pack_gloss }}</span>{% endif %}{% endif %}
 {% if not state.replay %}<span class="token-pill {% if has_token or state.replay %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% elif state.replay %}Scored by TabPFN-3.5{% else %}No token: offline stand-in model{% endif %}</span>{% endif %}</p>
 <form method="post" action="/select-client" data-coach="client-switcher" class="client-pick" style="display:inline-flex;gap:.4rem;align-items:center;margin:.35rem 0 0">
     <label class="muted" for="client-select" style="font-size:.8rem">Showing</label>
@@ -71,7 +71,7 @@
 <!-- plain crib via partials_desk_main → partials_plain_english.html -->
 {% include "partials_desk_main.html" %}
 
-<footer class="muted" style="font-size:.75rem">{% if not state.act_first %}<a href="/export-triage.csv" id="export-triage-csv" download="triage_actions.csv">Download the list (CSV)</a> · {% endif %}For developers: <a href="/docs" data-coach="robot-api" target="_blank" rel="noopener">API docs</a></footer>
+{% if not state.act_first %}<footer class="muted" style="font-size:.75rem"><a href="/export-triage.csv" id="export-triage-csv" download="triage_actions.csv">Download the list (CSV)</a> · <a href="/docs" data-coach="robot-api" target="_blank" rel="noopener">API docs</a></footer>{% endif %}
 
 {% include "polish_drawer.html" %}
 

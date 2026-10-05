@@ -38,7 +38,7 @@
   <div class="hero-row">
     <div>
       <h1>Stop paying container late fees</h1>
-      <p class="sub">TabPFN-3.5 predicts which containers will miss their free days, and the desk ranks them by money at stake so you know which to act on first. All data here is synthetic.</p>
+      <p class="sub">TabPFN-3.5, an AI model built for spreadsheet-style data, predicts which containers will stay at the port past their free days (the days before late fees start), and the desk ranks them by money at stake so you know which to act on first. All data here is synthetic.</p>
       <a class="hero-cta" id="hero-cta" href="/desk?pack=freight-demurrage">Open the freight desk →</a>
     </div>
   </div>
@@ -69,7 +69,7 @@
   {% set extra = desks|rejectattr("spine")|list %}
   {% if extra %}
   <p class="section-label" style="margin-top:1.25rem">More sample desks</p>
-  <p class="muted" style="margin:-.25rem 0 .6rem;font-size:.82rem">Same idea on other freight problems. These use a simple stand-in model unless a TabPFN key is set.</p>
+  <p class="muted" style="margin:-.25rem 0 .6rem;font-size:.82rem">Same idea on other freight problems. In this demo they use a simpler backup model, not TabPFN.</p>
   <div class="desk-grid">
     {% for d in extra %}
     <a class="desk-card" href="/desk?pack={{ d.id }}">

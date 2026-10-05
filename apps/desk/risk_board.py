@@ -12,7 +12,7 @@ from tabpfn_hack_core.core.pipeline import PipelineSession
 # Desk UI copy — keep API / playbook keys unchanged.
 ACTION_LABELS: dict[str, str] = {
     "divert": "Move to another terminal",
-    "rebook": "Change booking",
+    "rebook": "Book on the next ship",
     "authorize_fee": "Pay the known fee",
     "cancel_booking": "Cancel booking",
     "cancel": "Cancel booking",
