@@ -22,7 +22,6 @@
     <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn" data-judge-path="1">Guided tour</button></form>
   </div>
   <div class="spacer"></div>
-  <span class="chip live">Demo · synthetic data</span>
   {% if live_budget and not replay_on %}
   <span class="chip live-budget-chip {% if live_budget.mode == 'mock' %}mock{% else %}live{% endif %}"
         id="live-budget-chip"
@@ -85,7 +84,7 @@
     </a>
   </div>
 
-  <p class="foot-note">Demo login only · synthetic data · machine-readable API at <code>/api/v1</code>.</p>
+  <p class="foot-note">Demo login only.</p>
 </div>
 <script src="/static/desk_keys.js" defer></script>
 </body>

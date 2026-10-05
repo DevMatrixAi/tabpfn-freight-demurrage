@@ -3,8 +3,8 @@
 <aside id="action-drawer" class="action-drawer" aria-hidden="true" aria-label="Suggested moves">
   <div class="drawer-head">
     <div>
-      <p class="drawer-eyebrow">Container</p>
-      <h2>Suggested move</h2>
+      <p class="drawer-eyebrow">Suggested move for</p>
+      <h2 id="drawer-title">a container</h2>
     </div>
     <button type="button" class="drawer-close" onclick="closeActionDrawer()" aria-label="Close">✕</button>
   </div>
@@ -16,7 +16,7 @@
   </div>
 
   {% if state.explain and state.explain.bars %}
-  <section class="drawer-explain" id="drawer-explain" aria-label="Why this move" data-top-labels="{% if state.explain.top_labels %}{{ state.explain.top_labels|join('|') }}{% endif %}">
+  <section class="drawer-explain" id="drawer-explain" hidden aria-label="Why this move" data-top-labels="{% if state.explain.top_labels %}{{ state.explain.top_labels|join('|') }}{% endif %}">
     <p class="item-kicker">What drives the late-fee scores overall</p>
     <p class="explain-why" id="explain-why" hidden>{{ state.explain.why }}</p>
     <p class="muted explain-method">This is for all containers, not just this one.</p>
@@ -38,7 +38,7 @@
   </section>
   {% endif %}
 
-  <details class="drawer-all"><summary>Top {{ (state.actions or [])|length }} suggested moves</summary>
+  <details class="drawer-all"><summary>See the top {{ (state.actions or [])|length }} containers and their moves</summary>
   <div class="drawer-list" id="drawer-list">
   {% if state.actions %}
     {% for a in state.actions %}
@@ -69,8 +69,7 @@
     <p class="muted" style="margin:.45rem 0 0;font-size:.75rem">Applying action…</p>
   </div>
 <div class="drawer-foot" id="drawer-foot">
-    <p class="foot-note">Shipper late-fee desk · synthetic data only · not a live booking change.</p>
-    <button type="button" class="ghost" onclick="closeActionDrawer()">Close</button>
+    <p class="foot-note">Suggestions only. Nothing is changed in any booking system.</p>
   </div>
 </aside>
 <script>
@@ -93,8 +92,8 @@ function openActionDrawer(el) {
     var facts = pct + '% chance of a late fee';
     if (money) facts += ' · $' + Math.round(Number(money)).toLocaleString() + ' at stake';
     if (expected) facts += ' · expected $' + Math.round(Number(expected)).toLocaleString();
+    var ttl = document.getElementById('drawer-title'); if (ttl) ttl.textContent = el.getAttribute('data-row-id') || 'a container';
     focus.innerHTML =
-      '<div class="focus-id">' + (el.getAttribute('data-row-id') || '') + '</div>' +
       '<div class="focus-sub">' + facts + '</div>' +
       '<div class="focus-kicker">Suggested move</div>' +
       '<div class="focus-action">' + (el.getAttribute('data-action-label') || '') + '</div>' +

@@ -206,3 +206,5 @@ html,body{max-width:100%;overflow-x:hidden}
 .focus-reason{margin:.4rem 0 0;line-height:1.4}
 .drawer-all{margin:.75rem 0}.drawer-all>summary{cursor:pointer;color:var(--muted);font-weight:600}
 .eval-summary .eval-headline{font-size:1.15rem}
+.act-first-dl,.act-first a{color:#93c5fd;text-decoration:underline}
+.act-first-why{font-size:.85rem;margin:.4rem 0 .2rem}

@@ -12,13 +12,17 @@
 <span class="act-first-exp">expected ${{ "{:,}".format(it.expected) }}</span> <span class="act-first-move">Suggested: {{ it.action|human_action }}</span>{% if it.estimate %} <em class="muted">(estimate)</em>{% endif %}</button></li>
 {% endfor %}
 </ol>
+{% set acts = af["items"]|map(attribute="action")|unique|list %}
+{% if acts|length == 1 and state.action_counts %}
+<p class="muted act-first-why">These top {{ af["items"]|length }} all get "{{ acts[0]|human_action }}" because the biggest fees in this data sit on cargo worth less than the fee itself. {% set others = state.action_counts.items()|rejectattr(0, "in", [acts[0], "monitor", "cancel"])|sort(attribute=1, reverse=True)|list %}{% if others %} Across all {{ "{:,}".format(state.n_rows) }} containers, other moves also come up:{% for k, v in others %} {{ k|human_action }} ({{ "{:,}".format(v) }}){% if not loop.last %},{% endif %}{% endfor %}.{% endif %}</p>
+{% endif %}
 {% else %}
 <p>No container's expected fee is above the action cost right now.</p>
 {% endif %}
-<p class="act-first-sum">Showing the top {{ af["items"]|length }}. {{ af.n_flagged }} of {{ "{:,}".format(af.n_rows) }} containers are worth acting on (<a href="/export-triage.csv" download="triage_actions.csv">download the full list</a>).
+<p class="act-first-sum">Showing the top {{ af["items"]|length }}. {{ af.n_flagged }} of {{ "{:,}".format(af.n_rows) }} containers are worth acting on (<a class="act-first-dl" href="/export-triage.csv" download="triage_actions.csv">download the top 50 as a spreadsheet</a>).
 {% if af.model %} Acting on them saves <strong>${{ "{:,}".format(af.model.net_savings) }}</strong> after action costs, using TabPFN-3.5 scores{% if af.baseline %}, vs ${{ "{:,}".format(af.baseline.net_savings) }} using HistGBM scores on the same containers{% endif %}.{% endif %}</p>
 {% if af.top_risk and not af.top_risk.in_top %}
-<p class="muted">{{ af.top_risk.row_id }} is the most likely to get a late fee ({{ (af.top_risk.proba * 100)|round|int }}%), but the fee is only ${{ "{:,}".format(af.top_risk.fee) }}, so it is ranked lower: paying it costs less than most interventions.</p>
+<p class="muted">{{ af.top_risk.row_id }} is the most likely to get a late fee ({{ (af.top_risk.proba * 100)|round|int }}%), but only ${{ "{:,}".format(af.top_risk.fee) }} is at stake, so it sits below containers with more money on the line.</p>
 {% endif %}
 </section>
 {% endif %}

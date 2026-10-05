@@ -47,7 +47,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
         },
         "stow-fit": {
             "label": "Stow-fit equip/mode (extra)",
-            "gloss": "Suggest equipment/mode — not a 3D packer",
+            "gloss": "Suggest the right container size or transport mode",
             "domain": root / "domains" / "stow-fit" / "domain.yaml",
             "csv": root / "domains" / "stow-fit" / "data" / "shipments.csv",
             "spine": False,
