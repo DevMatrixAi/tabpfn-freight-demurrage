@@ -55,7 +55,7 @@ def build_act_first(
         row = pred.iloc[int(i)]
         items.append({
             "row_id": str(row.get(id_col, i)),
-            "proba": round(float(p[i]), 3),
+            "proba": round(float(p[i]), 4),
             "fee": round(float(fee[i])),
             "expected": round(float(exp[i])),
             "estimate": str(row.get("score_source", "")) == "estimate",
@@ -67,7 +67,7 @@ def build_act_first(
         row = pred.iloc[int(i)]
         flagged.append({
             "row_id": str(row.get(id_col, i)),
-            "proba": round(float(p[i]), 3),
+            "proba": round(float(p[i]), 4),
             "fee": round(float(fee[i])),
             "expected": round(float(exp[i])),
             "estimate": str(row.get("score_source", "")) == "estimate",
@@ -77,7 +77,7 @@ def build_act_first(
         j = int(np.argmax(p))
         top_risk = {
             "row_id": str(pred.iloc[j].get(id_col, j)),
-            "proba": round(float(p[j]), 3),
+            "proba": round(float(p[j]), 4),
             "fee": round(float(fee[j])),
             "in_top": any(it["row_id"] == str(pred.iloc[j].get(id_col, j)) for it in items),
         }
