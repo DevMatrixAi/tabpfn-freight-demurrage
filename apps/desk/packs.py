@@ -7,7 +7,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
     return {
         "freight-demurrage": {
             "label": "Late container fees",
-            "gloss": "Late-container fee (demurrage) — money left on the dock",
+            "gloss": "Which containers will run up port late fees (demurrage), and what to do",
             "domain": root / "domains" / "freight-demurrage" / "domain.yaml",
             "csv": root / "domains" / "freight-demurrage" / "data" / "containers.csv",
             "spine": True,
@@ -17,7 +17,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
         },
         "equipment-size": {
             "label": "Which container size to book",
-            "gloss": "Right box size for the booking",
+            "gloss": "Pick the container size each booking needs",
             "domain": root / "domains" / "equipment-size" / "domain.yaml",
             "csv": root / "domains" / "equipment-size" / "data" / "bookings.csv",
             "spine": False,
@@ -27,7 +27,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
         },
         "inland-mode": {
             "label": "Truck or rail inland",
-            "gloss": "Truck or rail to the inland dest",
+            "gloss": "Choose truck or rail for the inland leg",
             "domain": root / "domains" / "inland-mode" / "domain.yaml",
             "csv": root / "domains" / "inland-mode" / "data" / "moves.csv",
             "spine": False,
@@ -37,7 +37,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
         },
         "air-freight": {
             "label": "Air freight delays",
-            "gloss": "Missed connection / delay cost on air",
+            "gloss": "Which air shipments will miss a connection",
             "domain": root / "domains" / "air-freight" / "domain.yaml",
             "csv": root / "domains" / "air-freight" / "data" / "shipments.csv",
             "spine": False,
@@ -46,8 +46,8 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "awb_id",
         },
         "stow-fit": {
-            "label": "Equipment and mode for a cargo load",
-            "gloss": "Suggest the right container size or transport mode",
+            "label": "Equipment and mode for a load",
+            "gloss": "Pick equipment and transport mode together",
             "domain": root / "domains" / "stow-fit" / "domain.yaml",
             "csv": root / "domains" / "stow-fit" / "data" / "shipments.csv",
             "spine": False,

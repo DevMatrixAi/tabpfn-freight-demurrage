@@ -2,7 +2,8 @@
 {% include "partials_act_first.html" %}
 {% if state.act_first %}
 <details class="advanced-box" id="advanced-panel">
-<summary>More detail: risk board, charts, data sources and model settings</summary>
+<summary>More detail and charts</summary>
+{% if state.act_first and state.act_first.baseline %}<p class="muted" style="font-size:.85rem">For comparison, picking containers with a common off-the-shelf model (HistGBM) would save ${{ "{:,}".format(state.act_first.baseline.net_savings) }}. See Model comparison.</p>{% endif %}
 {% include "live_board.html" %}
 {% include "partials_plain_english.html" %}
 {% include "partials_morning_digest.html" %}

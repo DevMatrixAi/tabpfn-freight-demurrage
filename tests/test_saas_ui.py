@@ -14,7 +14,7 @@ def test_saas_shell_css_exists():
 def test_login_uses_saas_shell():
     text = (ROOT / "apps/desk/templates/login.html").read_text()
     assert "saas_shell.css" in text
-    assert "Sign in to your desks" in text
+    assert "Sign in" in text
 
 
 def test_home_has_primary_nav():

@@ -212,3 +212,5 @@ html,body{max-width:100%;overflow-x:hidden}
 .act-first-how,.act-first-sum{font-size:.88rem;color:#c3cfdf}
 .act-first-moves .act-first-move{min-width:12rem}
 .act-first-start{color:#c3cfdf}
+.ticker .meta .ticker-save{display:block;color:#bbf7d0;font-size:1.05rem;line-height:1.35}
+.ticker .meta .ticker-save strong{color:#4ade80;font-size:1.3rem}

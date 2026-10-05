@@ -27,7 +27,7 @@
 {% else %}
 <p>No container's likely fee is above the action cost right now.</p>
 {% endif %}
-<p class="act-first-sum">The other {{ "{:,}".format(af.n_rows - af.n_flagged) }} containers cost more to act on than their likely fee, so leave them alone.{% if af.baseline %} Picking with a common off-the-shelf model (HistGBM) instead would save ${{ "{:,}".format(af.baseline.net_savings) }}.{% endif %} <a class="act-first-dl" href="/export-triage.csv" download="triage_actions.csv">Download the top 50 as a spreadsheet</a>.</p>
+<p class="act-first-sum">The other {{ "{:,}".format(af.n_rows - af.n_flagged) }} containers cost more to act on than their likely fee, so leave them alone. <a class="act-first-dl" href="/export-triage.csv" download="triage_actions.csv">Download the top 50 as a spreadsheet</a>.</p>
 {% if af.top_risk and not af.top_risk.in_top and not af.by_move %}
 <p class="muted">{{ af.top_risk.row_id }} is the most likely to get a late fee ({{ (af.top_risk.proba * 100)|round|int }}%), but only ${{ "{:,}".format(af.top_risk.fee) }} is at stake, so it sits below containers with more money on the line.</p>
 {% endif %}

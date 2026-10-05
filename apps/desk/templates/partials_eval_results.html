@@ -14,11 +14,6 @@
     {% endif %}
     {% endif %}
     {% if result.replay %}
-    {% if result.replay.net_savings_300 %}
-    <p id="eval-money" style="margin:.25rem 0 .75rem">Net savings after a $300 cost per action:
-      {% for k, label in [("plus","TabPFN-3.5"),("hist_gbm","HistGBM")] %}{% if result.replay.net_savings_300.get(k) is not none %}<strong>{{ label }}</strong> saves ${{ "{:,}".format(result.replay.net_savings_300[k]) }}{% if not loop.last %} · {% endif %}{% endif %}{% endfor %}.
-     </p>
-    {% endif %}
     <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">Every container was scored by a model that had not seen it, and both models were tested the same way. The data is a made-up demo set; details are under "Detailed scores".</p>
     {% endif %}
   </section>

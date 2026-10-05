@@ -57,7 +57,7 @@
 {% if is_spine %}<div class="ticker-gloss">Projected late-container fees if nothing changes</div>{% endif %}
 </div>
 <div class="meta">
-{% if state.replay %}{% if state.act_first and state.act_first.model %}Acting on the right <strong>{{ state.act_first.n_flagged }}</strong> containers saves <strong>${{ "{:,}".format(state.act_first.model.net_savings) }}</strong> after action costs{% endif %}
+{% if state.replay %}{% if state.act_first and state.act_first.model %}<span class="ticker-save">Acting on the right <strong>{{ state.act_first.n_flagged }}</strong> containers saves <strong>${{ "{:,}".format(state.act_first.model.net_savings) }}</strong> after action costs</span>{% endif %}
 {% else %}
 <span class="badge">{{ state.source }}</span>
 · <span id="ticker-rows">{{ state.n_rows }}</span> rows

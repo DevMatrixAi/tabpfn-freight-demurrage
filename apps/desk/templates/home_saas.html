@@ -58,14 +58,27 @@
   <p class="section-label">Desks</p>
   {% if desks %}
   <div class="desk-grid">
-    {% for d in desks %}
-    <a class="desk-card {% if d.spine %}spine{% endif %}" href="/desk?pack={{ d.id }}">
-      {% if d.spine %}<span class="pill">Start here</span>{% endif %}
+    {% for d in desks if d.spine %}
+    <a class="desk-card spine" href="/desk?pack={{ d.id }}">
+      <span class="pill">Start here</span>
       <h2>{{ d.label }}</h2>
       <p class="muted" style="margin:0;font-size:.85rem">{{ d.gloss }}</p>
     </a>
     {% endfor %}
   </div>
+  {% set extra = desks|rejectattr("spine")|list %}
+  {% if extra %}
+  <p class="section-label" style="margin-top:1.25rem">More sample desks</p>
+  <p class="muted" style="margin:-.25rem 0 .6rem;font-size:.82rem">Same idea on other freight problems. These use a simple stand-in model unless a TabPFN key is set.</p>
+  <div class="desk-grid">
+    {% for d in extra %}
+    <a class="desk-card" href="/desk?pack={{ d.id }}">
+      <h2>{{ d.label }}</h2>
+      <p class="muted" style="margin:0;font-size:.85rem">{{ d.gloss }}</p>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
   {% else %}
   <div class="saas-empty" data-empty="home-desks">
     <p class="empty-kicker">No desks</p>
@@ -78,9 +91,8 @@
   <p class="section-label" style="margin-top:1.75rem">Compare</p>
   <div class="desk-grid">
     <a class="desk-card spine" href="/eval" id="eval-link" data-coach="compare-eval">
-      <span class="pill">Proof</span>
-      <h2>Does TabPFN beat a standard model?</h2>
-      <p class="muted" style="margin:0;font-size:.85rem">TabPFN-3.5 vs HistGBM on the same containers: money saved, and how each does with little data.</p>
+            <h2>Which model saves more money?</h2>
+      <p class="muted" style="margin:0;font-size:.85rem">The prediction model behind this desk (TabPFN-3.5) against a common off-the-shelf one (HistGBM), on the same containers.</p>
     </a>
   </div>
 
