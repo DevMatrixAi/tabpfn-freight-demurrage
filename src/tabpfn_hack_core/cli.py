@@ -21,6 +21,17 @@ def _project_root() -> Path:
     return find_project_root()
 
 
+def _maybe_dotenv(path) -> None:
+    """Load .env unless DESK_NO_DOTENV=1 (tests: a local token must never leak in)."""
+    import os
+
+    if os.environ.get("DESK_NO_DOTENV", "").strip().lower() in {"1", "true", "yes"}:
+        return
+    from dotenv import load_dotenv
+
+    load_dotenv(path)
+
+
 @app.command()
 def demo(
     mode: str = typer.Option(
@@ -40,12 +51,11 @@ def demo(
     ),
 ) -> None:
     """Run end-to-end demo; works without TABPFN_TOKEN via mock backend."""
-    from dotenv import load_dotenv
 
     from tabpfn_hack_core.demo.run_demo import run_demo
 
     root = _project_root()
-    load_dotenv(root / ".env")
+    _maybe_dotenv(root / ".env")
     result = run_demo(
         root=root,
         mode=mode,
@@ -64,9 +74,8 @@ def demo(
 @app.command()
 def mcp() -> None:
     """Start MCP stdio server exposing the 7 tools."""
-    from dotenv import load_dotenv
 
-    load_dotenv(_project_root() / ".env")
+    _maybe_dotenv(_project_root() / ".env")
     from tabpfn_hack_core.server.mcp_server import main as mcp_main
 
     mcp_main()
@@ -96,10 +105,9 @@ def desk(
     reload: bool = typer.Option(False, "--reload", help="Dev auto-reload"),
 ) -> None:
     """Start the freight demurrage web desk (FastAPI)."""
-    from dotenv import load_dotenv
 
     root = _project_root()
-    load_dotenv(root / ".env")
+    _maybe_dotenv(root / ".env")
     try:
         import uvicorn
     except ImportError:

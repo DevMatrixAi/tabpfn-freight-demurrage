@@ -4,8 +4,10 @@ Executed into app_impl globals after part A.
 """
 @app.on_event("startup")
 def _startup() -> None:
-    from dotenv import load_dotenv
-    load_dotenv(ROOT / ".env")
+    import os as _os
+    if _os.environ.get("DESK_NO_DOTENV", "").strip().lower() not in {"1", "true", "yes"}:
+        from dotenv import load_dotenv
+        load_dotenv(ROOT / ".env")
     sess = _session(DEFAULT_PACK)
     _STATE["pack"] = DEFAULT_PACK
     _STATE["pack_label"] = PACKS[DEFAULT_PACK]["label"]
