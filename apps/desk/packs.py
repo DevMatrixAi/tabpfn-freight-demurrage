@@ -6,7 +6,7 @@ from typing import Any
 def build_packs(root: Path) -> dict[str, dict[str, Any]]:
     return {
         "freight-demurrage": {
-            "label": "Freight demurrage (main demo)",
+            "label": "Late container fees",
             "gloss": "Late-container fee (demurrage) — money left on the dock",
             "domain": root / "domains" / "freight-demurrage" / "domain.yaml",
             "csv": root / "domains" / "freight-demurrage" / "data" / "containers.csv",
@@ -46,7 +46,7 @@ def build_packs(root: Path) -> dict[str, dict[str, Any]]:
             "id_hint": "awb_id",
         },
         "stow-fit": {
-            "label": "Which equipment and transport mode",
+            "label": "Equipment and mode for a cargo load",
             "gloss": "Suggest the right container size or transport mode",
             "domain": root / "domains" / "stow-fit" / "domain.yaml",
             "csv": root / "domains" / "stow-fit" / "data" / "shipments.csv",

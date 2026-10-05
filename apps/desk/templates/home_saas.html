@@ -16,7 +16,7 @@
   <div class="links">
     <a class="active" href="/">Home</a>
     <a href="/desk">Freight desk</a>
-    <a href="/eval" data-coach="compare-eval">TabPFN vs baseline</a>
+    <a href="/eval" data-coach="compare-eval">Model comparison</a>
     <a href="/anti-wrapper" id="anti-wrapper-link">How it works</a>
     <a href="/settings" id="settings-link">Settings</a>
     <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn" data-judge-path="1">Guided tour</button></form>
@@ -44,7 +44,7 @@
   </div>
 
   <form class="client-bar" method="post" action="/select-client" data-coach="client-switcher">
-    <span class="coach-hint" data-coach-hint="client-switcher">Same product, different customer books.</span>
+    
     <strong style="font-size:.85rem">Client</strong>
     <select name="client_id" onchange="this.form.submit()">
       {% for c in clients %}
@@ -60,7 +60,7 @@
   <div class="desk-grid">
     {% for d in desks %}
     <a class="desk-card {% if d.spine %}spine{% endif %}" href="/desk?pack={{ d.id }}">
-      {% if d.spine %}<span class="pill">Main demo</span>{% else %}<span class="pill coda">Extra</span>{% endif %}
+      {% if d.spine %}<span class="pill">Start here</span>{% endif %}
       <h2>{{ d.label }}</h2>
       <p class="muted" style="margin:0;font-size:.85rem">{{ d.gloss }}</p>
     </a>

@@ -17,7 +17,7 @@
   <div class="links">
     <a href="/">Home</a>
     <a class="active" href="/desk">Freight desk</a>
-    <a href="/eval" id="eval-link" data-coach="compare-eval">TabPFN vs baseline</a>
+    <a href="/eval" id="eval-link" data-coach="compare-eval">Model comparison</a>
     <a href="/anti-wrapper" id="anti-wrapper-link">How it works</a>
     <a href="/settings" id="settings-link">Settings</a>
     <form method="post" action="/judge-path" style="margin:0;display:inline"><button type="submit" class="judge-path-btn" id="judge-path-btn" data-judge-path="1" title="Score the desk, then open the comparison page">Guided tour</button></form>
@@ -71,7 +71,7 @@
 <!-- plain crib via partials_desk_main → partials_plain_english.html -->
 {% include "partials_desk_main.html" %}
 
-<footer><a href="/export-triage.csv" id="export-triage-csv" download="triage_actions.csv">Download the top 50 (CSV)</a> · <a href="/docs" data-coach="robot-api" target="_blank" rel="noopener">API docs</a></footer>
+<footer class="muted" style="font-size:.75rem">{% if not state.act_first %}<a href="/export-triage.csv" id="export-triage-csv" download="triage_actions.csv">Download the list (CSV)</a> · {% endif %}For developers: <a href="/docs" data-coach="robot-api" target="_blank" rel="noopener">API docs</a></footer>
 
 {% include "polish_drawer.html" %}
 

@@ -71,8 +71,8 @@ def replay_info() -> dict[str, Any]:
         "feature_set": rec.get("feature_set") or ("all columns" if leaky else "clean"),
         "label": f"Real TabPFN-3.5 scores from a saved run ({when})" if when else "Real TabPFN-3.5 scores from a saved run",
         "banner": (
-            "The containers are made up for this demo, and a few columns make the answer easy, "
-            "so expect lower accuracy on real shipments."
+            "The containers are made up for this demo. A few columns in this sample nearly give the answer away, "
+            "so treat these figures as a best case; real shipments will score lower."
             if leaky
             else "The containers are made up for this demo; answer-revealing columns were removed before scoring."
         ),

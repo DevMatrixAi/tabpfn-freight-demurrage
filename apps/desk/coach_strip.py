@@ -55,7 +55,7 @@ COACH_BEATS: list[dict[str, str]] = [
 # Control → one-liner crib (docs/IN_DESK_COACH_STRIP.md). Keys = data-coach ids.
 COACH_CRIBS: dict[str, str] = {
     "login": "You're the shipper — stop late fees before the invoice.",
-    "client-switcher": "Same product, different customer books.",
+    "client-switcher": "Switch between client accounts.",
     "money-at-risk": "Dollars that burn if boxes sit past grace days.",
     "sample-n": "Small slice for live Thinking (saves API). Full table = mock or final numbers.",
     "plus": "Reads messy text — no NLP pipeline.",

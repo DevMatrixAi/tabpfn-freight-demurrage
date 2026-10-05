@@ -17,6 +17,7 @@ ACTION_LABELS: dict[str, str] = {
     "cancel_booking": "Cancel booking",
     "cancel": "Cancel booking",
     "monitor": "Watch only",
+    "call_terminal": "Push for early pickup",
     "expedite": "Speed up inland move",
 }
 
