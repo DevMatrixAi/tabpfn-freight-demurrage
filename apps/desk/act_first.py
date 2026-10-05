@@ -116,8 +116,8 @@ def group_by_move(
             # so "watch" undersells it and "pay the fee" would contradict the savings math.
             act = "call_terminal"
             reason = (
-                "This container's likely cost is far above the $300 cost of acting. Push the terminal or trucker "
-                "to collect this container before its free days run out and late fees start."
+                "No reroute or rebooking fits this container, so the quickest fix is to get it collected: push the "
+                "terminal or trucker to pick it up before its free days run out. Its likely cost is far above the $300 cost of acting."
             )
         g = groups.setdefault(act, {"action": act, "n": 0, "at_stake": 0, "expected": 0, "top": None})
         g["n"] += 1
