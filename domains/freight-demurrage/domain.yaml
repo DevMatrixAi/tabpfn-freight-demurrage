@@ -24,7 +24,7 @@ playbook:
     min_proba: 0.35
     when_col: cargo_vs_fee_collapse
     when_equals: "1"
-    reason: "The late fee this shipment is likely to run up is bigger than its cargo is worth, so it is not worth bringing in. Cancel the booking before the container ships; like every move on this desk, that is counted as a $300 action."
+    reason: "The late fee this shipment is likely to run up is bigger than its cargo is worth. Cancel the booking before it ships, so the container never reaches the port. This demo counts that as a $300 action and does not price the cargo you give up."
   - action: divert
     min_proba: 0.78
     reason: "Very likely to sit past its free days (the days before late fees start) at its planned terminal. Route it to a less crowded terminal before it arrives to avoid the fee."
