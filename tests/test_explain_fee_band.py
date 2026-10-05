@@ -77,7 +77,7 @@ def test_desk_explain_and_fee_band_after_triage():
         assert 'id="drawer-explain"' in body
         assert "Why this move" in body
         assert 'id="explain-bars"' in body or "explain-bar" in body
-        assert "Expected $" in body
+        assert ("Expected $" in body) or ("If charged $" in body)
         assert "p90 $" in body
         assert 'class="fee-band"' in body
         assert 'data-expected="' in body

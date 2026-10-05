@@ -1,4 +1,11 @@
 <!-- TIP_SHA_PIN_START -->
+**Tip (main):** `5347bca` · clean12 Late Fee Control face · CONT-000121 showcase · VIDEO_LINK_TBD
+
+**First-screen gallery (JUDGE_3MIN):**
+
+| Login | Home | Desk | Eval |
+| --- | --- | --- | --- |
+| ![login](docs/images/judge/login.svg) | ![home](docs/images/judge/home.svg) | ![desk](docs/images/judge/desk.svg) | ![eval](docs/images/judge/eval.svg) |
 <!-- TIP_SHA_PIN_END -->
 
 <!-- FREIGHT_FACE_START -->
@@ -117,6 +124,8 @@ curl -s -X POST http://127.0.0.1:8765/api/v1/triage \
 **Ops board desk:** dollar ticker + green/amber/red risk cards; Plus | Thinking | Mock + HistGBM Δ stays the judge card. Pack selector includes demurrage (spine) + coda packs (equipment-size, inland-mode, air-freight, stow-fit). Chargeback remains an extra story under `domains/chargeback-desk/`. Stow-fit is a tabular suggestion head — **not** a 3D bin packer.
 
 # Engine: tabpfn-hack-core
+
+**Raw DataFrame in:** CSV / fixture adapters land as a pandas table via `load_table` — no custom featurizer. Text, high-cardinality IDs, and missings stay as columns; Thinking adds `group_col` / `group_time_col`.
 
 **Domain-agnostic TabPFN-3.5 MCP + CLI** — mock demo / pytest / MCP cookbook:
 

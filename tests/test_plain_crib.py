@@ -8,8 +8,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_plain_english_partial():
     text = (ROOT / "apps/desk/templates/partials_plain_english.html").read_text()
-    assert "Money at risk" in text
-    assert "Late fee risk" in text
+    assert "Possible late fee" in text
+    assert "Likely cost" in text
     assert "Suggested move" in text
 
 
