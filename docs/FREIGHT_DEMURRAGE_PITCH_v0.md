@@ -7,7 +7,7 @@
 
 ## Demo open (locked lead)
 
-**$1.27M projected demurrage on the table** (`artifacts/freight-demurrage/demo_report.md`, mock run). First screen for judges and README. Then action counts: divert / rebook / expedite / authorize_fee / cancel_booking / monitor.
+**Clean12 late-fee control (reported face):** TabPFN-3.5 Plus AUC 0.911 vs HistGBM 0.873; at $300/action Plus saves $595,310 vs HistGBM $435,587. 195 actions hold $708,152 of $1,273,564 in possible late fees. Star container CONT-000121. First screen for judges and README.
 
 ## One sentence
 
@@ -64,8 +64,8 @@ Scores use the dwell / demurrage risk distribution (demo: synthetic). Pair every
 ```text
 # Freight demurrage triage (TabPFN-3.5)
 
-Demo open: $1.27M projected demurrage on the table — then divert / rebook /
-expedite / authorize_fee / cancel_booking before free days burn.
+Demo open: TabPFN-3.5 Plus AUC 0.911 vs HistGBM 0.873; $595,310 saved at
+$300/action (195 picks). Star CONT-000121 — then push / move / speed up / rebook.
 
 Synthetic / public-derived demo only. Not a carrier system of record.
 

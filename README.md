@@ -1,5 +1,5 @@
 <!-- TIP_SHA_PIN_START -->
-**Tip (main):** `5347bca` · clean12 Late Fee Control face · CONT-000121 showcase · VIDEO_LINK_TBD
+**Judged version:** git tag `submit` · clean12 Late Fee Control face · CONT-000121 showcase · VIDEO_LINK_TBD
 
 **First-screen gallery (JUDGE_3MIN):**
 

@@ -82,7 +82,7 @@ a{color:#93c5fd} .muted{opacity:.7;font-size:.85rem}
 </style></head><body>
 <header>
   <div><strong>Freight demurrage triage</strong><div class=muted>Preview stub · full desk via local / Fly</div></div>
-  <div class=ticker>$1.27M projected</div>
+  <div class=ticker>$595k saved · 195 picks (clean12)</div>
   <div><a href=/eval>Eval</a> · <a href=/settings>Settings</a> · <a href=/api/v1/health>Health</a> · <a href=/logout>Logout</a></div>
 </header>
 __CHIPS__

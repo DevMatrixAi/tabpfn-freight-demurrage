@@ -30,7 +30,7 @@ RECEIPT = {
     "elapsed_s": 0.48,
     "modes": ["mock", "plus", "thinking", "fast", "hist_gbm"],
     "modes_run": ["mock"],
-    "money_at_risk_usd": 1_270_000.0,
+    "money_at_risk_usd": 1_273_564.0,
     "actions_count": 12,
     "n_cards": 8,
     "delta_vs_hist_gbm": {

@@ -99,7 +99,7 @@ def test_readme_and_judge_tip_pins():
     assert "docs/images/judge/home.svg" in readme
     assert "docs/images/judge/desk.svg" in readme
     assert "docs/images/judge/eval.svg" in readme
-    assert "Tip (main):" in readme
+    assert "Judged version:" in readme
     head = readme.split("FREIGHT_FACE_START")[0]
     assert "images/judge/login.svg" in head
 

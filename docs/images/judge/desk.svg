@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="540">
 <rect width="100%" height="100%" fill="#0b1220"/>
 <text x="40" y="60" fill="#e8eefc" font-family="system-ui,sans-serif" font-size="28" font-weight="700">Ops board</text>
-<text x="40" y="100" fill="#9aa8bc" font-family="system-ui,sans-serif" font-size="16">$1.27M · Mock triage cards</text>
+<text x="40" y="100" fill="#9aa8bc" font-family="system-ui,sans-serif" font-size="16">195 actions · $708k fees at stake · Mock triage cards</text>
 <text x="40" y="520" fill="#5a697f" font-family="system-ui,sans-serif" font-size="12">Mock UI frame · JUDGE_3MIN · not a live capture</text>
 <rect x="40" y="140" width="880" height="320" rx="12" fill="#141e33" stroke="#243045"/>
 </svg>

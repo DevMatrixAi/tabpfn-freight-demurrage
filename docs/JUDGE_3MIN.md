@@ -1,5 +1,5 @@
 <!-- TIP_SHA_PIN_START -->
-**Tip (main):** `718dcef` · [judge_path_mock_receipt.md](../artifacts/freight-demurrage/judge_path_mock_receipt.md)
+**Judged version:** git tag `submit` · clean12 Late Fee Control face · CONT-000121 showcase · VIDEO_LINK_TBD · [judge_path_mock_receipt.md](../artifacts/freight-demurrage/judge_path_mock_receipt.md)
 
 **First-screen gallery:**
 
@@ -19,12 +19,28 @@ Credentials: `demo` / `demurrage`. Never commit `.env`. Keep `TABPFN_TOKEN=` emp
 | Min | Do this |
 | --- | --- |
 | 0:00 | `pip install -e ".[dev,desk]"` then `TABPFN_TOKEN= tabpfn-hack desk --host 127.0.0.1 --port 8765` |
-| 0:30 | http://127.0.0.1:8765 → login → **Run triage** (Mock) → money-at-risk cards + HistGBM Δ |
+| 0:30 | http://127.0.0.1:8765 → login → **Run triage** (Mock) → money-at-risk cards + HistGBM Δ · star **CONT-000121** |
 | 1:30 | Open **/eval** → **Run eval** → Plus/Thinking/Fast vs HistGBM, latency, ablations, calibration, **small-n learning curve** |
 | 2:20 | Optional: `TABPFN_TOKEN= python scripts/robot_api_smoke.py` (robot/TMS health+triage) |
 | 2:30 | Optional: `TABPFN_TOKEN= python scripts/mcp_cookbook_demo.py` (7 tools) · see [`MCP_SMOKE.md`](MCP_SMOKE.md) · `TABPFN_TOKEN= pytest -q` |
 
-**What to point at (50% showcase):** text / high-card / missings on vessel tables · Thinking group/time narrative · Plus Δacc vs HistGBM · playbook money moves · robot API same actions.
+## Clean12 numbers (reported face)
+
+Method: **12 kept columns**, 5 folds grouped by vessel, seed 42. Columns that nearly gave the answer away are removed from what the models see.
+
+| | AUC | Net saved at $300/action |
+| --- | ---: | ---: |
+| TabPFN-3.5 Plus | **0.911** | **$595,310** |
+| HistGBM (scikit-learn's standard gradient-boosting model) | 0.873 | $435,587 |
+| Perfect foresight | | $914,480 |
+
+At $300 per action, Plus saves **$595,310** vs HistGBM **$435,587** — **65.1%** vs **47.6%** of the $914,480 perfect forecast.
+
+**What the desk flags:** 195 actions hold **$708,152** of the **$1,273,564** in possible late fees (total possible fees, not a savings claim).
+
+**Star container:** CONT-000121 — 26.80% chance, $11,308 fee, $3,031 likely cost, desk says **Push for early pickup**.
+
+**What to point at (50% showcase):** text / high-card / missings on vessel tables · Thinking group/time narrative · Plus Δ vs HistGBM · playbook money moves · robot API same actions.
 
 **Stress missingness (optional):** load `fixtures/stress/missing_wide_demurrage.csv` (or unpack via `fixtures/stress/_unpack_missing_wide.py`) — desk shows a missingness panel when NaNs are present.
 

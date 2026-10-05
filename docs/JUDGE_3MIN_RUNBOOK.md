@@ -17,7 +17,7 @@
 | 2:50 | Robot / MCP note | Same actions for humans or robots. |
 | 3:00 | Stop | |
 
-Long form: `docs/DEMO_90S_AND_FORM_v2.md`.
+One-pager: [`JUDGE_3MIN.md`](JUDGE_3MIN.md).
 
 
 ## First screens (mock UI frames)
