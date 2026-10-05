@@ -101,7 +101,7 @@ def _auto_triage_from_replay() -> None:
     except ImportError:
         from desk_triage_apply import apply_triage  # type: ignore
     apply_triage(
-        app, _STATE, mode="thinking",
+        app, _STATE, mode="plus",
         pack_meta=_pack_meta, resolve_mode=_resolve_mode, metric_slice=_metric_slice,
         money_total=_money_total, build_risk_cards=_build_risk_cards,
         load_default_csv=_load_default_csv, sample_ids=sample_ids,

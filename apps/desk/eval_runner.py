@@ -239,6 +239,7 @@ def run_multi_mode_eval(
         replay_meta = {
             **_replay.replay_info(),
             "net_savings_300": _replay.recorded_net_savings(300.0),
+            "oracle_net_300": _replay.recorded_oracle_net(300.0),
             "skipped_modes": skipped,
         }
 

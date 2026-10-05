@@ -69,12 +69,12 @@ def replay_info() -> dict[str, Any]:
         "recorded_at": when,
         "leaky": leaky,
         "feature_set": rec.get("feature_set") or ("all columns" if leaky else "clean"),
-        "label": f"Real TabPFN-3.5 scores, recorded {when}" if when else "Real TabPFN-3.5 scores",
+        "label": f"Real TabPFN-3.5 scores from a saved run ({when})" if when else "Real TabPFN-3.5 scores from a saved run",
         "banner": (
-            "Synthetic benchmark data. A few columns nearly give away the answer, so read these "
-            "scores as a benchmark, not real-world shipper accuracy."
+            "The containers are made up for this demo, and a few columns make the answer easy, "
+            "so expect lower accuracy on real shipments."
             if leaky
-            else "Synthetic benchmark data; scores from a clean run with answer-revealing columns removed."
+            else "The containers are made up for this demo; answer-revealing columns were removed before scoring."
         ),
     }
 
@@ -180,6 +180,16 @@ def recorded_learning_curve() -> dict[str, Any] | None:
             f"average of {meta.get('repeats', 'several')} draws. Savings assume a $300 action cost."
         ),
     }
+
+
+def recorded_oracle_net(action_cost: float = 300.0) -> int | None:
+    """Net savings a perfect forecast would get at this action cost (same for every model)."""
+    rec = load_receipt()
+    for v in (rec.get("metrics") or {}).values():
+        for c in v.get("cost") or []:
+            if float(c.get("action_cost", -1)) == float(action_cost) and c.get("oracle_net") is not None:
+                return int(c["oracle_net"])
+    return None
 
 
 def recorded_net_savings(action_cost: float = 300.0) -> dict[str, int]:

@@ -3,17 +3,17 @@
 <aside class="coach-strip" id="coach-strip" data-coach-strip="1" aria-label="Demo coach strip" hidden
   data-active="{{ _beat }}">
   <div class="coach-strip-head">
-    <span class="coach-kicker">Coach</span>
-    <span class="coach-title">Judge path</span>
+    <span class="coach-kicker">Tour</span>
+    <span class="coach-title">Demo steps</span>
     <button type="button" class="coach-dismiss" id="coach-dismiss" title="Hide coach strip" aria-label="Dismiss coach">×</button>
   </div>
   <ol class="coach-chips" id="coach-chips">
     <li class="coach-chip {% if _beat == 'login' %}active{% endif %}" data-beat="login"><a href="/login">Login</a></li>
     <li class="coach-chip {% if _beat == 'ticker' %}active{% endif %}" data-beat="ticker"><a href="/desk#ticker-dollars">Money at risk</a></li>
-    <li class="coach-chip {% if _beat == 'triage' %}active{% endif %}" data-beat="triage"><a href="/desk#triage-panel">Triage</a></li>
-    <li class="coach-chip {% if _beat == 'drawer' %}active{% endif %}" data-beat="drawer"><a href="/desk#risk-board">Drawer</a></li>
-    <li class="coach-chip {% if _beat == 'stream' %}active{% endif %}" data-beat="stream"><a href="/desk#stream-panel">Stream</a></li>
-    <li class="coach-chip {% if _beat == 'eval' %}active{% endif %}" data-beat="eval"><a href="/eval" id="coach-eval-chip">/eval</a></li>
+    <li class="coach-chip {% if _beat == 'triage' %}active{% endif %}" data-beat="triage"><a href="/desk#triage-panel">Score</a></li>
+    <li class="coach-chip {% if _beat == 'drawer' %}active{% endif %}" data-beat="drawer"><a href="/desk#risk-board">Side panel</a></li>
+    <li class="coach-chip {% if _beat == 'stream' %}active{% endif %}" data-beat="stream"><a href="/desk#stream-panel">New arrival</a></li>
+    <li class="coach-chip {% if _beat == 'eval' %}active{% endif %}" data-beat="eval"><a href="/eval" id="coach-eval-chip">Comparison</a></li>
   </ol>
   <p class="coach-line" id="coach-line" data-coach-line="1">
     {% if _beat == 'login' %}You’re the shipper — stop late fees before the invoice.
@@ -21,7 +21,7 @@
     {% elif _beat == 'triage' %}Score late-fee risk on this messy table.
     {% elif _beat == 'drawer' %}Click a container to see the suggested move.
     {% elif _beat == 'stream' %}New event — score and move can change.
-    {% else %}Plus / Thinking / Fast vs HistGBM for judges.{% endif %}
+    {% else %}TabPFN-3.5 against a standard model.{% endif %}
   </p>
 </aside>
 <script>

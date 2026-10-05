@@ -2,18 +2,24 @@
     {% if result.replay and result.replay.net_savings_300 %}
     {% set ns = result.replay.net_savings_300 %}
     {% if ns.get("hist_gbm") and (ns.get("plus") is not none or ns.get("thinking") is not none) %}
-    {% set best_k = "plus" if (ns.get("plus") or 0) >= (ns.get("thinking") or 0) else "thinking" %}
+    {% set best_k = "plus" if ns.get("plus") is not none else "thinking" %}
     {% set gap = ns[best_k] - ns["hist_gbm"] %}
+    {% set oracle = result.replay.oracle_net_300 %}
+    {% if oracle %}
+    <p class="eval-headline" id="eval-headline">TabPFN-3.5 captures <strong>{{ "%.1f"|format(100.0 * ns[best_k] / oracle) }}%</strong> of the savings a perfect forecast would get (${{ "{:,}".format(ns[best_k]) }} of ${{ "{:,}".format(oracle) }}). HistGBM gets {{ "%.1f"|format(100.0 * ns["hist_gbm"] / oracle) }}%.</p>
+    <p class="eval-subhead" id="eval-subhead">That's <strong>${{ "{:,}".format(gap) }} more</strong> than HistGBM on the same {{ "{:,}".format(result.n_rows) }} containers, after a $300 cost per action.</p>
+    {% else %}
     <p class="eval-headline" id="eval-headline">TabPFN-3.5 {{ best_k|capitalize }} saves <strong>${{ "{:,}".format(gap) }} more</strong> than HistGBM ({{ "%+.1f"|format(100.0 * gap / ns["hist_gbm"]) }}%) on the same {{ "{:,}".format(result.n_rows) }} containers, after a ${{ "{:,}".format(300) }} cost per action.</p>
+    {% endif %}
     {% endif %}
     {% endif %}
     {% if result.replay %}
     {% if result.replay.net_savings_300 %}
     <p id="eval-money" style="margin:.25rem 0 .75rem">Net savings after a $300 cost per action:
-      {% for k, label in [("plus","Plus"),("thinking","Thinking"),("hist_gbm","HistGBM")] %}{% if result.replay.net_savings_300.get(k) is not none %}<strong>{{ label }}</strong> saves ${{ "{:,}".format(result.replay.net_savings_300[k]) }}{% if not loop.last %} · {% endif %}{% endif %}{% endfor %}.
-      The freight desk shows the Thinking number, so the two pages match.</p>
+      {% for k, label in [("plus","TabPFN-3.5"),("hist_gbm","HistGBM")] %}{% if result.replay.net_savings_300.get(k) is not none %}<strong>{{ label }}</strong> saves ${{ "{:,}".format(result.replay.net_savings_300[k]) }}{% if not loop.last %} · {% endif %}{% endif %}{% endfor %}.
+     </p>
     {% endif %}
-    <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">Each container was scored by a model that never saw it (5 folds, split by vessel), and HistGBM was scored on the same folds. Recorded TabPFN-3.5 run on synthetic data; a few columns nearly give away the answer, so treat these as a demo, not real shipper accuracy.</p>
+    <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">Every container was scored by a model that had not seen it, and both models were tested the same way. HistGBM is a widely used standard machine-learning model. The containers are made up for this demo, and a few columns make the answer easy, so expect lower accuracy on real shipments.</p>
     {% endif %}
   </section>
   <details class="advanced-box" id="eval-advanced">

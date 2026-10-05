@@ -17,9 +17,9 @@
 
   {% if state.explain and state.explain.bars %}
   <section class="drawer-explain" id="drawer-explain" aria-label="Why this move" data-top-labels="{% if state.explain.top_labels %}{{ state.explain.top_labels|join('|') }}{% endif %}">
-    <p class="item-kicker">What the model looks at most</p>
+    <p class="item-kicker">What drives the late-fee scores overall</p>
     <p class="explain-why" id="explain-why" hidden>{{ state.explain.why }}</p>
-    <p class="muted explain-method">Across all containers, these columns move the late-fee score the most.</p>
+    <p class="muted explain-method">This is for all containers, not just this one.</p>
     <div class="explain-bars" id="explain-bars" role="img" aria-label="Top feature importances">
       {% set vmax = namespace(v=0) %}
       {% for b in state.explain.bars %}
@@ -38,7 +38,7 @@
   </section>
   {% endif %}
 
-  <details class="drawer-all"><summary>All suggested moves ({{ (state.actions or [])|length }})</summary>
+  <details class="drawer-all"><summary>Top {{ (state.actions or [])|length }} suggested moves</summary>
   <div class="drawer-list" id="drawer-list">
   {% if state.actions %}
     {% for a in state.actions %}

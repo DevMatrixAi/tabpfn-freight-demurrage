@@ -135,3 +135,5 @@
 .desk-skeleton.drawer-apply{margin:.35rem 1.15rem .65rem;min-height:2.5rem}
 .desk-skeleton.drawer-apply .sk-bar{height:.55rem;width:70%;border-radius:4px;background:linear-gradient(90deg,#1a2436 0%,#243044 50%,#1a2436 100%);background-size:200% 100%;animation:saas-shimmer 1.4s ease-in-out infinite}
 .btn-busy{opacity:.75;cursor:wait!important}
+
+.explain-bar-label{white-space:normal!important;overflow:visible!important}

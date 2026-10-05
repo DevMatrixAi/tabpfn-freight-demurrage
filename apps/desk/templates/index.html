@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Freight Ops Board</title>
+<title>Freight desk · Freight Money Desk</title>
 <link rel="stylesheet" href="/static/ops_board.css?v=r3"/>
 <link rel="stylesheet" href="/static/column_chips.css?v=r3" />
 <link rel="stylesheet" href="/static/coach_strip.css?v=r3" />
@@ -46,7 +46,7 @@
 <div>
 <h1>Freight desk</h1>
 <p class="tagline">{% if state.replay %}Late-container fees on {{ "{:,}".format(state.n_rows) }} sample containers{% else %}Dataset <strong>{{ state.pack_label or state.pack }}</strong>{% if state.pack_gloss %}<span class="pack-gloss"> — {{ state.pack_gloss }}</span>{% endif %}{% endif %}
-<span class="token-pill {% if has_token or state.replay %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% elif state.replay %}Recorded TabPFN-3.5 scores, no token needed{% else %}No token: offline stand-in model{% endif %}</span></p>
+<span class="token-pill {% if has_token or state.replay %}ok{% else %}missing{% endif %}">{% if has_token %}TABPFN_TOKEN set{% elif state.replay %}Scored by TabPFN-3.5{% else %}No token: offline stand-in model{% endif %}</span></p>
 </div>
 </div>
 <div class="ticker" id="money-ticker" data-coach="money-at-risk" role="status" aria-live="polite">
@@ -56,7 +56,7 @@
 {% if is_spine %}<div class="ticker-gloss">Projected late-container fees if nothing changes</div>{% endif %}
 </div>
 <div class="meta">
-{% if state.replay %}<span id="ticker-rows">{{ state.n_rows }}</span> containers · TabPFN-3.5 {{ (state.requested_mode or state.mode)|capitalize }}, recorded run
+{% if state.replay %}<span id="ticker-rows">{{ "{:,}".format(state.n_rows) }}</span> containers scored by TabPFN-3.5
 {% else %}
 <span class="badge">{{ state.source }}</span>
 · <span id="ticker-rows">{{ state.n_rows }}</span> rows
