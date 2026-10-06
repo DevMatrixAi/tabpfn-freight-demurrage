@@ -13,7 +13,7 @@ Every day a container sits at the port past its free days, the shipper pays a la
 
 > **Read this before the numbers.** The 1,200 containers are synthetic, generated from demurrage rules, the same way TabPFN itself learned from synthetic tables; real shipments will differ. Three columns that nearly gave the answer away (`projected_demurrage_usd`, `fee_inevitable`, `cargo_vs_fee_collapse`) plus the ID and timestamp columns are removed from what the models see. An earlier run that kept them scored AUC 0.987; we report the clean run. The dollar math still uses `projected_demurrage_usd` as the fee at stake, to decide what's worth acting on and to value each save. (receipt: `artifacts/freight-demurrage/replay_tabpfn_oof_receipt.json`)
 
-**Every container scored by a model that never saw it (12 kept columns, 5 folds grouped by vessel, seed 42):**
+**Every container scored by a model that never saw it (12 kept columns, 5 folds grouped by vessel, seed 42):** (receipt: `artifacts/freight-demurrage/replay_tabpfn_oof_clean12_receipt.json`)
 
 | | AUC | Avg precision | Net saved at $300/action | Actions |
 |---|---|---|---|---|
