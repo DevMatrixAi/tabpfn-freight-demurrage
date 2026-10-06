@@ -44,7 +44,7 @@ At $300 per action, Plus saves **$595,310** vs HistGBM **$435,587** — **65.1%*
 
 **Stress missingness (optional):** load `fixtures/stress/missing_wide_demurrage.csv` (or unpack via `fixtures/stress/_unpack_missing_wide.py`) — desk shows a missingness panel when NaNs are present.
 
-More depth: [`DEEP_SHOWCASE_v0.md`](DEEP_SHOWCASE_v0.md) · preview honesty: [`PREVIEW.md`](PREVIEW.md).
+More depth: [`DEEP_SHOWCASE.md`](DEEP_SHOWCASE.md) · preview honesty: [`PREVIEW.md`](PREVIEW.md).
 
 ## Live budget (after API reset)
 

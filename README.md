@@ -54,7 +54,7 @@ TABPFN_TOKEN= .venv/bin/tabpfn-hack desk --host 127.0.0.1 --port 8765
 ```
 Open http://127.0.0.1:8765 and log in with `demo` / `demurrage`. With a token, score live instead: `DESK_REPLAY=0 TABPFN_TOKEN=YOUR_TOKEN .venv/bin/tabpfn-hack desk --host 127.0.0.1 --port 8765`. Tests: `TABPFN_TOKEN= .venv/bin/python -m pytest -q`.
 
-**Video:** [https://youtu.be/_aIq96WwLF0](https://youtu.be/_aIq96WwLF0) (90-second demo, unlisted on YouTube).
+**Video:** [https://youtu.be/_aIq96WwLF0](https://youtu.be/_aIq96WwLF0) (demo video, unlisted on YouTube).
 
 ## Appendix: learning curve (below the fold)
 
@@ -93,7 +93,7 @@ The app loads a repo `.env` for convenience; an explicitly empty variable preven
 unintended live request/rate limit and keeps the 3-minute walkthrough offline. Never
 commit `.env`.
 
-**Stub URL honesty:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) shows login + sample ticker only — **not** Jinja `/eval` or robot triage. Full TabPFN desk stays local (or Docker/Fly/Railway). Repo stays **private**. Never commit `.env`.
+**Stub URL honesty:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) shows login + sample ticker only — **not** Jinja `/eval` or robot triage. Full TabPFN desk stays local (or Docker/Fly/Railway). Never commit `.env`.
 
 
 
@@ -137,4 +137,4 @@ python scripts/mcp_cookbook_demo.py
 tabpfn-hack desk --host 127.0.0.1 --port 8765
 ```
 
-Deep panels: [`docs/DEEP_SHOWCASE_v0.md`](docs/DEEP_SHOWCASE_v0.md). Preview honesty: [`docs/PREVIEW.md`](docs/PREVIEW.md).
+Deep panels: [`docs/DEEP_SHOWCASE.md`](docs/DEEP_SHOWCASE.md). Preview honesty: [`docs/PREVIEW.md`](docs/PREVIEW.md).

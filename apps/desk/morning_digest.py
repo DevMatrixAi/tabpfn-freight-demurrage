@@ -1,6 +1,6 @@
 """Morning digest strip — top-N moves + $ at risk + action counts (mock).
 
-Pitch claim (FREIGHT_DEMURRAGE_PITCH): suggest_actions + morning digest.
+suggest_actions + morning digest.
 """
 from __future__ import annotations
 

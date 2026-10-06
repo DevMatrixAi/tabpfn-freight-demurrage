@@ -11,7 +11,7 @@ Fixture adapters under `fixtures/adapters/` normalize vendor-shaped JSON into th
 From the repo root (with the package editable-installed):
 
 ```bash
-cd /workspace/tabpfn-hack-core
+cd tabpfn-freight-demurrage
 pip install -e ".[dev,desk]"
 # mock by default; set TABPFN_TOKEN for Plus / Thinking / Fast
 tabpfn-hack desk --host 127.0.0.1 --port 8765

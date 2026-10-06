@@ -21,7 +21,7 @@ The app loads a repo `.env` for convenience; an explicitly empty variable preven
 unintended live request/rate limit and keeps the 3-minute walkthrough offline. Never
 commit `.env`.
 
-**Stub URL honesty:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) shows login + sample ticker only — **not** Jinja `/eval` or robot triage. Full TabPFN desk stays local (or Docker/Fly/Railway). Repo stays **private**. Never commit `.env`.
+**Stub URL honesty:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) shows login + sample ticker only — **not** Jinja `/eval` or robot triage. Full TabPFN desk stays local (or Docker/Fly/Railway). Never commit `.env`.
 
 ## Surfaces (2–4 strongest)
 
@@ -59,7 +59,7 @@ tabpfn-hack desk --host 127.0.0.1 --port 8765   # /eval → Run eval
 - Desk `/eval` + index showcase HTML shipped via `ensure_deep_templates` + zlib blobs (`deep_template_blobs_*.py`); eval_dashboard imports ensure on load.
 - Thinking / Fast-vs-Plus latency / text+high-card ablations / calibration / denser HistGBM judge card remain wired.
 - Stress: `fixtures/stress/missing_wide_demurrage.csv` (plain CSV, checked in; `_unpack_missing_wide.py` rebuilds it deterministically).
-- pytest: 68 passed. Repo stays private. No `.env` commits.
+- pytest green. No `.env` commits.
 
 ## 2026-09-21 PT — overnight polish
 
@@ -75,4 +75,4 @@ tabpfn-hack desk --host 127.0.0.1 --port 8765   # /eval → Run eval
   (app.py next). Templates remain preferred over zlib blob fallbacks.
 - New TabPFN-deep surface: **small-n learning curve** on `/eval` (`core/learning_curve.py`)
   — mock HistGBM Acc@n curve; live TabPFN few-shot when `TABPFN_TOKEN` is set.
-- pytest green; demurrage spine intact; repo stays **private**; never commit `.env`.
+- pytest green; demurrage spine intact; never commit `.env`.

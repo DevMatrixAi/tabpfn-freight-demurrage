@@ -35,7 +35,7 @@ commit `.env`.
 
 **Live budget after reset:** desk `sample_n` 40–80 (or `TABPFN_DEV_N=60`); practice stays mock/full.
 
-**Stub URL honesty:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) shows login + sample ticker only — **not** Jinja `/eval` or robot triage. Full TabPFN desk stays local (or Docker/Fly/Railway). Repo stays **private**. Never commit `.env`.
+**Stub URL honesty:** [https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app) shows login + sample ticker only — **not** Jinja `/eval` or robot triage. Full TabPFN desk stays local (or Docker/Fly/Railway). Never commit `.env`.
 
 
 ## Status
@@ -44,7 +44,7 @@ commit `.env`.
 
 | Item | Value |
 | --- | --- |
-| GitHub repo | private `DevMatrixAi/tabpfn-freight-demurrage` (stays private) |
+| GitHub repo | `DevMatrixAi/tabpfn-freight-demurrage` |
 | Vercel project | `tabpfn-freight-demurrage` (`prj_zdy4NLl4FHlAkqDQaZsFA2mnnyf0`) |
 | Preview URL | **[https://tabpfn-freight-demurrage.vercel.app](https://tabpfn-freight-demurrage.vercel.app)** (stub, mock-first) |
 | Mode | mock-first (no `TABPFN_TOKEN` required) |
@@ -56,7 +56,7 @@ Live Vercel production is a **lightweight preview stub** (`preview_stub.py`):
 
 - Login `demo` / `demurrage` → ops board ticker + sample risk cards
 - Open `/api/v1/health` without login
-- Full TabPFN desk (Jinja ops board, `/eval`, robot API triage) is **not** on this serverless URL — run locally or deploy `Dockerfile` / Fly / Railway (see below). Stub exists so judges have a public HTTPS link while the private repo stays private and Hobby Vercel cannot pull the private GitHub source.
+- Full TabPFN desk (Jinja ops board, `/eval`, robot API triage) is **not** on this serverless URL — run locally or deploy `Dockerfile` / Fly / Railway (see below). The stub gives judges a quick public link; the full desk runs from this repo.
 
 ## One-command local
 
