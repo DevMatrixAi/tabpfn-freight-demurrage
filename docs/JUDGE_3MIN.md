@@ -1,5 +1,5 @@
 <!-- TIP_SHA_PIN_START -->
-**Judged version:** git tag `submit` · clean12 Late Fee Control face · CONT-000121 showcase · VIDEO_LINK_TBD · [judge_path_mock_receipt.md](../artifacts/freight-demurrage/judge_path_mock_receipt.md)
+**Judged version:** git tag `submit` · clean12 Late Fee Control face · CONT-000121 showcase · [video](https://youtu.be/_aIq96WwLF0) · [judge_path_mock_receipt.md](../artifacts/freight-demurrage/judge_path_mock_receipt.md)
 
 **First-screen gallery:**
 

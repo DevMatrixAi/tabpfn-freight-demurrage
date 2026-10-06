@@ -1,5 +1,5 @@
 <!-- TIP_SHA_PIN_START -->
-**Judged version:** git tag `submit` · clean12 Late Fee Control face · CONT-000121 showcase · VIDEO_LINK_TBD
+**Judged version:** git tag `submit` · clean12 Late Fee Control face · CONT-000121 showcase · [video](https://youtu.be/_aIq96WwLF0)
 
 **First-screen gallery (JUDGE_3MIN):**
 
@@ -15,7 +15,7 @@ Every day a container sits at the port past its free days, the shipper pays a la
 
 **TabPFN-3.5 Plus ranks late-fee risk at AUC 0.911, against 0.873 for HistGBM (scikit-learn's standard gradient-boosting model, the usual default for tables like this). At $300 per action, its picks save $595,310, which is $159,723 more than HistGBM's.**
 
-> **Read this before the numbers.** The 1,200 containers are synthetic, generated from demurrage rules, the same way TabPFN itself learned from synthetic tables; real shipments will differ. Three columns that nearly gave the answer away (`projected_demurrage_usd`, `fee_inevitable`, `cargo_vs_fee_collapse`) plus the ID and timestamp columns are removed from what the models see. An earlier run that kept them scored AUC 0.987; we report the clean run. The dollar math still uses `projected_demurrage_usd` as the fee at stake, to decide what's worth acting on and to value each save.
+> **Read this before the numbers.** The 1,200 containers are synthetic, generated from demurrage rules, the same way TabPFN itself learned from synthetic tables; real shipments will differ. Three columns that nearly gave the answer away (`projected_demurrage_usd`, `fee_inevitable`, `cargo_vs_fee_collapse`) plus the ID and timestamp columns are removed from what the models see. An earlier run that kept them scored AUC 0.987; we report the clean run. The dollar math still uses `projected_demurrage_usd` as the fee at stake, to decide what's worth acting on and to value each save. (receipt: `artifacts/freight-demurrage/replay_tabpfn_oof_receipt.json`)
 
 **Every container scored by a model that never saw it (12 kept columns, 5 folds grouped by vessel, seed 42):**
 
@@ -54,7 +54,7 @@ TABPFN_TOKEN= .venv/bin/tabpfn-hack desk --host 127.0.0.1 --port 8765
 ```
 Open http://127.0.0.1:8765 and log in with `demo` / `demurrage`. With a token, score live instead: `DESK_REPLAY=0 TABPFN_TOKEN=YOUR_TOKEN .venv/bin/tabpfn-hack desk --host 127.0.0.1 --port 8765`. Tests: `TABPFN_TOKEN= .venv/bin/python -m pytest -q`.
 
-**Video:** `VIDEO_LINK_TBD` (human uploads later).
+**Video:** [https://youtu.be/_aIq96WwLF0](https://youtu.be/_aIq96WwLF0) (90-second demo, unlisted on YouTube).
 
 ## Appendix: learning curve (below the fold)
 

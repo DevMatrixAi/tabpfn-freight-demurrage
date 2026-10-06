@@ -21,4 +21,4 @@ Honest caveats: the containers are synthetic, generated from demurrage rules, wh
 The repo ships the table and a recorded replay of real TabPFN-3.5 predictions, so judges can run the full desk without a token; one command switches to live calls.
 
 Repo: https://github.com/DevMatrixAi/tabpfn-freight-demurrage   (after the public flip)
-Video: VIDEO_LINK_TBD
+Video: https://youtu.be/_aIq96WwLF0
