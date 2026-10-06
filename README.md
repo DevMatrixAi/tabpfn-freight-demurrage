@@ -1,11 +1,7 @@
 <!-- TIP_SHA_PIN_START -->
-**Judged version:** git tag `submit` · clean12 Late Fee Control face · CONT-000121 showcase · [video](https://youtu.be/_aIq96WwLF0)
+[![Watch the demo video (1:46)](docs/images/demo_video.png)](https://youtu.be/_aIq96WwLF0)
 
-**First-screen gallery (JUDGE_3MIN):**
-
-| Login | Home | Desk | Eval |
-| --- | --- | --- | --- |
-| ![login](docs/images/judge/login.svg) | ![home](docs/images/judge/home.svg) | ![desk](docs/images/judge/desk.svg) | ![eval](docs/images/judge/eval.svg) |
+**Judged version:** git tag `submit`
 <!-- TIP_SHA_PIN_END -->
 
 <!-- FREIGHT_FACE_START -->
@@ -76,13 +72,7 @@ One-pager: [`docs/JUDGE_3MIN.md`](docs/JUDGE_3MIN.md) · MCP smoke: [`docs/MCP_S
 
 
 
-**First screens (mock UI frames):**
-
-| Login | Home | Desk | Eval |
-| --- | --- | --- | --- |
-| ![login](docs/images/judge/login.svg) | ![home](docs/images/judge/home.svg) | ![desk](docs/images/judge/desk.svg) | ![eval](docs/images/judge/eval.svg) |
-
-Synthetic dark-theme panels for the 3-minute crib (not live captures). Settings stub: `/settings`.
+Settings stub: `/settings`.
 
 **Live budget:** desk `sample_n` 40–80 (or `TABPFN_DEV_N=60`) for Plus/Thinking after API reset; full-table mock anytime.
 

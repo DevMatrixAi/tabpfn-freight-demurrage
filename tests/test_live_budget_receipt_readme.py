@@ -95,13 +95,12 @@ def test_readme_and_judge_tip_pins():
     readme = (ROOT / "README.md").read_text()
     assert "TIP_SHA_PIN_START" in readme
     assert "TIP_SHA_PIN_END" in readme
-    assert "docs/images/judge/login.svg" in readme
-    assert "docs/images/judge/home.svg" in readme
-    assert "docs/images/judge/desk.svg" in readme
-    assert "docs/images/judge/eval.svg" in readme
+    assert "images/judge/" not in readme  # placeholder panels replaced by video thumbnail
     assert "Judged version:" in readme
     head = readme.split("FREIGHT_FACE_START")[0]
-    assert "images/judge/login.svg" in head
+    assert "docs/images/demo_video.png" in head
+    assert "https://youtu.be/_aIq96WwLF0" in head
+    assert (ROOT / "docs" / "images" / "demo_video.png").exists()
 
     judge = (ROOT / "docs" / "JUDGE_3MIN.md").read_text()
     assert "TIP_SHA_PIN_START" in judge

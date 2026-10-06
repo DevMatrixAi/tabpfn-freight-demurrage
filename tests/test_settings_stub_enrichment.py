@@ -118,7 +118,6 @@ def test_judge_screenshots_exist_and_linked():
     for doc in (
         ROOT / "docs/JUDGE_3MIN.md",
         ROOT / "docs/JUDGE_3MIN_RUNBOOK.md",
-        ROOT / "README.md",
     ):
         text = doc.read_text()
         assert "images/judge/login." in text or "docs/images/judge/login." in text
